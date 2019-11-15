@@ -231,7 +231,7 @@ export default {
       console.log(state);
     },
     /**
-     * 选择`获取`表单
+     * 获取表单
      */
     getList() {
       this.listLoading = true;
@@ -260,7 +260,7 @@ export default {
           return false;
         }
         const data = this.list.map(value => {
-          return filterVal.map(key => {
+          return this.tableContent.map(key => {
             return value[key];
           });
         });
