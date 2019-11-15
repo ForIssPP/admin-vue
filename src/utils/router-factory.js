@@ -7,7 +7,7 @@
  */
 export default function (path, component, name, title) {
   const len = path.length;
-  if (len) {
+  if (typeof path !== 'string') {
     let reList = [];
     for (let i = 0; i < len; i++) {
       reList.push({
