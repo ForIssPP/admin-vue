@@ -18,7 +18,9 @@ for (let i = 0; i < count; i++) {
 const testList = Array(15).fill(null)
 
 const avatarList = [],
-  profilesList = []
+  profilesList = [],
+  picture = [],
+  pictures = []
 
 testList.map(() => {
   avatarList.push(Mock.mock({
@@ -41,6 +43,27 @@ testList.map(() => {
     'reviewer|1': ['admin', 'Siykt', 'King', 'Bill'],
     profiles: '@sentence'
   }))
+
+  picture.push(Mock.mock({
+    id: '@increment',
+    time: '@datetime(yyyy-mm-dd HH:mm:ss)',
+    phoneNumber: /1[345789][0-9]{9}/,
+    'sex|1': ['男', '女'],
+    'state|1': ['通过', '未通过', '待审核'],
+    'reviewer|1': ['admin', 'Siykt', 'King', 'Bill'],
+    'picture': '@image(100x100, @color, @word)',
+  }))
+
+  pictures.push(Mock.mock({
+    id: '@increment',
+    time: '@datetime(yyyy-mm-dd HH:mm:ss)',
+    phoneNumber: /1[345789][0-9]{9}/,
+    'sex|1': ['男', '女'],
+    'state|1': ['通过', '未通过', '待审核'],
+    'reviewer|1': ['admin', 'Siykt', 'King', 'Bill'],
+    'pictures|1-5': ['@image(50x50, @color, @word)'],
+  }))
+
 });
 
 
@@ -119,6 +142,64 @@ export default [
       } = config.query
 
       const pageList = profilesList
+
+      if (sort === '-id') {
+        pageList = pageList.reverse()
+      }
+
+      return {
+        code: 20000,
+        data: {
+          total: pageList.length,
+          items: pageList.slice(0, limit)
+        }
+      }
+    }
+  },
+
+  {
+    url: '/api/user/check/picture',
+    type: 'get',
+    response: config => {
+      const {
+        importance,
+        type,
+        title,
+        page = 1,
+        limit = 15,
+        sort
+      } = config.query
+
+      const pageList = picture
+
+      if (sort === '-id') {
+        pageList = pageList.reverse()
+      }
+
+      return {
+        code: 20000,
+        data: {
+          total: pageList.length,
+          items: pageList.slice(0, limit)
+        }
+      }
+    }
+  },
+
+  {
+    url: '/api/user/check/moneypictures',
+    type: 'get',
+    response: config => {
+      const {
+        importance,
+        type,
+        title,
+        page = 1,
+        limit = 15,
+        sort
+      } = config.query
+
+      const pageList = pictures
 
       if (sort === '-id') {
         pageList = pageList.reverse()

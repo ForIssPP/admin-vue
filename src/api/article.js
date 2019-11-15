@@ -24,6 +24,22 @@ export function getProfilesList(query) {
   })
 }
 
+export function getPictureList(query) {
+  return request({
+    url: '/api/user/check/picture',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getMoneyPicturesList(query) {
+  return request({
+    url: '/api/user/check/moneypictures',
+    method: 'get',
+    params: query
+  })
+}
+
 export function fetchArticle(id) {
   return request({
     url: '/article/detail',

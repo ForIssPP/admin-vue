@@ -29,18 +29,6 @@
         @keyup.enter.native="handleFilter"
       />
 
-      <!-- 性别查询 -->
-      <SearchSex @sexTypeChange="sexTypeChange" />
-
-      <!-- 状态查询 -->
-      <SearchState @stateTypeChange="stateTypeChange" />
-
-      <!-- 操作人查询 -->
-      <SearchReviewer @reviewerTypeChange="reviewerTypeChange" />
-
-      <!-- 时间查询 -->
-      <SearchDate style="margin-right: 10px" @dateTypeChange="dateTypeChange" />
-
       <!-- 搜索 -->
       <el-button
         v-waves
@@ -82,20 +70,24 @@
       <!-- Sex -->
       <TableSex />
 
-      <!-- State -->
-      <TableState />
-
-      <!-- Check Name -->
-      <TableCheckName />
-
-      <!-- Time -->
-      <TableTime />
-
-      <!-- Reviewer -->
-      <TableReviewer />
+      <!-- Picture Check -->
+      <el-table-column label="图片" prop="avatar" align="center">
+        <template slot-scope="{row}">
+          <img :src="row.picture" alt="old-avatar" />
+        </template>
+      </el-table-column>
 
       <!-- 操作 -->
-      <TableChoise @handleChoise="handleChoise" />
+      <el-table-column
+        label="操作"
+        prop="checkName"
+        align="center"
+        width="130"
+      >
+        <template v-slot="{row}">
+          <el-button plain size="mini" @click="handleChoise">审核</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <!-- 表单 end -->
 
@@ -113,7 +105,7 @@
 
 <script>
 import {
-  fetchList,
+  getPictureList,
   fetchPv,
   createArticle,
   updateArticle
@@ -123,38 +115,20 @@ import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import {
-  SearchSex,
-  SearchState,
-  SearchReviewer,
-  SearchDate
-} from "../components/search/index";
-import {
   TableId,
   TablePhoneNumber,
   TableSex,
-  TableState,
-  TableCheckName,
-  TableTime,
-  TableReviewer,
   TableChoise
 } from "../components/table/index";
 
 export default {
-  name: "UserControllerNameCheck",
+  name: "UserControllerAlbumCheck",
   components: {
     Pagination,
-    SearchSex,
-    SearchState,
-    SearchReviewer,
-    SearchDate,
     TableId,
     TableSex,
-    TableState,
     TablePhoneNumber,
-    TableTime,
-    TableReviewer,
-    TableChoise,
-    TableCheckName
+    TableChoise
   },
   directives: { waves },
   data() {
@@ -201,16 +175,10 @@ export default {
   },
   methods: {
     /**
-     * 操作状态更新
+     * 打开相册审核界面
      */
-    handleChoise(tag) {
-      console.log(tag);
-    },
-    /**
-     * 选择`性别`更新
-     */
-    sexTypeChange(sex) {
-      console.log(sex);
+    handleChoise() {
+      console.log('open');
     },
     /**
      * 选择`状态`更新
@@ -225,17 +193,11 @@ export default {
       console.log(state);
     },
     /**
-     * 选择`时间`更新
-     */
-    dateTypeChange(state) {
-      console.log(state);
-    },
-    /**
      * 获取表单
      */
     getList() {
       this.listLoading = true;
-      fetchList(this.listQuery).then(response => {
+      getPictureList(this.listQuery).then(response => {
         this.list = response.data.items;
         this.total = response.data.total;
         this.listLoading = false;

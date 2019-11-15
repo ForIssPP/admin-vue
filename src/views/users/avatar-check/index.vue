@@ -86,14 +86,14 @@
       <TableState />
 
       <!-- Old Avatar -->
-      <el-table-column label="oldAvatar" prop="avatar" align="center" width="130">
+      <el-table-column label="原头像" prop="avatar" align="center">
         <template slot-scope="{row}">
           <img :src="row.oldAvatar" alt="old-avatar" />
         </template>
       </el-table-column>
 
       <!-- Check Avatar -->
-      <el-table-column label="checkAvatar" prop="avatar" align="center" width="130">
+      <el-table-column label="待审头像" prop="avatar" align="center">
         <template slot-scope="{row}">
           <img :src="row.checkAvatar" alt="check-avatar" />
         </template>

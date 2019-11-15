@@ -29,17 +29,11 @@
         @keyup.enter.native="handleFilter"
       />
 
-      <!-- 性别查询 -->
-      <SearchSex @sexTypeChange="sexTypeChange" />
-
       <!-- 状态查询 -->
       <SearchState @stateTypeChange="stateTypeChange" />
 
       <!-- 操作人查询 -->
       <SearchReviewer @reviewerTypeChange="reviewerTypeChange" />
-
-      <!-- 时间查询 -->
-      <SearchDate style="margin-right: 10px" @dateTypeChange="dateTypeChange" />
 
       <!-- 搜索 -->
       <el-button
@@ -85,11 +79,12 @@
       <!-- State -->
       <TableState />
 
-      <!-- Check Name -->
-      <TableCheckName />
-
-      <!-- Time -->
-      <TableTime />
+      <!-- Picture Check -->
+      <el-table-column label="图片" prop="avatar" align="center">
+        <template slot-scope="{row}">
+          <img :src="row.picture" alt="old-avatar" />
+        </template>
+      </el-table-column>
 
       <!-- Reviewer -->
       <TableReviewer />
@@ -113,7 +108,7 @@
 
 <script>
 import {
-  fetchList,
+  getPictureList,
   fetchPv,
   createArticle,
   updateArticle
@@ -122,39 +117,28 @@ import {
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
-import {
-  SearchSex,
-  SearchState,
-  SearchReviewer,
-  SearchDate
-} from "../components/search/index";
+import { SearchState, SearchReviewer } from "../components/search/index";
 import {
   TableId,
   TablePhoneNumber,
   TableSex,
   TableState,
-  TableCheckName,
-  TableTime,
   TableReviewer,
   TableChoise
 } from "../components/table/index";
 
 export default {
-  name: "UserControllerNameCheck",
+  name: "UserControllerPictureCheck",
   components: {
     Pagination,
-    SearchSex,
     SearchState,
     SearchReviewer,
-    SearchDate,
     TableId,
     TableSex,
     TableState,
     TablePhoneNumber,
-    TableTime,
     TableReviewer,
-    TableChoise,
-    TableCheckName
+    TableChoise
   },
   directives: { waves },
   data() {
@@ -207,12 +191,6 @@ export default {
       console.log(tag);
     },
     /**
-     * 选择`性别`更新
-     */
-    sexTypeChange(sex) {
-      console.log(sex);
-    },
-    /**
      * 选择`状态`更新
      */
     stateTypeChange(state) {
@@ -225,17 +203,11 @@ export default {
       console.log(state);
     },
     /**
-     * 选择`时间`更新
-     */
-    dateTypeChange(state) {
-      console.log(state);
-    },
-    /**
      * 获取表单
      */
     getList() {
       this.listLoading = true;
-      fetchList(this.listQuery).then(response => {
+      getPictureList(this.listQuery).then(response => {
         this.list = response.data.items;
         this.total = response.data.total;
         this.listLoading = false;
