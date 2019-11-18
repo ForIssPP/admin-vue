@@ -153,7 +153,7 @@ import {
   SearchNumberState,
   SearchUserCreateType,
   SearchDate
-} from "../components/search/index";
+} from "@/components/search/index";
 import {
   TableId,
   TablePhoneNumber,
@@ -168,7 +168,7 @@ import {
   TablePlatform,
   TableUserCreateType,
   TableVip
-} from "../components/table/index";
+} from "@/components/table/index";
 
 export default {
   name: "UserControllerNameCheck",

@@ -109,7 +109,7 @@ import {
   TablePhoneNumber,
   TableSex,
   TableChoise
-} from "../components/table/index";
+} from "@/components/table/index";
 
 export default {
   name: "UserControllerAlbumCheck",

@@ -122,7 +122,7 @@ import {
   SearchState,
   SearchReviewer,
   SearchDate
-} from "../components/search/index";
+} from "@/components/search/index";
 import {
   TableId,
   TablePhoneNumber,
@@ -132,7 +132,7 @@ import {
   TableTime,
   TableReviewer,
   TableChoise
-} from "../components/table/index";
+} from "@/components/table/index";
 
 export default {
   name: "UserControllerNameCheck",
