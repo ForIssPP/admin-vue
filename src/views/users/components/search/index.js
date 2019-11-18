@@ -2,3 +2,8 @@ export { default as SearchDate } from "./search-date";
 export { default as SearchReviewer } from "./search-reviewer";
 export { default as SearchSex } from "./search-sex";
 export { default as SearchState } from "./search-state";
+export { default as SearchVip } from "./search-vip";
+export { default as SearchNumberState } from "./search-number-state";
+export { default as SearchAddress } from "./search-address";
+export { default as SearchUserCreateType } from "./search-user-create-type";
+export { default as SearchPlatform } from "./search-platform";
