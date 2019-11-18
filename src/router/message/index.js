@@ -1,23 +1,27 @@
-import routerFactory from '@/utils/router-factory';
-import Layout from '@/layout'
+import routerFactory from "@/utils/router-factory";
+import Layout from "@/layout";
 
-const name = ['msgPush', 'feedback', 'tipOffs'];
+const name = ["msgPush", "feedback", "tipOffs"];
 
 export default {
-  path: '/message',
+  path: "/message",
   component: Layout,
-  redirect: '/message',
-  name: 'messageController',
+  redirect: "/message",
+  name: "messageController",
   meta: {
-    title: '消息管理',
-    icon: 'message'
+    title: "消息管理",
+    icon: "message"
   },
   children: [
     ...routerFactory(
       name,
-      Array(name.length).fill(() => import('@/views/nested/menu1/menu1-1')),
+      [
+        () => import("@/views/message/push"),
+        () => import("@/views/message/feedback"),
+        () => import("@/views/message/tip-offs")
+      ],
       name,
-      ['消息推送', '反馈', '举报']
+      ["消息推送", "反馈", "举报"]
     )
   ]
-}
+};

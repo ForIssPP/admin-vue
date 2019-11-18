@@ -1,3 +1,5 @@
+import Mock from 'mockjs'
+
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -101,6 +103,21 @@ export default [
       return {
         code: 20000,
         data: info
+      }
+    }
+  },
+
+  {
+    url: '/user/update/avatar',
+    type: 'post',
+    response: config => {
+      return {
+        code: 20000,
+        data: {
+          files: {
+            avatar: Mock.mock('@image(100x100, @color, @word)')
+          }
+        }
       }
     }
   },

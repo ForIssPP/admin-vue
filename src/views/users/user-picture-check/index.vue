@@ -107,17 +107,12 @@
 </template>
 
 <script>
-import {
-  getPictureList,
-  fetchPv,
-  createArticle,
-  updateArticle
-} from "@/api/article";
+import { getPictureList } from "@/api/user";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
-import { SearchState, SearchReviewer } from "../components/search/index";
+import { SearchState, SearchReviewer } from "@/components/search/index";
 import {
   TableId,
   TablePhoneNumber,
@@ -125,7 +120,7 @@ import {
   TableState,
   TableReviewer,
   TableChoise
-} from "../components/table/index";
+} from "@/components/table/index";
 
 export default {
   name: "UserControllerPictureCheck",

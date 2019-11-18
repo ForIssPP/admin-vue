@@ -29,6 +29,30 @@
         @keyup.enter.native="handleFilter"
       />
 
+      <!-- 性别查询 -->
+      <search-sex @sexTypeChange="sexTypeChange" />
+
+      <!-- 会员查询 -->
+      <search-vip @stateTypeChange="stateTypeChange" />
+
+      <!-- 渠道查询 -->
+      <search-platform @stateTypeChange="stateTypeChange" />
+
+      <!-- 时间查询 -->
+      <search-date @dateTypeChange="dateTypeChange" />
+
+      <!-- 账号状态查询 -->
+      <search-numberState @stateTypeChange="stateTypeChange" />
+
+      <!-- 位置查询 -->
+      <search-address @stateTypeChange="stateTypeChange" />
+
+      <!-- 用户类型查询 -->
+      <search-userCreateType @stateTypeChange="stateTypeChange" />
+
+      <!-- 操作人查询 -->
+      <search-reviewer style="margin-right: 10px" @reviewerTypeChange="reviewerTypeChange" />
+
       <!-- 搜索 -->
       <el-button
         v-waves
@@ -62,27 +86,40 @@
       style="width: 100%;"
     >
       <!-- ID -->
-      <TableId />
+      <table-id />
+
+      <!-- Name -->
+      <table-name />
 
       <!-- Phone Number -->
-      <TablePhoneNumber />
+      <table-phone-number />
+
+      <!-- Number State -->
+      <table-number-state />
 
       <!-- Sex -->
-      <TableSex />
+      <table-sex />
 
-      <!-- Picture Check -->
-      <el-table-column label="图片" prop="avatar" align="center">
-        <template slot-scope="{row}">
-          <img :src="row.picture" alt="old-avatar" />
-        </template>
-      </el-table-column>
+      <!-- Vip -->
+      <table-vip />
 
-      <!-- 操作 -->
-      <el-table-column label="操作" prop="checkName" align="center" width="130">
-        <template v-slot="{row}">
-          <el-button plain size="mini" @click="handleChoise">审核</el-button>
-        </template>
-      </el-table-column>
+      <!-- Platform -->
+      <table-platform />
+
+      <!-- Time -->
+      <table-time />
+
+      <!-- Address -->
+      <table-address />
+
+      <!-- User Create Type -->
+      <table-user-create-type />
+
+      <!-- Reviewer -->
+      <table-reviewer />
+
+      <!-- Choise Group -->
+      <table-choise-group @handleChoise="handleChoise" />
     </el-table>
     <!-- 表单 end -->
 
@@ -99,26 +136,66 @@
 </template>
 
 <script>
-import { getPictureList } from "@/api/user";
+import {
+  getUserList
+} from "@/api/user";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import {
+  SearchVip,
+  SearchSex,
+  SearchAddress,
+  SearchState,
+  SearchPlatform,
+  SearchReviewer,
+  SearchNumberState,
+  SearchUserCreateType,
+  SearchDate
+} from "@/components/search/index";
+import {
   TableId,
   TablePhoneNumber,
   TableSex,
-  TableChoise
+  TableTime,
+  TableReviewer,
+  TableUsername,
+  TableChoiseGroup,
+  TableAddress,
+  TableName,
+  TableNumberState,
+  TablePlatform,
+  TableUserCreateType,
+  TableVip
 } from "@/components/table/index";
 
 export default {
-  name: "UserControllerAlbumCheck",
+  name: "UserControllerNameCheck",
   components: {
     Pagination,
+    SearchVip,
+    SearchSex,
+    SearchAddress,
+    SearchState,
+    SearchPlatform,
+    SearchReviewer,
+    SearchNumberState,
+    SearchUserCreateType,
+    SearchDate,
     TableId,
-    TableSex,
     TablePhoneNumber,
-    TableChoise
+    TableSex,
+    TableTime,
+    TableReviewer,
+    TableUsername,
+    TableChoiseGroup,
+    TableAddress,
+    TableName,
+    TableNumberState,
+    TablePlatform,
+    TableUserCreateType,
+    TableVip
   },
   directives: { waves },
   data() {
@@ -165,10 +242,16 @@ export default {
   },
   methods: {
     /**
-     * 打开相册审核界面
+     * 操作状态更新
      */
-    handleChoise() {
-      console.log("open");
+    handleChoise(tag) {
+      console.log(tag);
+    },
+    /**
+     * 选择`性别`更新
+     */
+    sexTypeChange(sex) {
+      console.log(sex);
     },
     /**
      * 选择`状态`更新
@@ -183,11 +266,17 @@ export default {
       console.log(state);
     },
     /**
+     * 选择`时间`更新
+     */
+    dateTypeChange(state) {
+      console.log(state);
+    },
+    /**
      * 获取表单
      */
     getList() {
       this.listLoading = true;
-      getPictureList(this.listQuery).then(response => {
+      getUserList(this.listQuery).then(response => {
         this.list = response.data.items;
         this.total = response.data.total;
         this.listLoading = false;

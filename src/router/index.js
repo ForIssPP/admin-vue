@@ -132,7 +132,7 @@ export const constantRoutes = [{
 ]
 
 // 异步路由
-export const asyncRoutes = [tableRouter];
+export const asyncRoutes = [];
 
 const oldRoutes = [{
     path: '/permission',

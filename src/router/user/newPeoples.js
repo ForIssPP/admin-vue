@@ -5,7 +5,7 @@ const name = ['addUser'];
 export default [
   ...routerFactory(
     'addUser',
-    () => import('@/views/nested/menu1/menu1-1'),
+    () => import('@/views/users/create-user'),
     'addUser',
     '添加用户'
   )

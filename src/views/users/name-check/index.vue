@@ -112,12 +112,7 @@
 </template>
 
 <script>
-import {
-  fetchList,
-  fetchPv,
-  createArticle,
-  updateArticle
-} from "@/api/article";
+import { fetchList } from "@/api/article";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
@@ -127,7 +122,7 @@ import {
   SearchState,
   SearchReviewer,
   SearchDate
-} from "../components/search/index";
+} from "@/components/search/index";
 import {
   TableId,
   TablePhoneNumber,
@@ -137,7 +132,7 @@ import {
   TableTime,
   TableReviewer,
   TableChoise
-} from "../components/table/index";
+} from "@/components/table/index";
 
 export default {
   name: "UserControllerNameCheck",
