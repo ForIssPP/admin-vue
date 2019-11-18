@@ -9,7 +9,8 @@
 export default {
   props: {
     width: {
-      type: String
+      type: String,
+      default: "80"
     },
     sortable: {
       type: [Boolean, String],
