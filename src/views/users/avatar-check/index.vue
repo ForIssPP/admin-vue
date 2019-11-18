@@ -123,12 +123,7 @@
 </template>
 
 <script>
-import {
-  getAvatarList,
-  fetchPv,
-  createArticle,
-  updateArticle
-} from "@/api/article";
+import { getAvatarList } from "@/api/user";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";

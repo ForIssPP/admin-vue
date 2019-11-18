@@ -20,7 +20,8 @@ const testList = Array(15).fill(null)
 const avatarList = [],
   profilesList = [],
   picture = [],
-  pictures = []
+  pictures = [],
+  userlist = []
 
 testList.map(() => {
   avatarList.push(Mock.mock({
@@ -64,9 +65,21 @@ testList.map(() => {
     'pictures|1-5': ['@image(50x50, @color, @word)'],
   }))
 
+  userlist.push(Mock.mock({
+    id: '@increment',
+    username: '@cname',
+    'numberState|1': ['冻结', '正常'],
+    'platform|1': ['安卓', 'IOS'],
+    'userCreateType|1': ['手机端', '后台'],
+    time: '@datetime(yyyy-mm-dd HH:mm:ss)',
+    'vip|1': ['会员', '非会员'],
+    'address|1': ['台湾', '香港', '澳门', '@county'],
+    phoneNumber: /1[345789][0-9]{9}/,
+    'sex|1': ['男', '女'],
+    'reviewer|1': ['admin', 'Siykt', 'King', 'Bill'],
+  }))
+
 });
-
-
 
 export default [
   // 表单查询接口
@@ -100,7 +113,7 @@ export default [
   },
 
   {
-    url: '/api/user/check/avatar',
+    url: '/user/check/avatar',
     type: 'get',
     response: config => {
       const {
@@ -129,7 +142,7 @@ export default [
   },
 
   {
-    url: '/api/user/check/profiles',
+    url: '/user/check/profiles',
     type: 'get',
     response: config => {
       const {
@@ -158,7 +171,7 @@ export default [
   },
 
   {
-    url: '/api/user/check/picture',
+    url: '/user/check/picture',
     type: 'get',
     response: config => {
       const {
@@ -187,7 +200,7 @@ export default [
   },
 
   {
-    url: '/api/user/check/moneypictures',
+    url: '/user/check/moneypictures',
     type: 'get',
     response: config => {
       const {
@@ -200,6 +213,56 @@ export default [
       } = config.query
 
       const pageList = pictures
+
+      if (sort === '-id') {
+        pageList = pageList.reverse()
+      }
+
+      return {
+        code: 20000,
+        data: {
+          total: pageList.length,
+          items: pageList.slice(0, limit)
+        }
+      }
+    }
+  },
+
+  {
+    url: '/user/check/album',
+    type: 'get',
+    response: config => {
+      const {
+        userName
+      } = config.query
+      if (userName) {
+        return {
+          code: 20000,
+          data: {
+            userName,
+            items: []
+          }
+        }
+      } else {
+        return;
+      }
+    }
+  },
+
+  {
+    url: '/user/userlist',
+    type: 'get',
+    response: config => {
+      const {
+        importance,
+        type,
+        title,
+        page = 1,
+        limit = 15,
+        sort
+      } = config.query
+
+      const pageList = userlist
 
       if (sort === '-id') {
         pageList = pageList.reverse()

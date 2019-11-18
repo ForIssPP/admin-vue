@@ -78,12 +78,7 @@
       </el-table-column>
 
       <!-- 操作 -->
-      <el-table-column
-        label="操作"
-        prop="checkName"
-        align="center"
-        width="130"
-      >
+      <el-table-column label="操作" prop="checkName" align="center" width="130">
         <template v-slot="{row}">
           <el-button plain size="mini" @click="handleChoise">审核</el-button>
         </template>
@@ -104,12 +99,7 @@
 </template>
 
 <script>
-import {
-  getPictureList,
-  fetchPv,
-  createArticle,
-  updateArticle
-} from "@/api/article";
+import { getPictureList } from "@/api/user";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
@@ -178,7 +168,7 @@ export default {
      * 打开相册审核界面
      */
     handleChoise() {
-      console.log('open');
+      console.log("open");
     },
     /**
      * 选择`状态`更新
