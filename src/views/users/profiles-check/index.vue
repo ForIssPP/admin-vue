@@ -112,12 +112,7 @@
 </template>
 
 <script>
-import {
-  getProfilesList,
-  fetchPv,
-  createArticle,
-  updateArticle
-} from "@/api/article";
+import { getProfilesList } from "@/api/user";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
