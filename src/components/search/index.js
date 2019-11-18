@@ -7,3 +7,5 @@ export { default as SearchNumberState } from "./search-number-state";
 export { default as SearchAddress } from "./search-address";
 export { default as SearchUserCreateType } from "./search-user-create-type";
 export { default as SearchPlatform } from "./search-platform";
+export { default as SearchStateTackle } from "./search-state-tackle";
+export { default as SearchTipOffType } from "./search-tip-off-type";
