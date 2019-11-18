@@ -88,8 +88,8 @@
       <!-- ID -->
       <table-id />
 
-      <!-- Name -->
-      <table-name />
+      <!-- Username -->
+      <table-username />
 
       <!-- Phone Number -->
       <table-phone-number />
@@ -163,7 +163,6 @@ import {
   TableUsername,
   TableChoiseGroup,
   TableAddress,
-  TableName,
   TableNumberState,
   TablePlatform,
   TableUserCreateType,
@@ -191,7 +190,6 @@ export default {
     TableUsername,
     TableChoiseGroup,
     TableAddress,
-    TableName,
     TableNumberState,
     TablePlatform,
     TableUserCreateType,
