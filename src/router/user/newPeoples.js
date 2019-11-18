@@ -5,7 +5,7 @@ const name = ['addUser'];
 export default [
   ...routerFactory(
     'addUser',
-    () => import('@/views/users/create-user/index'),
+    () => import('@/views/users/create-user'),
     'addUser',
     '添加用户'
   )
