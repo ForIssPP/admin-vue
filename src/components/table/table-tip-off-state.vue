@@ -1,7 +1,13 @@
 <template>
-  <el-table-column label="会员" prop="vip" :sortable="sortable" align="center" :width="width">
+  <el-table-column
+    label="处理状态"
+    prop="tipOffState"
+    :sortable="sortable"
+    align="center"
+    :width="width"
+  >
     <template slot-scope="{row}">
-      <span>{{ row.vip }}</span>
+      <span>{{ row.tipOffState }}</span>
     </template>
   </el-table-column>
 </template>

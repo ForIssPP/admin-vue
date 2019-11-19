@@ -2,32 +2,8 @@
   <div class="app-container">
     <!-- 检索栏 start -->
     <div class="filter-container">
-      <!-- 昵称查询 -->
-      <el-input
-        v-model="listQuery.name"
-        placeholder="昵称查询"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-
-      <!-- 手机号查询 -->
-      <el-input
-        v-model="listQuery.phoneNumber"
-        placeholder="手机号查询"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-
-      <!-- ID查询 -->
-      <el-input
-        v-model="listQuery.userID"
-        placeholder="ID查询"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
+      <!-- 位置查询 -->
+      <search-address @stateTypeChange="stateTypeChange" />
 
       <!-- 性别查询 -->
       <search-sex @sexTypeChange="sexTypeChange" />
@@ -38,20 +14,48 @@
       <!-- 渠道查询 -->
       <search-platform @stateTypeChange="stateTypeChange" />
 
-      <!-- 时间查询 -->
-      <search-date @dateTypeChange="dateTypeChange" />
+      <!-- 真人认证 -->
+      <el-select v-model="userCheck" placeholder="真人认证" class="filter-item" style="width: 110px">
+        <el-option label="已通过" value="已通过" />
+        <el-option label="未通过" value="未通过" />
+      </el-select>
 
-      <!-- 账号状态查询 -->
-      <search-numberState @stateTypeChange="stateTypeChange" />
+      <!-- 财产认证 -->
+      <el-select v-model="moneyCheck" placeholder="财产认证" class="filter-item" style="width: 110px">
+        <el-option label="已通过" value="已通过" />
+        <el-option label="未通过" value="未通过" />
+      </el-select>
 
-      <!-- 位置查询 -->
-      <search-address @stateTypeChange="stateTypeChange" />
+      <!-- 注册时间 -->
+      <search-date></search-date>
 
-      <!-- 用户类型查询 -->
-      <search-userCreateType @stateTypeChange="stateTypeChange" />
+      <!-- 身高 -->
+      <div class="filter-item number-search">
+        <el-col :span="11">
+          <el-input placeholder="开始身高" v-model="height.start"></el-input>
+        </el-col>
+        <el-col class="text-center" :span="2">-</el-col>
+        <el-col :span="11">
+          <el-input placeholder="结束身高" v-model="height.end"></el-input>
+        </el-col>
+      </div>
 
-      <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @reviewerTypeChange="reviewerTypeChange" />
+      <!-- 年龄 -->
+      <div class="filter-item number-search">
+        <el-col :span="11">
+          <el-input placeholder="开始年龄" v-model="age.start"></el-input>
+        </el-col>
+        <el-col class="text-center" :span="2">-</el-col>
+        <el-col :span="11">
+          <el-input placeholder="结束年龄" v-model="age.end"></el-input>
+        </el-col>
+      </div>
+
+      <!-- 特殊符号 -->
+      <el-select v-model="syntaxCheck" placeholder="特殊符号" class="filter-item" style="width: 110px">
+        <el-option label="存在" value="存在" />
+        <el-option label="不存在" value="不存在" />
+      </el-select>
 
       <!-- 搜索 -->
       <el-button
@@ -60,85 +64,25 @@
         type="primary"
         icon="el-icon-search"
         @click="handleFilter"
-      >搜索</el-button>
-
-      <!-- 导出 -->
-      <el-button
-        v-waves
-        :loading="downloadLoading"
-        class="filter-item"
-        type="primary"
-        style="margin-left: 0"
-        icon="el-icon-download"
-        @click="handleDownload"
-      >导出</el-button>
+      >筛选</el-button>
     </div>
     <!-- 检索栏 end -->
 
-    <!-- 表单 start -->
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
-      <!-- ID -->
-      <table-id />
+    <el-form :label-position="'left'" :label-width="'100px'" :model="pushForm" ref="pushForm">
+      <el-form-item label="发送内容" prop="msg">
+        <el-input type="textarea" :rows="10" v-model="pushForm.msg" placeholder="请输入想要群发的内容"></el-input>
+      </el-form-item>
 
-      <!-- Username -->
-      <table-username />
-
-      <!-- Phone Number -->
-      <table-phone-number />
-
-      <!-- Number State -->
-      <table-number-state />
-
-      <!-- Sex -->
-      <table-sex />
-
-      <!-- Vip -->
-      <table-vip />
-
-      <!-- Platform -->
-      <table-platform />
-
-      <!-- Time -->
-      <table-time />
-
-      <!-- Address -->
-      <table-address />
-
-      <!-- User Create Type -->
-      <table-user-create-type />
-
-      <!-- Reviewer -->
-      <table-reviewer />
-
-      <!-- Choise Group -->
-      <table-choise-group @handleChoise="handleChoise" />
-    </el-table>
-    <!-- 表单 end -->
-
-    <!-- 分页器 start -->
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="listQuery.page"
-      :limit.sync="listQuery.limit"
-      @pagination="getList"
-    />
-    <!-- 分页器 end -->
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">发送</el-button>
+        <el-button>重置</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
-import {
-  getUserList
-} from "@/api/user";
+import { getUserList } from "@/api/user";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
@@ -147,27 +91,9 @@ import {
   SearchVip,
   SearchSex,
   SearchAddress,
-  SearchState,
-  SearchPlatform,
-  SearchReviewer,
-  SearchNumberState,
-  SearchUserCreateType,
-  SearchDate
+  SearchDate,
+  SearchPlatform
 } from "@/components/search/index";
-import {
-  TableId,
-  TablePhoneNumber,
-  TableSex,
-  TableTime,
-  TableReviewer,
-  TableUsername,
-  TableChoiseGroup,
-  TableAddress,
-  TableNumberState,
-  TablePlatform,
-  TableUserCreateType,
-  TableVip
-} from "@/components/table/index";
 
 export default {
   name: "UserControllerNameCheck",
@@ -176,28 +102,26 @@ export default {
     SearchVip,
     SearchSex,
     SearchAddress,
-    SearchState,
-    SearchPlatform,
-    SearchReviewer,
-    SearchNumberState,
-    SearchUserCreateType,
     SearchDate,
-    TableId,
-    TablePhoneNumber,
-    TableSex,
-    TableTime,
-    TableReviewer,
-    TableUsername,
-    TableChoiseGroup,
-    TableAddress,
-    TableNumberState,
-    TablePlatform,
-    TableUserCreateType,
-    TableVip
+    SearchPlatform
   },
   directives: { waves },
   data() {
     return {
+      moneyCheck: "",
+      userCheck: "",
+      syntaxCheck: "",
+      height: {
+        start: "",
+        end: ""
+      },
+      age: {
+        start: "",
+        end: ""
+      },
+      pushForm: {
+        msg: ""
+      },
       tableKey: 0,
       list: null,
       // 分页器按钮
@@ -280,6 +204,9 @@ export default {
         this.listLoading = false;
       });
     },
+    onSubmit() {
+      console.log(this.userCheck);
+    },
     /**
      * 表单搜索填充
      */
@@ -314,3 +241,13 @@ export default {
   }
 };
 </script>
+<style lang="scss">
+.filter-item {
+  &.number-search {
+    width: 200px;
+  }
+  .text-center {
+    line-height: 36px;
+  }
+}
+</style>

@@ -82,7 +82,12 @@
       <!-- Picture Check -->
       <el-table-column label="图片" prop="avatar" align="center">
         <template slot-scope="{row}">
-          <img v-for="(picture, index) in row.pictures" :key="index" :src="picture" alt="old-avatar" />
+          <img
+            v-for="(picture, index) in row.pictures"
+            :key="index"
+            :src="picture"
+            alt="old-avatar"
+          />
         </template>
       </el-table-column>
 
@@ -107,12 +112,7 @@
 </template>
 
 <script>
-import {
-  getMoneyPicturesList,
-  fetchPv,
-  createArticle,
-  updateArticle
-} from "@/api/article";
+import { getMoneyPicturesList } from "@/api/user";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
@@ -208,7 +208,7 @@ export default {
     getList() {
       this.listLoading = true;
       getMoneyPicturesList(this.listQuery).then(response => {
-        console.log(response)
+        console.log(response);
         this.list = response.data.items;
         this.total = response.data.total;
         this.listLoading = false;

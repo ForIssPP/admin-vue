@@ -2,23 +2,20 @@
   <div class="app-container">
     <!-- 检索栏 start -->
     <div class="filter-container">
-      <!-- 昵称查询 -->
-      <el-input
-        v-model="listQuery.name"
-        placeholder="昵称查询"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
+      <!-- 处理类型查询 -->
+      <search-tip-off-type @dateTypeChange="dateTypeChange" />
 
-      <!-- 手机号查询 -->
-      <el-input
-        v-model="listQuery.phoneNumber"
-        placeholder="手机号查询"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
+      <!-- 时间查询 -->
+      <search-date @dateTypeChange="dateTypeChange" />
+
+      <!-- 操作人查询 -->
+      <search-reviewer style="margin-right: 10px" @reviewerTypeChange="reviewerTypeChange" />
+
+      <!-- 渠道查询 -->
+      <search-platform @stateTypeChange="stateTypeChange" />
+
+      <!-- 处理结果查询 -->
+      <search-state-tackle />
 
       <!-- ID查询 -->
       <el-input
@@ -28,30 +25,6 @@
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
-
-      <!-- 性别查询 -->
-      <search-sex @sexTypeChange="sexTypeChange" />
-
-      <!-- 会员查询 -->
-      <search-vip @stateTypeChange="stateTypeChange" />
-
-      <!-- 渠道查询 -->
-      <search-platform @stateTypeChange="stateTypeChange" />
-
-      <!-- 时间查询 -->
-      <search-date @dateTypeChange="dateTypeChange" />
-
-      <!-- 账号状态查询 -->
-      <search-numberState @stateTypeChange="stateTypeChange" />
-
-      <!-- 位置查询 -->
-      <search-address @stateTypeChange="stateTypeChange" />
-
-      <!-- 用户类型查询 -->
-      <search-userCreateType @stateTypeChange="stateTypeChange" />
-
-      <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @reviewerTypeChange="reviewerTypeChange" />
 
       <!-- 搜索 -->
       <el-button
@@ -91,35 +64,52 @@
       <!-- Username -->
       <table-username />
 
-      <!-- Phone Number -->
-      <table-phone-number />
-
-      <!-- Number State -->
-      <table-number-state />
-
-      <!-- Sex -->
-      <table-sex />
+      <!-- Defendant -->
+      <el-table-column
+        label="昵称"
+        prop="defendant"
+        align="center"
+      >
+        <template slot-scope="{row}">
+          <span>{{ row.defendant }}</span>
+        </template>
+      </el-table-column>
 
       <!-- Vip -->
       <table-vip />
 
+      <!-- Tip Off Type -->
+      <table-tip-off-type />
+
+      <!-- Tip Off State -->
+      <table-tip-off-state />
+
+      <!-- Tip Off Messages -->
+      <table-tip-off-msg />
+
       <!-- Platform -->
       <table-platform />
+
+      <!-- Tip Off Images -->
+      <el-table-column label="图片" prop="tipOffImages" align="center">
+        <template slot-scope="{row}">
+          <img
+            v-for="(src, index) in row.tipOffImages"
+            :key="index"
+            :src="src"
+            alt="tip-off-images"
+          />
+        </template>
+      </el-table-column>
 
       <!-- Time -->
       <table-time />
 
-      <!-- Address -->
-      <table-address />
-
-      <!-- User Create Type -->
-      <table-user-create-type />
-
       <!-- Reviewer -->
       <table-reviewer />
 
-      <!-- Choise Group -->
-      <table-choise-group @handleChoise="handleChoise" />
+      <!-- Choise Message -->
+      <table-choise-msg @handleChoise="handleChoise" />
     </el-table>
     <!-- 表单 end -->
 
@@ -136,36 +126,28 @@
 </template>
 
 <script>
-import {
-  getUserList
-} from "@/api/user";
+import { getTipOffsList } from "@/api/user";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import {
-  SearchVip,
-  SearchSex,
-  SearchAddress,
-  SearchState,
   SearchPlatform,
   SearchReviewer,
-  SearchNumberState,
-  SearchUserCreateType,
-  SearchDate
+  SearchDate,
+  SearchStateTackle,
+  SearchTipOffType
 } from "@/components/search/index";
 import {
   TableId,
-  TablePhoneNumber,
-  TableSex,
   TableTime,
   TableReviewer,
   TableUsername,
-  TableChoiseGroup,
-  TableAddress,
-  TableNumberState,
   TablePlatform,
-  TableUserCreateType,
+  TableTipOffMsg,
+  TableTipOffType,
+  TableTipOffState,
+  TableChoiseMsg,
   TableVip
 } from "@/components/table/index";
 
@@ -173,26 +155,20 @@ export default {
   name: "UserControllerNameCheck",
   components: {
     Pagination,
-    SearchVip,
-    SearchSex,
-    SearchAddress,
-    SearchState,
     SearchPlatform,
     SearchReviewer,
-    SearchNumberState,
-    SearchUserCreateType,
     SearchDate,
+    SearchStateTackle,
+    SearchTipOffType,
     TableId,
-    TablePhoneNumber,
-    TableSex,
     TableTime,
     TableReviewer,
     TableUsername,
-    TableChoiseGroup,
-    TableAddress,
-    TableNumberState,
     TablePlatform,
-    TableUserCreateType,
+    TableTipOffMsg,
+    TableTipOffType,
+    TableTipOffState,
+    TableChoiseMsg,
     TableVip
   },
   directives: { waves },
@@ -274,7 +250,7 @@ export default {
      */
     getList() {
       this.listLoading = true;
-      getUserList(this.listQuery).then(response => {
+      getTipOffsList(this.listQuery).then(response => {
         this.list = response.data.items;
         this.total = response.data.total;
         this.listLoading = false;
