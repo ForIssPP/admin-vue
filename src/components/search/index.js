@@ -9,3 +9,4 @@ export { default as SearchUserCreateType } from "./search-user-create-type";
 export { default as SearchPlatform } from "./search-platform";
 export { default as SearchStateTackle } from "./search-state-tackle";
 export { default as SearchTipOffType } from "./search-tip-off-type";
+export { default as SearchStateActivity } from "./search-state-activity";
