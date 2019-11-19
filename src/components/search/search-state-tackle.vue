@@ -5,7 +5,7 @@
     clearable
     @change="stateTackleTypeChange"
     class="filter-item"
-    style="width: 100px"
+    style="width: 110px"
   >
     <el-option v-for="item in stateTackleTypeOptions" :key="item" :label="item" :value="item" />
   </el-select>

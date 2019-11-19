@@ -1,0 +1,44 @@
+<template>
+  <el-table-column label="操作" prop="checkUp" :sortable="sortable" align="center" :width="width">
+    <template v-slot="{row}">
+      <div class="table-choise" v-if="row.activityState === '正常'">
+        <el-button plain type="warning" size="mini" @click="handleChoise(true)">下架</el-button>
+      </div>
+      <div v-else>
+        <el-button plain type="success" size="mini" @click="handleChoise(false)">上架</el-button>
+      </div>
+    </template>
+  </el-table-column>
+</template>
+<script>
+export default {
+  props: {
+    width: {
+      type: String
+    },
+    sortable: {
+      type: [Boolean, String],
+      validator(value) {
+        return typeof value === "boolean" || value === "custom ";
+      },
+      default: false
+    }
+  },
+  methods: {
+    handleChoise(state) {
+      this.$emit("handleChoise", state);
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+.table-choise {
+  .el-button--success.is-plain {
+    margin-bottom: 3px;
+  }
+  .el-button--warning.is-plain {
+    margin-top: 3px;
+    margin-left: 0;
+  }
+}
+</style>
