@@ -1,23 +1,27 @@
-import routerFactory from '@/utils/router-factory';
-import Layout from '@/layout'
+import routerFactory from "@/utils/router-factory";
+import Layout from "@/layout";
 
-const name = ['activityCheck', 'offlinePartyCheck', 'onlinePartyCheck'];
+const name = ["offlinePartyCheck", "activityCheck", "privatePartyCheck"];
 
 export default {
-  path: '/activity',
+  path: "/activity",
   component: Layout,
-  redirect: '/activity',
-  name: 'ActivityController',
+  redirect: "/activity",
+  name: "ActivityController",
   meta: {
-    title: '广场动态',
-    icon: 'component'
+    title: "广场动态",
+    icon: "component"
   },
   children: [
     ...routerFactory(
       name,
-      Array(name.length).fill(() => import('@/views/nested/menu1/menu1-1')),
+      [
+        () => import("@/views/activity/offline-party-check/"),
+        () => import("@/views/activity/activity-check/"),
+        () => import("@/views/activity/private-party-check/")
+      ],
       name,
-      ['动态审核', '线下聚会审核', '私密聚会审核']
+      ["线下聚会审核", "动态审核", "私密聚会审核"]
     )
   ]
-}
+};
