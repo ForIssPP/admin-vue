@@ -6,14 +6,18 @@ import role from './role'
 import article from './article'
 import search from './remote-search'
 import activity from './activity'
+import getConfig from './get-config'
+import finance from "./finance";
 
 const mocks = [
   ...user,
   ...role,
   ...article,
   ...search,
-  ...activity
-]
+  ...activity,
+  ...getConfig,
+  ...finance
+];
 
 // for front mock
 // please use it cautiously, it will redefine XMLHttpRequest,
