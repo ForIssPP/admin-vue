@@ -13,6 +13,7 @@
 </template>
 <script>
 export default {
+  name: "table-number-state",
   props: {
     width: {
       type: String

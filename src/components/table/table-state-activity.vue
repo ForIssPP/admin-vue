@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-state-activity",
   props: {
     width: {
       type: String,

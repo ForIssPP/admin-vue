@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-activity-text",
   props: {
     width: {
       type: String

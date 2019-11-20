@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-title",
   props: {
     width: {
       type: String

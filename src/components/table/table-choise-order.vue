@@ -28,6 +28,7 @@
 </template>
 <script>
 export default {
+  name: "table-choise-order",
   props: {
     width: {
       type: String
