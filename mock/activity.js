@@ -1,39 +1,7 @@
 import Mock from "mockjs";
+import dataList from "./data-list";
 
 const offlineList = [];
-const dataList = {
-  id: "@increment",
-  username: "@cname",
-  profiles: "@sentence",
-  reviewer: ["admin", "Siykt", "King", "Bill"],
-  phoneNumber: /1[345789][0-9]{9}/,
-  sex: ["男", "女"],
-  vip: ["会员", "非会员"],
-  platform: ["安卓", "IOS"],
-  numberState: ["冻结", "正常"],
-  time: "@datetime(yyyy-mm-dd HH:mm:ss)",
-  userCreateType: ["手机端", "后台"],
-  state: ["通过", "未通过", "待审核"],
-  pictures: ["@image(50x50, @color, @word)"],
-  address: ["台湾", "香港", "澳门", "@county"],
-  userCreateType: ["手机端", "后台"],
-  tipOffType: [
-    "头像/资料虚假",
-    "诈骗/广告",
-    "恶意骚扰我",
-    "发布色情、低俗、暴力内容",
-    "其他"
-  ],
-  tipOffState: ["已处理", "未处理"],
-  tipOffMsg: "@cparagraph",
-  tipOffImages: ["@image(50x50, @color, @word)"],
-  defendant: "@cname",
-  vip: ["会员", "非会员"],
-  title: "@cparagraph",
-  activityText: "@cparagraph",
-  activityState: ["正常", "已下架"],
-  activityImage: "@image(50x50, @color, @word)"
-};
 const mock = Mock.mock;
 const {
   id,
