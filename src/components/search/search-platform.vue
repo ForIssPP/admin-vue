@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", this.platformType);
+      this.$emit("searchChange", "platform", this.platformType);
     }
   }
 };

@@ -12,7 +12,7 @@
 </template>
 <script>
 export default {
-  name: "search-tip-off-type",
+  name: "search-tip-off-",
   data() {
     return {
       tipOffsType: "",
@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", this.tipOffsType);
+      this.$emit("searchChange", "tipOffs", this.tipOffsType);
     }
   }
 };

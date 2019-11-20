@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", this.addressType);
+      this.$emit("searchChange", "address", this.addressType);
     }
   }
 };

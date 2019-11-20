@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", this.vipType);
+      this.$emit("searchChange", "vip", this.vipType);
     }
   }
 };

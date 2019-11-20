@@ -1,27 +1,27 @@
 <template>
   <el-select
-    v-model="userCreateTypeType"
+    v-model="userCreateType"
     placeholder="用户类型"
     clearable
     @change="searchChange"
     class="filter-item"
     style="width: 110px"
   >
-    <el-option v-for="item in userCreateTypeTypeOptions" :key="item" :label="item" :value="item" />
+    <el-option v-for="item in userCreateTypeOptions" :key="item" :label="item" :value="item" />
   </el-select>
 </template>
 <script>
 export default {
-  name: "search-user-create-type",
+  name: "search-user-create-",
   data() {
     return {
-      userCreateTypeType: "",
-      userCreateTypeTypeOptions: ["后台", "手机端"]
+      userCreateType: "",
+      userCreateTypeOptions: ["后台", "手机端"]
     };
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", this.userCreateTypeType);
+      this.$emit("searchChange", "userCreate", this.userCreateType);
     }
   }
 };

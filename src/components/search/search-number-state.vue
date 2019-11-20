@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", this.numberStateType);
+      this.$emit("searchChange", "numberState", this.numberStateType);
     }
   }
 };

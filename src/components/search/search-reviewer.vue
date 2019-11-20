@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", this.reviewerType);
+      this.$emit("searchChange", "reviewer", this.reviewerType);
     }
   }
 };

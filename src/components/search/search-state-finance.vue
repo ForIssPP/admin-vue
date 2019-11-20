@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", this.payStateType);
+      this.$emit("searchChange", "payState", this.payStateType);
     }
   }
 };
