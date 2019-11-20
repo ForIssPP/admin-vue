@@ -3,7 +3,7 @@
     v-model="stateTackleType"
     placeholder="处理状态"
     clearable
-    @change="stateTackleTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 110px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-state-tackle",
   data() {
     return {
       stateTackleType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    stateTackleTypeChange() {
-      this.$emit("stateTackleTypeChange", this.stateTackleType);
+    searchChange() {
+      this.$emit("searchChange", this.stateTackleType);
     }
   }
 };

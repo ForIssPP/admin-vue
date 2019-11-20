@@ -3,7 +3,7 @@
     v-model="stateType"
     placeholder="状态"
     clearable
-    @change="stateTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 100px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-state",
   data() {
     return {
       stateType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    stateTypeChange() {
-      this.$emit("stateTypeChange", this.stateType);
+    searchChange() {
+      this.$emit("searchChange", this.stateType);
     }
   }
 };

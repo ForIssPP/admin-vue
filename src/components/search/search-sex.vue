@@ -3,7 +3,7 @@
     v-model="sexType"
     placeholder="性别"
     clearable
-    @change="sexTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 80px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-sex",
   data() {
     return {
       sexType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    sexTypeChange() {
-      this.$emit("sexTypeChange", this.sexType);
+    searchChange() {
+      this.$emit("searchChange", this.sexType);
     }
   }
 };

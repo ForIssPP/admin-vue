@@ -3,7 +3,7 @@
     v-model="tipOffsType"
     placeholder="举报类型"
     clearable
-    @change="tipOffsTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 140px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-tip-off-type",
   data() {
     return {
       tipOffsType: "",
@@ -25,8 +26,8 @@ export default {
     };
   },
   methods: {
-    tipOffsTypeChange() {
-      this.$emit("tipOffsTypeChange", this.tipOffsType);
+    searchChange() {
+      this.$emit("searchChange", this.tipOffsType);
     }
   }
 };

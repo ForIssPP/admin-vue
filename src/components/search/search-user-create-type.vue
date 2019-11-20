@@ -3,7 +3,7 @@
     v-model="userCreateTypeType"
     placeholder="用户类型"
     clearable
-    @change="userCreateTypeTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 110px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-user-create-type",
   data() {
     return {
       userCreateTypeType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    userCreateTypeTypeChange() {
-      this.$emit("userCreateTypeTypeChange", this.userCreateTypeType);
+    searchChange() {
+      this.$emit("searchChange", this.userCreateTypeType);
     }
   }
 };
