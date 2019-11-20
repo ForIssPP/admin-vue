@@ -1,23 +1,27 @@
-import routerFactory from '@/utils/router-factory';
-import Layout from '@/layout'
+import routerFactory from "@/utils/router-factory";
+import Layout from "@/layout";
 
-const name = ['recharge', 'cashRecord', 'purchaseRecord'];
+const name = ["withdrawRecord", "rechargeRecord", "purchaseRecord"];
 
 export default {
-  path: '/finance',
+  path: "/finance",
   component: Layout,
-  redirect: '/finance',
-  name: 'FinanceController',
+  redirect: "/finance",
+  name: "FinanceController",
   meta: {
-    title: '财务管理',
-    icon: 'money'
+    title: "财务管理",
+    icon: "money"
   },
   children: [
     ...routerFactory(
       name,
-      Array(name.length).fill(() => import('@/views/nested/menu1/menu1-1')),
+      [
+        () => import("@/views/finance/withdraw-record/"),
+        () => import("@/views/finance/recharge-record/"),
+        () => import("@/views/finance/purchase-record/")
+      ],
       name,
-      ['手动充值', '提现记录', '消费记录']
+      ["提现记录", "充值记录", "消费记录"]
     )
   ]
-}
+};

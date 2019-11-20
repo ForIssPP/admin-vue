@@ -1,14 +1,18 @@
+import {} from "./data-list";
+
 import Mock from "mockjs";
 import dataList from "./data-list";
 
-const offlineList = [];
+const withdrawalList = [],
+  rechargeList = [],
+  purchaseList = [];
 const mock = Mock.mock;
+
 const {
   id,
   username,
   profiles,
   reviewer,
-  phoneNumber,
   sex,
   platform,
   numberState,
@@ -17,41 +21,72 @@ const {
   state,
   pictures,
   address,
-  tipOffType,
-  tipOffState,
-  tipOffMsg,
-  tipOffImages,
   defendant,
   vip,
   title,
-  activityText,
-  activityImage,
-  activityState
+  coin,
+  payType,
+  orderState,
+  purchaseType,
+  orderNumber
 } = dataList;
 
 Array(15)
   .fill(null)
   .forEach(() => {
-    offlineList.push(
+    withdrawalList.push(
       mock({
         id,
         username,
-        "address|1": address,
-        "sex|1": sex,
-        profiles,
-        title,
-        activityText,
-        activityImage,
-        time,
+        coin,
+        postTime: time,
+        withdrawAmount: coin,
+        "vip|1": vip,
+        withdrawUserId: id,
+        "orderState|1": orderState,
+        orderNumber,
         "platform|1": platform,
         "reviewer|1": reviewer,
-        "activityState|1": activityState
+        "payType|1": payType,
+        time
+      })
+    );
+
+    rechargeList.push(
+      mock({
+        id,
+        username,
+        coin,
+        rechargeAmount: coin,
+        "sex|1": sex,
+        "platform|1": platform,
+        orderNumber,
+        "vip|1": vip,
+        "orderState|1": orderState,
+        "payType|1": payType,
+        postTime: time
+      })
+    );
+
+    purchaseList.push(
+      mock({
+        id,
+        username,
+        coin: "@integer(-10000, 0)",
+        "sex|1": sex,
+        "platform|1": platform,
+        orderNumber,
+        "vip|1": vip,
+        "orderState|1": orderState,
+        "payType|1": payType,
+        postTime: time,
+        "purchaseType|1": purchaseType
       })
     );
   });
 
-const GetOfflineParty = {
-  url: "/activity/offlineparty/list",
+const GetWithdrawalList = {
+  url: "/finance/withdraw/list",
   type: "get",
   response: config => {
     const {
@@ -63,7 +98,7 @@ const GetOfflineParty = {
       sort
     } = config.query;
 
-    const pageList = offlineList;
+    const pageList = withdrawalList;
 
     if (sort === "-id") {
       pageList = pageList.reverse();
@@ -79,8 +114,8 @@ const GetOfflineParty = {
   }
 };
 
-const GetPrivateParty = {
-  url: "/activity/privateparty/list",
+const GetRechargeRecordList = {
+  url: "/finance/record/rechargelist",
   type: "get",
   response: config => {
     const {
@@ -92,7 +127,7 @@ const GetPrivateParty = {
       sort
     } = config.query;
 
-    const pageList = offlineList;
+    const pageList = rechargeList;
 
     if (sort === "-id") {
       pageList = pageList.reverse();
@@ -108,8 +143,8 @@ const GetPrivateParty = {
   }
 };
 
-const GetActivityCheckList = {
-  url: "/activity/check/list",
+const GetPurchaseRecordList = {
+  url: "/finance/record/purchaselist",
   type: "get",
   response: config => {
     const {
@@ -121,7 +156,7 @@ const GetActivityCheckList = {
       sort
     } = config.query;
 
-    const pageList = offlineList;
+    const pageList = purchaseList;
 
     if (sort === "-id") {
       pageList = pageList.reverse();
@@ -137,4 +172,4 @@ const GetActivityCheckList = {
   }
 };
 
-export default [GetOfflineParty, GetActivityCheckList, GetPrivateParty];
+export default [GetWithdrawalList, GetRechargeRecordList, GetPurchaseRecordList];
