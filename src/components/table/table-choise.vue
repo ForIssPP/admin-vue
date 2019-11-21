@@ -2,11 +2,11 @@
   <el-table-column label="操作" prop="checkName" :sortable="sortable" align="center" :width="width">
     <template v-slot="{row}">
       <div class="table-choise" v-if="row.state === '待审核'">
-        <el-button plain type="success" size="mini" @click="handleChoise(true)">通过</el-button>
-        <el-button plain type="warning" size="mini" @click="handleChoise(false)">拒绝</el-button>
+        <el-button plain type="success" size="mini" @click="handleChoise(true, row)">通过</el-button>
+        <el-button plain type="warning" size="mini" @click="handleChoise(false, row)">拒绝</el-button>
       </div>
       <div v-else>
-        <el-button plain size="mini" @click="handleChoise('update')">更改状态</el-button>
+        <el-button plain size="mini" @click="handleChoise('update', row)">更改状态</el-button>
       </div>
     </template>
   </el-table-column>
@@ -27,8 +27,8 @@ export default {
     }
   },
   methods: {
-    handleChoise(state) {
-      this.$emit("handleChoise", state);
+    handleChoise(state, row) {
+      this.$emit("handleChoise", state, row);
     }
   }
 };
