@@ -1,28 +1,28 @@
-import request from '@/utils/request'
+import request from "@/utils/request";
 
 export function login(data) {
   return request({
-    url: '/user/login',
-    method: 'post',
+    url: "/user/login",
+    method: "post",
     data
-  })
+  });
 }
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
-    method: 'get',
+    url: "/user/info",
+    method: "get",
     params: {
       token
     }
-  })
+  });
 }
 
 export function logout() {
   return request({
-    url: '/user/logout',
-    method: 'post'
-  })
+    url: "/user/logout",
+    method: "post"
+  });
 }
 
 export function getReviewerUserList(reviewerUserList) {
@@ -32,7 +32,7 @@ export function getReviewerUserList(reviewerUserList) {
     params: {
       reviewerUserList
     }
-  })
+  });
 }
 
 export function getUserList(reviewerUserList) {
@@ -42,39 +42,39 @@ export function getUserList(reviewerUserList) {
     params: {
       reviewerUserList
     }
-  })
+  });
 }
 
 export function getAvatarList(query) {
   return request({
-    url: '/user/check/avatar',
-    method: 'get',
+    url: "/user/check/avatar",
+    method: "get",
     params: query
-  })
+  });
 }
 
 export function getProfilesList(query) {
   return request({
-    url: '/user/check/profiles',
-    method: 'get',
+    url: "/user/check/profiles",
+    method: "get",
     params: query
-  })
+  });
 }
 
 export function getPictureList(query) {
   return request({
-    url: '/user/check/picture',
-    method: 'get',
+    url: "/user/check/picture",
+    method: "get",
     params: query
-  })
+  });
 }
 
 export function getMoneyPicturesList(query) {
   return request({
-    url: '/user/check/moneypictures',
-    method: 'get',
+    url: "/user/check/moneypictures",
+    method: "get",
     params: query
-  })
+  });
 }
 
 export function getFeedBack(query) {
@@ -88,6 +88,22 @@ export function getFeedBack(query) {
 export function getTipOffsList(query) {
   return request({
     url: "/user/tipoffs/list",
+    method: "get",
+    params: query
+  });
+}
+
+export function getUsernameList(query) {
+  return request({
+    url: "/article/list",
+    method: "get",
+    params: query
+  });
+}
+
+export function getAlbumList(query) {
+  return request({
+    url: "/user/album/List",
     method: "get",
     params: query
   });
