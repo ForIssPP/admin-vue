@@ -79,8 +79,6 @@
 </template>
 
 <script>
-import { fetchList } from "@/api/article";
-// button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
@@ -91,9 +89,25 @@ import {
   SearchDate
 } from "@/components/search/index";
 import MyTable from "@/components/table/index.vue";
-import { _confirm } from "@/utils/open-confirm";
 import downloadExcel from "@/utils/download-excel";
-import { tableHeader, tableContent, componentList } from "./tableConfig";
+import { tableHeader, tableContent, componentList } from "./table-config";
+import methodsCommon from "../common/methods";
+
+const methods = methodsCommon("getUsernameList");
+methods["handleDownload"] = function() {
+  this.downloadLoading = true;
+  const data = this.list.map(value => {
+    return tableContent.map(key => {
+      return value[key];
+    });
+  });
+  downloadExcel(
+    tableHeader,
+    data,
+    () => (this.downloadLoading = false)
+    /* file name */
+  );
+};
 
 export default {
   name: "UserControllerNameCheck",
@@ -130,71 +144,6 @@ export default {
   created() {
     this.getList();
   },
-  methods: {
-    /**
-     * 操作状态更新
-     */
-    handleChoise(tag, row) {
-      const openConfirm = _confirm.bind(this);
-      const handleUpdate = () => {
-        row.state = "待审核";
-      };
-
-      const handlePass = () => {
-        row.state = "通过";
-      };
-
-      const handleNotPass = () => {
-        row.state = "未通过";
-      };
-
-      if (tag === "update") {
-        openConfirm(handleUpdate);
-      }
-
-      if (tag === true) {
-        openConfirm(handlePass);
-      }
-
-      if (tag === false) {
-        openConfirm(handleNotPass);
-      }
-    },
-    /**
-     * 查询更新
-     */
-    searchChange(type, query) {
-      this.listQuery[type] = query || undefined;
-      /* TODO */
-    },
-    /**
-     * 获取表单
-     */
-    getList() {
-      this.listLoading = true;
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.total = response.data.total;
-        this.listLoading = false;
-      });
-    },
-    /**
-     * 导出Excel
-     */
-    handleDownload() {
-      this.downloadLoading = true;
-      const data = this.list.map(value => {
-        return tableContent.map(key => {
-          return value[key];
-        });
-      });
-      downloadExcel(
-        tableHeader,
-        data,
-        () => (this.downloadLoading = false)
-        /* file name */
-      );
-    }
-  }
+  methods
 };
 </script>
