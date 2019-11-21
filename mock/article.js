@@ -50,6 +50,7 @@ testList.map(() => {
       "sex|1": ["男", "女"],
       "state|1": ["通过", "未通过", "待审核"],
       "reviewer|1": reviewer,
+      username: "@cname",
       profiles: "@sentence"
     })
   );
