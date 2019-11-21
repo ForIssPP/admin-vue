@@ -23,7 +23,7 @@ export default {
     searchChange() {
       // 返回的是Date对象数组
       if (this.choseDates) {
-        this.$emit("searchChange", "date", [this.startDate, this.endDate]);
+        this.$emit("searchChange", "date", this.choseDates);
       }
     }
   }
