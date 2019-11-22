@@ -8,7 +8,7 @@
         placeholder="昵称查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 手机号查询 -->
@@ -17,7 +17,7 @@
         placeholder="手机号查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- ID查询 -->
@@ -26,20 +26,20 @@
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 性别查询 -->
-      <SearchSex @sexTypeChange="sexTypeChange" />
+      <SearchSex @searchChange="searchChange" />
 
       <!-- 状态查询 -->
-      <SearchState @stateTypeChange="stateTypeChange" />
+      <SearchState @searchChange="searchChange" />
 
       <!-- 操作人查询 -->
-      <SearchReviewer @reviewerTypeChange="reviewerTypeChange" />
+      <SearchReviewer @searchChange="searchChange" />
 
       <!-- 时间查询 -->
-      <SearchDate style="margin-right: 10px" @dateTypeChange="dateTypeChange" />
+      <SearchDate style="margin-right: 10px" @searchChange="searchChange" />
 
       <!-- 搜索 -->
       <el-button
@@ -47,7 +47,7 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="getList"
       >搜索</el-button>
 
       <!-- 导出 -->
@@ -63,41 +63,8 @@
     </div>
     <!-- 检索栏 end -->
 
-    <!-- 表单 start -->
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
-      <!-- ID -->
-      <TableId />
-
-      <!-- Phone Number -->
-      <TablePhoneNumber />
-
-      <!-- Sex -->
-      <TableSex />
-
-      <!-- State -->
-      <TableState />
-
-      <!-- Check Name -->
-      <TableCheckName />
-
-      <!-- Time -->
-      <TableTime />
-
-      <!-- Reviewer -->
-      <TableReviewer />
-
-      <!-- 操作 -->
-      <TableChoise @handleChoise="handleChoise" />
-    </el-table>
-    <!-- 表单 end -->
+    <!-- 表格 -->
+    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
 
     <!-- 分页器 start -->
     <pagination
@@ -112,8 +79,6 @@
 </template>
 
 <script>
-import { fetchList } from "@/api/article";
-// button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
@@ -123,16 +88,26 @@ import {
   SearchReviewer,
   SearchDate
 } from "@/components/search/index";
-import {
-  TableId,
-  TablePhoneNumber,
-  TableSex,
-  TableState,
-  TableCheckName,
-  TableTime,
-  TableReviewer,
-  TableChoise
-} from "@/components/table/index";
+import MyTable from "@/components/table/index.vue";
+import downloadExcel from "@/utils/download-excel";
+import { tableHeader, tableContent, componentList } from "./table-config";
+import methodsCommon from "../common/methods";
+
+const methods = methodsCommon("getUsernameList");
+methods["handleDownload"] = function() {
+  this.downloadLoading = true;
+  const data = this.list.map(value => {
+    return tableContent.map(key => {
+      return value[key];
+    });
+  });
+  downloadExcel(
+    tableHeader,
+    data,
+    () => (this.downloadLoading = false)
+    /* file name */
+  );
+};
 
 export default {
   name: "UserControllerNameCheck",
@@ -142,131 +117,33 @@ export default {
     SearchState,
     SearchReviewer,
     SearchDate,
-    TableId,
-    TableSex,
-    TableState,
-    TablePhoneNumber,
-    TableTime,
-    TableReviewer,
-    TableChoise,
-    TableCheckName
+    MyTable
   },
   directives: { waves },
   data() {
     return {
       tableKey: 0,
       list: null,
-      // 分页器按钮
       total: 0,
       listLoading: true,
+      downloadLoading: false,
+      componentList,
       listQuery: {
-        // 页面
+        name: undefined,
         page: 1,
-        // 15行
+        userID: undefined,
         limit: 15,
-
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: "+id"
-      },
-      tableHeader: [
-        "ID",
-        "电话号码",
-        "状态",
-        "性别",
-        "审核昵称",
-        "修改时间",
-        "处理人"
-      ],
-      tableContent: [
-        "id",
-        "phoneNumber",
-        "state",
-        "sex",
-        "checkName",
-        "time",
-        "reviewer"
-      ],
-      downloadLoading: false
+        sex: undefined,
+        state: undefined,
+        reviewer: undefined,
+        date: undefined,
+        phoneNumber: undefined
+      }
     };
   },
   created() {
     this.getList();
   },
-  methods: {
-    /**
-     * 操作状态更新
-     */
-    handleChoise(tag) {
-      console.log(tag);
-    },
-    /**
-     * 选择`性别`更新
-     */
-    sexTypeChange(sex) {
-      console.log(sex);
-    },
-    /**
-     * 选择`状态`更新
-     */
-    stateTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`处理`人更新
-     */
-    reviewerTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`时间`更新
-     */
-    dateTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 获取表单
-     */
-    getList() {
-      this.listLoading = true;
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.total = response.data.total;
-        this.listLoading = false;
-      });
-    },
-    /**
-     * 表单搜索填充
-     */
-    handleFilter() {
-      console.log(this.listQuery);
-      // this.getList();
-    },
-    /**
-     * 导出Excel
-     */
-    handleDownload() {
-      const header = this.tableHeader;
-
-      this.downloadLoading = true;
-      import("@/vendor/Export2Excel").then(excel => {
-        if (header.length !== this.tableContent.length) {
-          return false;
-        }
-        const data = this.list.map(value => {
-          return this.tableContent.map(key => {
-            return value[key];
-          });
-        });
-        excel.export_json_to_excel({
-          header,
-          data,
-          filename: "name-check"
-        });
-        this.downloadLoading = false;
-      });
-    }
-  }
+  methods
 };
 </script>

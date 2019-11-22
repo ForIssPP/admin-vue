@@ -13,6 +13,7 @@
 </template>
 <script>
 export default {
+  name: "table-choise-group",
   props: {
     width: {
       type: String

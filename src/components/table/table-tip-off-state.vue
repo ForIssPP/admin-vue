@@ -13,6 +13,7 @@
 </template>
 <script>
 export default {
+  name: "table-tip-off-state",
   props: {
     width: {
       type: String,

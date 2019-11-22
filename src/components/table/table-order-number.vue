@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-order-number",
   props: {
     width: {
       type: String

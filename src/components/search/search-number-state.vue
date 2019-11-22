@@ -3,7 +3,7 @@
     v-model="numberStateType"
     placeholder="账号状态"
     clearable
-    @change="numberStateTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 110px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-number-state",
   data() {
     return {
       numberStateType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    numberStateTypeChange() {
-      this.$emit("numberStateTypeChange", this.numberStateType);
+    searchChange() {
+      this.$emit("searchChange", "numberState", this.numberStateType);
     }
   }
 };

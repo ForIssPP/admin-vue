@@ -13,6 +13,7 @@
 </template>
 <script>
 export default {
+  name: "table-phone-number",
   props: {
     width: {
       type: String,

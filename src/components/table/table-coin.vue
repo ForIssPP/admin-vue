@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-coin",
   props: {
     width: {
       type: String

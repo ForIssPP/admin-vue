@@ -5,7 +5,7 @@
       v-model="choseDates"
       type="daterange"
       style="width: 250px"
-      @change="choseDatesChange"
+      @change="searchChange"
       start-placeholder="开始时间"
       end-placeholder="结束时间"
     ></el-date-picker>
@@ -13,17 +13,17 @@
 </template>
 <script>
 export default {
+  name: "search-date",
   data() {
     return {
       choseDates: ""
     };
   },
   methods: {
-    choseDatesChange() {
+    searchChange() {
       // 返回的是Date对象数组
       if (this.choseDates) {
-        console.log(this.choseDates);
-        this.$emit("choseDatesChange", [this.startDate, this.endDate]);
+        this.$emit("searchChange", "date", this.choseDates);
       }
     }
   }

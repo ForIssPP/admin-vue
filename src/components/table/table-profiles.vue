@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-profiles",
   props: {
     width: {
       type: String,

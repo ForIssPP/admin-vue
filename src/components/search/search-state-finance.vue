@@ -3,7 +3,7 @@
     v-model="payStateType"
     placeholder="账号状态"
     clearable
-    @change="payStateTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 110px"
   >
@@ -14,6 +14,7 @@
 import { getPayList } from "@/api/get-config";
 
 export default {
+  name: "search-state-finance",
   data() {
     return {
       payStateType: "",
@@ -26,8 +27,8 @@ export default {
     );
   },
   methods: {
-    payStateTypeChange() {
-      this.$emit("payStateTypeChange", this.payStateType);
+    searchChange() {
+      this.$emit("searchChange", "payState", this.payStateType);
     }
   }
 };

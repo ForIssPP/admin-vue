@@ -13,6 +13,7 @@
 </template>
 <script>
 export default {
+  name: "table-pay-type",
   props: {
     width: {
       type: String

@@ -3,7 +3,7 @@
     v-model="stateActivityType"
     placeholder="状态"
     clearable
-    @change="stateActivityTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 110px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-state-activity",
   data() {
     return {
       stateActivityType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    stateActivityTypeChange() {
-      this.$emit("stateActivityTypeChange", this.stateActivityType);
+    searchChange() {
+      this.$emit("searchChange", "stateActivity", this.stateActivityType);
     }
   }
 };

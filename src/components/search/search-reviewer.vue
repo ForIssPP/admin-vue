@@ -3,7 +3,7 @@
     v-model="reviewerType"
     placeholder="处理人"
     clearable
-    @change="reviewerTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 100px"
     :loading="loading"
@@ -16,6 +16,7 @@ import request from "@/utils/request";
 import { getReviewerUserList } from "@/api/user.js";
 
 export default {
+  name: "search-reviewer",
   data() {
     return {
       reviewerType: "",
@@ -34,8 +35,8 @@ export default {
       .catch(err => console.log(err));
   },
   methods: {
-    reviewerTypeChange() {
-      this.$emit("reviewerTypeChange", this.reviewerType);
+    searchChange() {
+      this.$emit("searchChange", "reviewer", this.reviewerType);
     }
   }
 };

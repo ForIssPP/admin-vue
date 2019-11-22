@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "table-choise-activity",
   props: {
     width: {
       type: String

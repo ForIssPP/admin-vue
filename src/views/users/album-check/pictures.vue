@@ -1,0 +1,13 @@
+<template>
+  <!-- Picture Check -->
+  <el-table-column label="图片" prop="avatar" align="center">
+    <template slot-scope="{row}">
+      <img :src="row.picture" alt="old-avatar" />
+    </template>
+  </el-table-column>
+</template>
+<script>
+export default {
+  name: "table-old-avatar"
+};
+</script>

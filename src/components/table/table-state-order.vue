@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-state-order",
   props: {
     width: {
       type: String,

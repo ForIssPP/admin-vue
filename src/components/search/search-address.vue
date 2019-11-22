@@ -3,7 +3,7 @@
     v-model="addressType"
     placeholder="用户地理位置"
     clearable
-    @change="addressTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 140px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-address",
   data() {
     return {
       addressType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    addressTypeChange() {
-      this.$emit("addressTypeChange", this.addressType);
+    searchChange() {
+      this.$emit("searchChange", "address", this.addressType);
     }
   }
 };

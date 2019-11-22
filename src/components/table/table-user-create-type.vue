@@ -13,6 +13,7 @@
 </template>
 <script>
 export default {
+  name: "table-user-create-type",
   props: {
     width: {
       type: String

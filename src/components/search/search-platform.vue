@@ -3,7 +3,7 @@
     v-model="platformType"
     placeholder="渠道"
     clearable
-    @change="platformTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 80px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-platform",
   data() {
     return {
       platformType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    platformTypeChange() {
-      this.$emit("platformTypeChange", this.platformType);
+    searchChange() {
+      this.$emit("searchChange", "platform", this.platformType);
     }
   }
 };

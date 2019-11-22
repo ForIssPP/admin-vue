@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-time",
   props: {
     width: {
       type: String

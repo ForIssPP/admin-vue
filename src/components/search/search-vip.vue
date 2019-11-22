@@ -3,7 +3,7 @@
     v-model="vipType"
     placeholder="会员"
     clearable
-    @change="vipTypeChange"
+    @change="searchChange"
     class="filter-item"
     style="width: 80px"
   >
@@ -12,6 +12,7 @@
 </template>
 <script>
 export default {
+  name: "search-vip",
   data() {
     return {
       vipType: "",
@@ -19,8 +20,8 @@ export default {
     };
   },
   methods: {
-    vipTypeChange() {
-      this.$emit("vipTypeChange", this.vipType);
+    searchChange() {
+      this.$emit("searchChange", "vip", this.vipType);
     }
   }
 };

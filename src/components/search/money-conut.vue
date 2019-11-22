@@ -10,6 +10,7 @@
 import countTo from "vue-count-to";
 
 export default {
+  name: "money-conut",
   components: { countTo },
   props: {
     money: {

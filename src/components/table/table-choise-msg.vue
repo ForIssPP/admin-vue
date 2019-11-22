@@ -17,6 +17,7 @@
 </template>
 <script>
 export default {
+  name: "table-choise-msg",
   props: {
     width: {
       type: String

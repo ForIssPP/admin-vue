@@ -7,6 +7,7 @@
 </template>
 <script>
 export default {
+  name: "table-tip-off-msg",
   props: {
     width: {
       type: String
