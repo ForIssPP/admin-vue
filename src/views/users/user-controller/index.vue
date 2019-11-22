@@ -127,7 +127,7 @@ methods["handleDownload"] = function() {
 };
 
 export default {
-  name: "UserControllerNameCheck",
+  name: "UserControllerCheck",
   components: {
     Pagination,
     SearchVip,
