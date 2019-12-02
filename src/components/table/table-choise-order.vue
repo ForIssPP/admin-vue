@@ -6,21 +6,21 @@
           v-show="row.orderState === '已完成'"
           plain
           size="mini"
-          @click="handleChoise('orderFinish')"
+          @click="handleChoise('orderFinish', row)"
         >已打款</el-button>
         <el-button
           v-show="row.orderState !== '已完成'"
           plain
           type="warning"
           size="mini"
-          @click="handleChoise('reject')"
+          @click="handleChoise('reject', row)"
         >驳回</el-button>
         <el-button
           v-show="row.orderState === '未处理'"
           plain
           type="success"
           size="mini"
-          @click="handleChoise('goPay')"
+          @click="handleChoise('goPay', row)"
         >打款</el-button>
       </div>
     </template>
@@ -42,8 +42,8 @@ export default {
     }
   },
   methods: {
-    handleChoise(state) {
-      this.$emit("handleChoise", state);
+    handleChoise(state, row) {
+      this.$emit("handleChoise", state, row);
     }
   }
 };

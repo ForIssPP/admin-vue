@@ -2,10 +2,10 @@
   <el-table-column label="操作" prop="checkUp" :sortable="sortable" align="center" :width="width">
     <template v-slot="{row}">
       <div class="table-choise" v-if="row.activityState === '正常'">
-        <el-button plain type="warning" size="mini" @click="handleChoise(true)">下架</el-button>
+        <el-button plain type="warning" size="mini" @click="handleChoise(true, row)">下架</el-button>
       </div>
       <div v-else>
-        <el-button plain type="success" size="mini" @click="handleChoise(false)">上架</el-button>
+        <el-button plain type="success" size="mini" @click="handleChoise(false, row)">上架</el-button>
       </div>
     </template>
   </el-table-column>
@@ -26,8 +26,8 @@ export default {
     }
   },
   methods: {
-    handleChoise(state) {
-      this.$emit("handleChoise", state);
+    handleChoise(state, row) {
+      this.$emit("handleChoise", state, row);
     }
   }
 };

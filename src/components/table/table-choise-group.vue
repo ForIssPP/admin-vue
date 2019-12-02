@@ -2,11 +2,11 @@
   <el-table-column label="操作" prop="checkName" :sortable="sortable" align="center" :width="width">
     <template v-slot="{row}">
       <div class="table-choise">
-        <el-button plain v-if="row.numberState === '正常'" size="mini" @click="handleChoise('freeze')">冻结</el-button>
-        <el-button plain v-else size="mini" @click="handleChoise('thaw')">解冻</el-button>
-        <el-button plain size="mini" @click="handleChoise('see')">查看</el-button>
-        <el-button plain size="mini" @click="handleChoise('msg')">消息</el-button>
-        <el-button plain size="mini" @click="handleChoise('edit')">编辑</el-button>
+        <el-button plain v-if="row.numberState === '正常'" size="mini" @click="handleChoise('freeze', row)">冻结</el-button>
+        <el-button plain v-else size="mini" @click="handleChoise('thaw', row)">解冻</el-button>
+        <el-button plain size="mini" @click="handleChoise('see', row)">查看</el-button>
+        <el-button plain size="mini" @click="handleChoise('msg', row)">消息</el-button>
+        <el-button plain size="mini" @click="handleChoise('edit', row)">编辑</el-button>
       </div>
     </template>
   </el-table-column>
@@ -27,8 +27,8 @@ export default {
     }
   },
   methods: {
-    handleChoise(state) {
-      this.$emit("handleChoise", state);
+    handleChoise(state, row) {
+      this.$emit("handleChoise", state, row);
     }
   }
 };
