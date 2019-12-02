@@ -30,16 +30,16 @@
       />
 
       <!-- 性别查询 -->
-      <SearchSex @searchChange="searchChange" />
+      <search-sex @searchChange="searchChange" />
 
       <!-- 状态查询 -->
-      <SearchState @searchChange="searchChange" />
+      <search-state @searchChange="searchChange" />
 
       <!-- 操作人查询 -->
-      <SearchReviewer @searchChange="searchChange" />
+      <search-reviewer @searchChange="searchChange" />
 
       <!-- 时间查询 -->
-      <SearchDate style="margin-right: 10px" @searchChange="searchChange" />
+      <search-date style="margin-right: 10px" @searchChange="searchChange" />
 
       <!-- 搜索 -->
       <el-button
