@@ -3,16 +3,16 @@
     <!-- 检索栏 start -->
     <div class="filter-container">
       <!-- 处理类型查询 -->
-      <search-tip-off-type @dateTypeChange="dateTypeChange" />
+      <search-tip-off-type @searchChange="searchChange" />
 
       <!-- 时间查询 -->
-      <search-date @dateTypeChange="dateTypeChange" />
+      <search-date @searchChange="searchChange" />
 
       <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @reviewerTypeChange="reviewerTypeChange" />
+      <search-reviewer style="margin-right: 10px" @searchChange="searchChange" />
 
       <!-- 渠道查询 -->
-      <search-platform @stateTypeChange="stateTypeChange" />
+      <search-platform @searchChange="searchChange" />
 
       <!-- 处理结果查询 -->
       <search-state-tackle />
@@ -34,83 +34,23 @@
         icon="el-icon-search"
         @click="handleFilter"
       >搜索</el-button>
-
-      <!-- 导出 -->
-      <el-button
-        v-waves
-        :loading="downloadLoading"
-        class="filter-item"
-        type="primary"
-        style="margin-left: 0"
-        icon="el-icon-download"
-        @click="handleDownload"
-      >导出</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
-      <!-- ID -->
-      <table-id />
+    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
 
-      <!-- Username -->
-      <table-username />
-
-      <!-- Defendant -->
-      <el-table-column
-        label="昵称"
-        prop="defendant"
-        align="center"
-      >
-        <template slot-scope="{row}">
-          <span>{{ row.defendant }}</span>
-        </template>
-      </el-table-column>
-
-      <!-- Vip -->
-      <table-vip />
-
-      <!-- Tip Off Type -->
-      <table-tip-off-type />
-
-      <!-- Tip Off State -->
-      <table-tip-off-state />
-
-      <!-- Tip Off Messages -->
-      <table-tip-off-msg />
-
-      <!-- Platform -->
-      <table-platform />
-
-      <!-- Tip Off Images -->
-      <el-table-column label="图片" prop="tipOffImages" align="center">
-        <template slot-scope="{row}">
-          <img
-            v-for="(src, index) in row.tipOffImages"
-            :key="index"
-            :src="src"
-            alt="tip-off-images"
-          />
-        </template>
-      </el-table-column>
-
-      <!-- Time -->
-      <table-time />
-
-      <!-- Reviewer -->
-      <table-reviewer />
-
-      <!-- Choise Message -->
-      <table-choise-msg @handleChoise="handleChoise" />
-    </el-table>
+    <el-dialog title="反馈结果" :visible.sync="feedbackVisible" :before-close="onClose">
+      <el-form :model="form">
+        <el-form-item label="活动名称" :label-width="'500'">
+          <el-input type="textarea" :rows="10" v-model="form.feedback" placeholder="请输入反馈内容"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="onClose">取 消</el-button>
+        <el-button type="primary" @click="onSend">确 定</el-button>
+      </div>
+    </el-dialog>
     <!-- 表单 end -->
 
     <!-- 分页器 start -->
@@ -131,6 +71,8 @@ import { getTipOffsList } from "@/api/user";
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
+import MyTable from "@/components/table/index.vue";
+import { componentList } from "./table-config";
 import {
   SearchPlatform,
   SearchReviewer,
@@ -138,77 +80,41 @@ import {
   SearchStateTackle,
   SearchTipOffType
 } from "@/components/search/index";
-import {
-  TableId,
-  TableTime,
-  TableReviewer,
-  TableUsername,
-  TablePlatform,
-  TableTipOffMsg,
-  TableTipOffType,
-  TableTipOffState,
-  TableChoiseMsg,
-  TableVip
-} from "@/components/table/index";
 
 export default {
-  name: "UserControllerNameCheck",
+  name: "MessageControllerTip-OffsPage",
   components: {
     Pagination,
+    MyTable,
     SearchPlatform,
     SearchReviewer,
     SearchDate,
     SearchStateTackle,
-    SearchTipOffType,
-    TableId,
-    TableTime,
-    TableReviewer,
-    TableUsername,
-    TablePlatform,
-    TableTipOffMsg,
-    TableTipOffType,
-    TableTipOffState,
-    TableChoiseMsg,
-    TableVip
+    SearchTipOffType
   },
   directives: { waves },
   data() {
     return {
+      componentList,
       tableKey: 0,
       list: null,
-      // 分页器按钮
       total: 0,
       listLoading: true,
       listQuery: {
-        // 页面
         page: 1,
-        // 15行
-        limit: 15,
-
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: "+id"
+        tipOffs: undefined,
+        name: undefined,
+        platform: undefined,
+        stateTackle: undefined,
+        reviewer: undefined,
+        date: undefined
       },
-      tableHeader: [
-        "ID",
-        "电话号码",
-        "状态",
-        "性别",
-        "审核昵称",
-        "修改时间",
-        "处理人"
-      ],
-      tableContent: [
-        "id",
-        "phoneNumber",
-        "state",
-        "sex",
-        "checkName",
-        "time",
-        "reviewer"
-      ],
-      downloadLoading: false
+      form: {
+        feedback: undefined
+      },
+      downloadLoading: false,
+      feedbackVisible: false,
+      feedbackId: undefined
     };
   },
   created() {
@@ -218,32 +124,31 @@ export default {
     /**
      * 操作状态更新
      */
-    handleChoise(tag) {
-      console.log(tag);
+    handleChoise(tag, row) {
+      if (tag === "msg") {
+        this.feedbackVisible = true;
+        this.feedbackId = row.id;
+        console.log(tag, row);
+      } else if (tag === false) {
+        this.$message({
+          message: "反馈已处理",
+          type: "warning"
+        });
+      } else {
+        import("@/utils/open-confirm").then(_confirm => {
+          _confirm.commonConfirm.call(this, () => {
+            row.tipOffState = "已处理";
+          });
+        });
+      }
     },
     /**
-     * 选择`性别`更新
+     * 查询更新
      */
-    sexTypeChange(sex) {
-      console.log(sex);
-    },
-    /**
-     * 选择`状态`更新
-     */
-    stateTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`处理`人更新
-     */
-    reviewerTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`时间`更新
-     */
-    dateTypeChange(state) {
-      console.log(state);
+    searchChange(type, query) {
+      this.listQuery[type] = query || undefined;
+      console.log(this.listQuery);
+      /* TODO */
     },
     /**
      * 获取表单
@@ -263,29 +168,14 @@ export default {
       console.log(this.listQuery);
       // this.getList();
     },
-    /**
-     * 导出Excel
-     */
-    handleDownload() {
-      const header = this.tableHeader;
-
-      this.downloadLoading = true;
-      import("@/vendor/Export2Excel").then(excel => {
-        if (header.length !== this.tableContent.length) {
-          return false;
-        }
-        const data = this.list.map(value => {
-          return this.tableContent.map(key => {
-            return value[key];
-          });
-        });
-        excel.export_json_to_excel({
-          header,
-          data,
-          filename: "name-check"
-        });
-        this.downloadLoading = false;
-      });
+    onSend() {
+      console.log(this.form.feedback);
+      console.log(this.feedbackId);
+    },
+    onClose() {
+      this.feedbackVisible = false;
+      this.form.feedback = undefined;
+      this.feedbackId = undefined;
     }
   }
 };
