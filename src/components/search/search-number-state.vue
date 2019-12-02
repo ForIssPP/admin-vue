@@ -15,7 +15,7 @@ export default {
   name: "search-number-state",
   data() {
     return {
-      numberStateType: "",
+      numberStateType: undefined,
       numberStateTypeOptions: ["正常", "非正常"]
     };
   },

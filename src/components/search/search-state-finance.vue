@@ -17,7 +17,7 @@ export default {
   name: "search-state-finance",
   data() {
     return {
-      payStateType: "",
+      payStateType: undefined,
       payStateTypeOptions: []
     };
   },

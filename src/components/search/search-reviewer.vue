@@ -19,7 +19,7 @@ export default {
   name: "search-reviewer",
   data() {
     return {
-      reviewerType: "",
+      reviewerType: undefined,
       loading: true,
       reviewerTypeOptions: []
     };

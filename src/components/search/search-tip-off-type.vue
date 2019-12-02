@@ -15,7 +15,7 @@ export default {
   name: "search-tip-off-",
   data() {
     return {
-      tipOffsType: "",
+      tipOffsType: undefined,
       tipOffsTypeOptions: [
         "头像/资料虚假",
         "诈骗/广告",

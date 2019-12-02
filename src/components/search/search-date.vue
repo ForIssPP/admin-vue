@@ -16,7 +16,7 @@ export default {
   name: "search-date",
   data() {
     return {
-      choseDates: ""
+      choseDates: undefined
     };
   },
   methods: {

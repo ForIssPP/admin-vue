@@ -15,7 +15,7 @@ export default {
   name: "search-user-create-",
   data() {
     return {
-      userCreateType: "",
+      userCreateType: undefined,
       userCreateTypeOptions: ["后台", "手机端"]
     };
   },

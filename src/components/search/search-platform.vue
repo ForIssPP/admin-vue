@@ -15,7 +15,7 @@ export default {
   name: "search-platform",
   data() {
     return {
-      platformType: "",
+      platformType: undefined,
       platformTypeOptions: ["iOS", "安卓"]
     };
   },

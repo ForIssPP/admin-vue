@@ -15,7 +15,7 @@ export default {
   name: "search-state",
   data() {
     return {
-      stateType: "",
+      stateType: undefined,
       stateTypeOptions: ["通过", "不通过"]
     };
   },

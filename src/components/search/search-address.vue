@@ -15,7 +15,7 @@ export default {
   name: "search-address",
   data() {
     return {
-      addressType: "",
+      addressType: undefined,
       addressTypeOptions: ["台湾", "香港", "澳门", "大陆", "其他"]
     };
   },

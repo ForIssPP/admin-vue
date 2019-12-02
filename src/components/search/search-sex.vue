@@ -15,7 +15,7 @@ export default {
   name: "search-sex",
   data() {
     return {
-      sexType: "",
+      sexType: undefined,
       sexTypeOptions: ["男", "女"]
     };
   },

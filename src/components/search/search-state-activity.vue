@@ -15,7 +15,7 @@ export default {
   name: "search-state-activity",
   data() {
     return {
-      stateActivityType: "",
+      stateActivityType: undefined,
       stateActivityTypeOptions: ["正常", "已下架"]
     };
   },

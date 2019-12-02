@@ -15,7 +15,7 @@ export default {
   name: "search-vip",
   data() {
     return {
-      vipType: "",
+      vipType: undefined,
       vipTypeOptions: ["会员", "非会员"]
     };
   },

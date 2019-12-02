@@ -15,7 +15,7 @@ export default {
   name: "search-state-tackle",
   data() {
     return {
-      stateTackleType: "",
+      stateTackleType: undefined,
       stateTackleTypeOptions: ["已处理", "未处理"]
     };
   },
