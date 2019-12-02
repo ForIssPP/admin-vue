@@ -16,7 +16,7 @@
       </el-select>
 
       <!-- 时间查询 -->
-      <search-date @dateTypeChange="dateTypeChange" />
+      <search-date @searchChange="searchChange" />
 
       <!-- ID查询 -->
       <el-input
@@ -37,16 +37,16 @@
       />
 
       <!-- Vip查询 -->
-      <search-vip></search-vip>
+      <search-vip @searchChange="searchChange" />
 
       <!-- 渠道查询 -->
-      <search-platform @stateTypeChange="stateTypeChange" />
+      <search-platform @searchChange="searchChange" />
 
       <!-- 操作人查询 -->
-      <search-reviewer @reviewerTypeChange="reviewerTypeChange" />
+      <search-reviewer @searchChange="searchChange" />
 
       <!-- 提现类型查询 -->
-      <search-state-finance style="margin-right: 10px"></search-state-finance>
+      <search-state-finance style="margin-right: 10px" @searchChange="searchChange" />
 
       <!-- 筛选结果金额统计 -->
       <money-conut :money="money" />
@@ -74,65 +74,7 @@
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
-      <!-- ID -->
-      <table-id />
-
-      <!-- Username -->
-      <table-username />
-
-      <!-- Vip -->
-      <table-vip />
-
-      <!-- Coin -->
-      <table-coin />
-
-      <!-- Withdraw Amount -->
-      <el-table-column label="提现金额" prop="withdrawAmount" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.withdrawAmount }}</span>
-        </template>
-      </el-table-column>
-
-      <!-- Order Number -->
-      <table-order-number></table-order-number>
-
-      <!-- Pay Type -->
-      <table-pay-type :payName="'提现类型'"></table-pay-type>
-
-      <!-- Withdraw User ID -->
-      <el-table-column label="提现账号" prop="withdrawUserId" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.withdrawUserId }}</span>
-        </template>
-      </el-table-column>
-
-      <!-- Platform -->
-      <table-platform />
-
-      <!-- Order State -->
-      <table-state-order></table-state-order>
-
-      <!-- Post Time -->
-      <table-post-time />
-
-      <!-- Reviewer -->
-      <table-reviewer />
-
-      <!-- Time -->
-      <table-time />
-
-      <!-- Choise Order -->
-      <table-choise-order></table-choise-order>
-    </el-table>
+    <withdraw-record-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></withdraw-record-table>
     <!-- 表单 end -->
 
     <!-- 分页器 start -->
@@ -162,20 +104,9 @@ import {
   SearchSex,
   MoneyConut
 } from "@/components/search/index";
-import {
-  TableId,
-  TableUsername,
-  TableVip,
-  TablePlatform,
-  TableTime,
-  TableCoin,
-  TableOrderNumber,
-  TablePayType,
-  TableStateOrder,
-  TableReviewer,
-  TablePostTime,
-  TableChoiseOrder
-} from "@/components/table/index";
+import WithdrawRecordTable from "@/components/table/index.vue";
+import { tableHeader, tableContent, componentList } from "./table-config";
+import downloadExcel from "@/utils/download-excel";
 
 export default {
   name: "UserControllerNameCheck",
@@ -188,60 +119,30 @@ export default {
     SearchVip,
     SearchSex,
     MoneyConut,
-    TableId,
-    TableUsername,
-    TableVip,
-    TablePlatform,
-    TableTime,
-    TableCoin,
-    TableOrderNumber,
-    TablePayType,
-    TableStateOrder,
-    TablePostTime,
-    TableReviewer,
-    TableChoiseOrder
+    WithdrawRecordTable
   },
   directives: { waves },
   data() {
     return {
+      componentList,
       tableKey: 0,
       list: null,
-      // 分页器按钮
       total: 0,
       listLoading: true,
+      rechargeVisible: false,
       money: 0,
       listQuery: {
-        // 页面
-        page: 1,
-        // 15行
-        limit: 15,
-        phoneNumber: undefined,
-        name: undefined,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: "+id",
+        payType: undefined,
+        orderState: undefined,
+        userID: undefined,
         orderNumber: undefined,
-        orderState: undefined
+        rechargeAmount: undefined,
+        page: 1,
+        limit: 15,
+        sex: undefined,
+        platform: undefined,
+        orderNumber: undefined
       },
-      tableHeader: [
-        "ID",
-        "电话号码",
-        "状态",
-        "性别",
-        "审核昵称",
-        "修改时间",
-        "处理人"
-      ],
-      tableContent: [
-        "id",
-        "phoneNumber",
-        "state",
-        "sex",
-        "checkName",
-        "time",
-        "reviewer"
-      ],
       downloadLoading: false
     };
   },
@@ -252,32 +153,30 @@ export default {
     /**
      * 操作状态更新
      */
-    handleChoise(tag) {
-      console.log(tag);
+    async handleChoise(tag, row) {
+      const openConfirm = await import("@/utils/open-confirm");
+      if (tag === "reject") {
+        openConfirm.commonConfirm.call(this, () => {
+          row.orderState = "未完成";
+        });
+      } else if (tag === "goPay") {
+        openConfirm.commonConfirm.call(this, () => {
+          row.orderState = "已完成";
+        });
+      } else {
+        this.$message({
+          message: "操作已处理",
+          type: "warning"
+        });
+      }
     },
     /**
-     * 选择`性别`更新
+     * 查询更新
      */
-    sexTypeChange(sex) {
-      console.log(sex);
-    },
-    /**
-     * 选择`状态`更新
-     */
-    stateTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`处理`人更新
-     */
-    reviewerTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`时间`更新
-     */
-    dateTypeChange(state) {
-      console.log(state);
+    searchChange(type, query) {
+      this.listQuery[type] = query || undefined;
+      console.log(this.listQuery);
+      /* TODO */
     },
     /**
      * 获取表单
@@ -309,25 +208,18 @@ export default {
      * 导出Excel
      */
     handleDownload() {
-      const header = this.tableHeader;
-
       this.downloadLoading = true;
-      import("@/vendor/Export2Excel").then(excel => {
-        if (header.length !== this.tableContent.length) {
-          return false;
-        }
-        const data = this.list.map(value => {
-          return this.tableContent.map(key => {
-            return value[key];
-          });
+      const data = this.list.map(value => {
+        return tableContent.map(key => {
+          return value[key];
         });
-        excel.export_json_to_excel({
-          header,
-          data,
-          filename: "name-check"
-        });
-        this.downloadLoading = false;
       });
+      downloadExcel(
+        tableHeader,
+        data,
+        () => (this.downloadLoading = false)
+        /* file name */
+      );
     }
   }
 };
