@@ -8,7 +8,7 @@
         placeholder="支付类型"
         clearable
         class="filter-item"
-        style="width: 80px"
+        style="width: 130px"
       >
         <el-option label="IOS支付" value="IOS支付" />
         <el-option label="Google支付" value="Google支付" />
@@ -28,10 +28,10 @@
       </el-select>
 
       <!-- 时间查询 -->
-      <search-date @dateTypeChange="dateTypeChange" />
+      <search-date @searchChange="searchChange" />
 
       <!-- 性别查询 -->
-      <search-sex></search-sex>
+      <search-sex @searchChange="searchChange" />
 
       <!-- ID查询 -->
       <el-input
@@ -53,7 +53,7 @@
 
       <!-- 充值金额查询 -->
       <el-input
-        v-model="listQuery.orderNumber"
+        v-model="listQuery.rechargeAmount"
         placeholder="充值金额查询"
         style="width: 150px;"
         class="filter-item"
@@ -61,7 +61,7 @@
       />
 
       <!-- 渠道查询 -->
-      <search-platform @stateTypeChange="stateTypeChange" />
+      <search-platform @searchChange="searchChange" />
 
       <!-- 筛选结果金额统计 -->
       <money-conut :money="money" />
@@ -93,58 +93,35 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="onRecharge"
       >手动储值</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
+    <recharge-record-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></recharge-record-table>
+    <el-dialog
+      title="手动充值"
+      label-width="80px"
+      :visible.sync="rechargeVisible"
+      :before-close="onClose"
     >
-      <!-- ID -->
-      <table-id />
-
-      <!-- Username -->
-      <table-username />
-
-      <!-- Vip -->
-      <table-vip />
-
-      <!-- Withdraw Amount -->
-      <el-table-column label="充值金额" prop="rechargeAmount" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.rechargeAmount }}</span>
-        </template>
-      </el-table-column>
-
-      <!-- Coin -->
-      <table-coin />
-
-      <!-- Order Number -->
-      <table-order-number></table-order-number>
-
-      <!-- Sex -->
-      <table-sex></table-sex>
-
-      <!-- Pay Type -->
-      <table-pay-type :payName="'支付类型'"></table-pay-type>
-
-      <!-- Platform -->
-      <table-platform />
-
-      <!-- Order State -->
-      <table-state-order></table-state-order>
-
-      <!-- Post Time -->
-      <table-post-time />
-    </el-table>
+      <el-form ref="rechargeForm" :model="form">
+        <el-form-item label="用户ID">
+          <el-input type="text" v-model="form.id" placeholder="请输入用户ID"></el-input>
+        </el-form-item>
+        <el-form-item label="用户昵称">
+          <el-input type="text" v-model="form.username" placeholder="请输入昵称"></el-input>
+        </el-form-item>
+        <el-form-item label="充值金额">
+          <el-input type="text" v-model="form.coin" placeholder="请输入金额"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="onClose">取 消</el-button>
+        <el-button type="primary" @click="onRechargeAmount">确 定</el-button>
+      </div>
+    </el-dialog>
     <!-- 表单 end -->
 
     <!-- 分页器 start -->
@@ -173,23 +150,12 @@ import {
   SearchSex,
   MoneyConut
 } from "@/components/search/index";
-import {
-  TableId,
-  TableUsername,
-  TableVip,
-  TableSex,
-  TablePlatform,
-  TableTime,
-  TableCoin,
-  TableOrderNumber,
-  TablePayType,
-  TableStateOrder,
-  TableReviewer,
-  TablePostTime
-} from "@/components/table/index";
+import RechargeRecordTable from "@/components/table/index.vue";
+import { tableHeader, tableContent, componentList } from "./table-config";
+import downloadExcel from "@/utils/download-excel";
 
 export default {
-  name: "UserControllerNameCheck",
+  name: "FinanceControllerRechargeRecord",
   components: {
     Pagination,
     MoneyConut,
@@ -198,60 +164,35 @@ export default {
     SearchDate,
     SearchVip,
     SearchSex,
-    TableId,
-    TableUsername,
-    TableVip,
-    TablePlatform,
-    TableTime,
-    TableCoin,
-    TableOrderNumber,
-    TablePayType,
-    TableStateOrder,
-    TablePostTime,
-    TableReviewer,
-    TableSex
+    RechargeRecordTable
   },
   directives: { waves },
   data() {
     return {
+      componentList,
       tableKey: 0,
       list: null,
-      // 分页器按钮
       total: 0,
       listLoading: true,
+      rechargeVisible: false,
       money: 0,
-      listQuery: {
-        // 页面
-        page: 1,
-        // 15行
-        limit: 15,
-        phoneNumber: undefined,
-        name: undefined,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: "+id",
-        orderNumber: undefined,
-        orderState: undefined
+      form: {
+        id: undefined,
+        coin: undefined,
+        username: undefined
       },
-      tableHeader: [
-        "ID",
-        "电话号码",
-        "状态",
-        "性别",
-        "审核昵称",
-        "修改时间",
-        "处理人"
-      ],
-      tableContent: [
-        "id",
-        "phoneNumber",
-        "state",
-        "sex",
-        "checkName",
-        "time",
-        "reviewer"
-      ],
+      listQuery: {
+        payType: undefined,
+        orderState: undefined,
+        userID: undefined,
+        orderNumber: undefined,
+        rechargeAmount: undefined,
+        page: 1,
+        limit: 15,
+        sex: undefined,
+        platform: undefined,
+        orderNumber: undefined
+      },
       downloadLoading: false
     };
   },
@@ -266,28 +207,12 @@ export default {
       console.log(tag);
     },
     /**
-     * 选择`性别`更新
+     * 查询更新
      */
-    sexTypeChange(sex) {
-      console.log(sex);
-    },
-    /**
-     * 选择`状态`更新
-     */
-    stateTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`处理`人更新
-     */
-    reviewerTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`时间`更新
-     */
-    dateTypeChange(state) {
-      console.log(state);
+    searchChange(type, query) {
+      this.listQuery[type] = query || undefined;
+      console.log(this.listQuery);
+      /* TODO */
     },
     /**
      * 获取表单
@@ -319,25 +244,32 @@ export default {
      * 导出Excel
      */
     handleDownload() {
-      const header = this.tableHeader;
-
       this.downloadLoading = true;
-      import("@/vendor/Export2Excel").then(excel => {
-        if (header.length !== this.tableContent.length) {
-          return false;
-        }
-        const data = this.list.map(value => {
-          return this.tableContent.map(key => {
-            return value[key];
-          });
+      const data = this.list.map(value => {
+        return tableContent.map(key => {
+          return value[key];
         });
-        excel.export_json_to_excel({
-          header,
-          data,
-          filename: "name-check"
-        });
-        this.downloadLoading = false;
       });
+      downloadExcel(
+        tableHeader,
+        data,
+        () => (this.downloadLoading = false)
+        /* file name */
+      );
+    },
+    onRecharge() {
+      this.rechargeVisible = true;
+    },
+    onRechargeAmount() {
+      console.log(this.form);
+    },
+    onClose() {
+      this.form = {
+        coin: undefined,
+        id: undefined,
+        username: undefined
+      };
+      this.rechargeVisible = false;
     }
   }
 };
