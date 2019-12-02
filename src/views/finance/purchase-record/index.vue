@@ -18,16 +18,16 @@
       </el-select>
 
       <!-- 渠道查询 -->
-      <search-platform @stateTypeChange="stateTypeChange" />
+      <search-platform @searchChange="searchChange" />
 
       <!-- 订单状态 -->
-      <search-state-finance></search-state-finance>
+      <search-state-finance @searchChange="searchChange" />
 
       <!-- 时间查询 -->
-      <search-date @dateTypeChange="dateTypeChange" />
+      <search-date @searchChange="searchChange" />
 
       <!-- 性别查询 -->
-      <search-sex></search-sex>
+      <search-sex @searchChange="searchChange" />
 
       <!-- ID查询 -->
       <el-input
@@ -69,50 +69,42 @@
         icon="el-icon-download"
         @click="handleDownload"
       >导出</el-button>
+
+      <!-- 手动扣费 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="onPurchase"
+      >手动扣费</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
+    <purchase-record-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></purchase-record-table>
+    <el-dialog
+      title="手动扣除"
+      label-width="80px"
+      :visible.sync="purchaseVisible"
+      :before-close="onClose"
     >
-      <!-- ID -->
-      <table-id />
-
-      <!-- Username -->
-      <table-username />
-
-      <!-- Vip -->
-      <table-vip />
-
-      <!-- Purchase Type -->
-      <el-table-column label="消费类型" prop="purchaseType" align="center">
-        <template slot-scope="{row}">
-          <span>{{ row.purchaseType }}</span>
-        </template>
-      </el-table-column>
-
-      <!-- Coin -->
-      <table-coin />
-
-      <!-- Sex -->
-      <table-sex></table-sex>
-
-      <!-- Order Number -->
-      <table-order-number></table-order-number>
-
-      <!-- Platform -->
-      <table-platform />
-
-      <!-- Post Time -->
-      <table-post-time />
-    </el-table>
+      <el-form ref="rechargeForm" :model="form">
+        <el-form-item label="用户ID">
+          <el-input type="text" v-model="form.id" placeholder="请输入用户ID"></el-input>
+        </el-form-item>
+        <el-form-item label="用户昵称">
+          <el-input type="text" v-model="form.username" placeholder="请输入昵称"></el-input>
+        </el-form-item>
+        <el-form-item label="扣除金额">
+          <el-input type="text" v-model="form.coin" placeholder="请输入扣除金额"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="onClose">取 消</el-button>
+        <el-button type="primary" @click="onPurchaseAmount">确 定</el-button>
+      </div>
+    </el-dialog>
     <!-- 表单 end -->
 
     <!-- 分页器 start -->
@@ -140,19 +132,12 @@ import {
   SearchSex,
   MoneyConut
 } from "@/components/search/index";
-import {
-  TableId,
-  TableUsername,
-  TableVip,
-  TablePlatform,
-  TableCoin,
-  TableOrderNumber,
-  TablePostTime,
-  TableSex
-} from "@/components/table/index";
+import PurchaseRecordTable from "@/components/table/index.vue";
+import { tableHeader, tableContent, componentList } from "./table-config";
+import downloadExcel from "@/utils/download-excel";
 
 export default {
-  name: "UserControllerNameCheck",
+  name: "FinanceControllerPurchaseRecord",
   components: {
     Pagination,
     SearchPlatform,
@@ -160,56 +145,35 @@ export default {
     SearchStateFinance,
     SearchSex,
     MoneyConut,
-    TableId,
-    TableUsername,
-    TableVip,
-    TablePlatform,
-    TableCoin,
-    TableOrderNumber,
-    TablePostTime,
-    TableSex
+    PurchaseRecordTable
   },
   directives: { waves },
   data() {
     return {
+      componentList,
       tableKey: 0,
       list: null,
-      // 分页器按钮
       total: 0,
       listLoading: true,
+      purchaseVisible: false,
       money: 0,
-      listQuery: {
-        // 页面
-        page: 1,
-        // 15行
-        limit: 15,
-        phoneNumber: undefined,
-        name: undefined,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: "+id",
-        orderNumber: undefined,
-        orderState: undefined
+      form: {
+        id: undefined,
+        coin: undefined,
+        username: undefined
       },
-      tableHeader: [
-        "ID",
-        "电话号码",
-        "状态",
-        "性别",
-        "审核昵称",
-        "修改时间",
-        "处理人"
-      ],
-      tableContent: [
-        "id",
-        "phoneNumber",
-        "state",
-        "sex",
-        "checkName",
-        "time",
-        "reviewer"
-      ],
+      listQuery: {
+        payType: undefined,
+        orderState: undefined,
+        userID: undefined,
+        orderNumber: undefined,
+        rechargeAmount: undefined,
+        page: 1,
+        limit: 15,
+        sex: undefined,
+        platform: undefined,
+        orderNumber: undefined
+      },
       downloadLoading: false
     };
   },
@@ -224,28 +188,12 @@ export default {
       console.log(tag);
     },
     /**
-     * 选择`性别`更新
+     * 查询更新
      */
-    sexTypeChange(sex) {
-      console.log(sex);
-    },
-    /**
-     * 选择`状态`更新
-     */
-    stateTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`处理`人更新
-     */
-    reviewerTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`时间`更新
-     */
-    dateTypeChange(state) {
-      console.log(state);
+    searchChange(type, query) {
+      this.listQuery[type] = query || undefined;
+      console.log(this.listQuery);
+      /* TODO */
     },
     /**
      * 获取表单
@@ -277,25 +225,32 @@ export default {
      * 导出Excel
      */
     handleDownload() {
-      const header = this.tableHeader;
-
       this.downloadLoading = true;
-      import("@/vendor/Export2Excel").then(excel => {
-        if (header.length !== this.tableContent.length) {
-          return false;
-        }
-        const data = this.list.map(value => {
-          return this.tableContent.map(key => {
-            return value[key];
-          });
+      const data = this.list.map(value => {
+        return tableContent.map(key => {
+          return value[key];
         });
-        excel.export_json_to_excel({
-          header,
-          data,
-          filename: "name-check"
-        });
-        this.downloadLoading = false;
       });
+      downloadExcel(
+        tableHeader,
+        data,
+        () => (this.downloadLoading = false)
+        /* file name */
+      );
+    },
+    onPurchase() {
+      this.purchaseVisible = true;
+    },
+    onPurchaseAmount() {
+      console.log(this.form);
+    },
+    onClose() {
+      this.form = {
+        coin: undefined,
+        id: undefined,
+        username: undefined
+      };
+      this.purchaseVisible = false;
     }
   }
 };
