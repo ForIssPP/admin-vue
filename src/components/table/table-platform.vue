@@ -1,7 +1,9 @@
 <template>
   <el-table-column label="平台" prop="platform" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.platform }}</span>
+      <span>{{
+        row.device === '0' ? '没有设备' : row.device === '1' ? '安卓' : 'iOS'
+      }}</span>
     </template>
   </el-table-column>
 </template>

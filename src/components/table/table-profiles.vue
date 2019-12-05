@@ -1,7 +1,7 @@
 <template>
   <el-table-column label="审核个人介绍" prop="profiles" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.profiles }}</span>
+      <span>{{ row.introduction }}</span>
     </template>
   </el-table-column>
 </template>
