@@ -4,7 +4,7 @@
     <div class="filter-container">
       <!-- 昵称查询 -->
       <el-input
-        v-model="listQuery.name"
+        v-model="listQuery.nickname"
         placeholder="昵称查询"
         style="width: 150px;"
         class="filter-item"
@@ -13,7 +13,7 @@
 
       <!-- 手机号查询 -->
       <el-input
-        v-model="listQuery.phoneNumber"
+        v-model="listQuery.mobile"
         placeholder="手机号查询"
         style="width: 150px;"
         class="filter-item"
@@ -22,7 +22,7 @@
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
@@ -30,16 +30,16 @@
       />
 
       <!-- 性别查询 -->
-      <SearchSex @searchChange="searchChange" />
+      <search-sex @searchChange="searchChange" />
 
       <!-- 状态查询 -->
-      <SearchState @searchChange="searchChange" />
+      <search-state @searchChange="searchChange" />
 
       <!-- 操作人查询 -->
-      <SearchReviewer @searchChange="searchChange" />
+      <search-reviewer @searchChange="searchChange" />
 
       <!-- 时间查询 -->
-      <SearchDate style="margin-right: 10px" @searchChange="searchChange" />
+      <search-date @searchChange="searchChange" />
 
       <!-- 搜索 -->
       <el-button
@@ -53,7 +53,12 @@
     <!-- 检索栏 end -->
 
     <!-- 表单 -->
-    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
+    <profiles-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    />
 
     <!-- 分页器 start -->
     <pagination
@@ -77,7 +82,7 @@ import {
   SearchReviewer,
   SearchDate
 } from "@/components/search/index";
-import MyTable from "@/components/table/index.vue";
+import ProfilesTable from "@/components/table/index.vue";
 import methodsCommon from "../common/methods";
 import { componentList } from "./table-config";
 
@@ -89,7 +94,7 @@ export default {
     SearchState,
     SearchReviewer,
     SearchDate,
-    MyTable
+    ProfilesTable
   },
   directives: { waves },
   data() {
@@ -102,21 +107,21 @@ export default {
       componentList,
       downloadLoading: false,
       listQuery: {
-        name: undefined,
+        nickname: undefined,
         page: 1,
-        userID: undefined,
+        uid: undefined,
         limit: 15,
         sex: undefined,
         state: undefined,
-        reviewer: undefined,
+        admin_id: undefined,
         date: undefined,
-        phoneNumber: undefined
+        mobile: undefined
       }
     };
   },
   created() {
     this.getList();
   },
-  methods: methodsCommon("getProfilesList")
+  methods: methodsCommon("getProfilesList", "setUserIntroductionCheck")
 };
 </script>
