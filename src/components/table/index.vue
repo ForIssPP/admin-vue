@@ -30,11 +30,20 @@ export default {
       default() {
         return [];
       }
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
+  watch: {
+    loading() {
+      this.listLoading = this.loading;
     }
   },
   data() {
     return {
-      listLoading: false
+      listLoading: this.loading
     };
   },
   components: TableComponents,
