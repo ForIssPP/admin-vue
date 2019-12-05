@@ -7,7 +7,7 @@
     class="filter-item"
     style="width: 100px"
   >
-    <el-option v-for="item in stateTypeOptions" :key="item" :label="item" :value="item" />
+    <el-option v-for="item in stateTypeOptions" :key="item[0]" :label="item[1]" :value="item[0]" />
   </el-select>
 </template>
 <script>
@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       stateType: undefined,
-      stateTypeOptions: ["通过", "不通过"]
+      stateTypeOptions: [["1", "通过"], ["2", "未通过"]]
     };
   },
   methods: {

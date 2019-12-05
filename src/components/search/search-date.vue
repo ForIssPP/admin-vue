@@ -12,19 +12,26 @@
   </div>
 </template>
 <script>
+
 export default {
   name: "search-date",
   data() {
     return {
-      choseDates: undefined
+      choseDates: null
     };
   },
   methods: {
     searchChange() {
       // 返回的是Date对象数组
       if (this.choseDates) {
-        this.$emit("searchChange", "date", this.choseDates);
+        this.$emit("searchChange", "date", this.getTime());
       }
+    },
+    getTime() {
+      return this.choseDates.map(date => {
+        date = Math.floor(date.getTime() / 1e3);
+        return date;
+      });
     }
   }
 };
