@@ -1,7 +1,7 @@
 <template>
-  <el-table-column label="图片" prop="picture" align="center">
+  <el-table-column label="图片" prop="img" align="center">
     <template slot-scope="{row}">
-      <img :src="row.picture" alt="picture" />
+      <img :src="row.img[0]" alt="picture" />
     </template>
   </el-table-column>
 </template>
