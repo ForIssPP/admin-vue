@@ -1,25 +1,58 @@
-import request from "@/utils/request";
+import richpapaRequest from "@/utils/richpapa-request";
 
-export function getOfflinePartyList(data) {
-  return request({
-    url: "/activity/offlineparty/list",
+export function getOfflinePartyList(query) {
+  query.service = "Square.PartyList";
+  return richpapaRequest({
     method: "get",
-    data
+    params: query
   });
 }
 
-export function getActivityCheckList(data) {
-  return request({
-    url: "/activity/offlineparty/list",
+export function getActivityCheckList(query) {
+  query.service = "Square.DynamicList";
+  return richpapaRequest({
     method: "get",
-    data
+    params: query
   });
 }
 
-export function getPrivateParty(data) {
-  return request({
-    url: "/activity/offlineparty/list",
+export function getPrivateParty(query) {
+  query.service = "Square.AppointmentList";
+  return richpapaRequest({
     method: "get",
-    data
+    params: query
+  });
+}
+
+export function setPartyState(row) {
+  return richpapaRequest({
+    method: "get",
+    params: {
+      service: "Square.UpdatePartyState",
+      target_id: row.id,
+      type: row.check_state
+    }
+  });
+}
+
+export function setAppointmentState(row) {
+  return richpapaRequest({
+    method: "get",
+    params: {
+      service: "Square.UpdateAppointmentState",
+      target_id: row.id,
+      type: row.check_state
+    }
+  });
+}
+
+export function setDynamicState(row) {
+  return richpapaRequest({
+    method: "get",
+    params: {
+      service: "Square.UpdateDynamicState",
+      target_id: row.id,
+      state: row.check_state
+    }
   });
 }
