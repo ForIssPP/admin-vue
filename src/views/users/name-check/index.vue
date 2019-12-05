@@ -49,22 +49,16 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
-
-      <!-- 导出 -->
-      <el-button
-        v-waves
-        :loading="downloadLoading"
-        class="filter-item"
-        type="primary"
-        style="margin-left: 0"
-        icon="el-icon-download"
-        @click="handleDownload"
-      >导出</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表格 -->
-    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
+    <name-check-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    />
 
     <!-- 分页器 start -->
     <pagination
@@ -88,26 +82,12 @@ import {
   SearchReviewer,
   SearchDate
 } from "@/components/search/index";
-import MyTable from "@/components/table/index.vue";
+import NameCheckTable from "@/components/table/index.vue";
 import downloadExcel from "@/utils/download-excel";
 import { tableHeader, tableContent, componentList } from "./table-config";
 import methodsCommon from "../common/methods";
-
-const methods = methodsCommon("getUsernameList");
-methods["handleDownload"] = function() {
-  this.downloadLoading = true;
-  const data = this.list.map(value => {
-    return tableContent.map(key => {
-      return value[key];
-    });
-  });
-  downloadExcel(
-    tableHeader,
-    data,
-    () => (this.downloadLoading = false)
-    /* file name */
-  );
-};
+import { commonConfirm } from "@/utils/open-confirm";
+const methods = methodsCommon("getUsernameList", "setUserNameCheck");
 
 export default {
   name: "UserControllerNameCheck",
@@ -117,7 +97,7 @@ export default {
     SearchState,
     SearchReviewer,
     SearchDate,
-    MyTable
+    NameCheckTable
   },
   directives: { waves },
   data() {
@@ -129,15 +109,15 @@ export default {
       downloadLoading: false,
       componentList,
       listQuery: {
-        name: undefined,
+        nickname: undefined,
         page: 1,
-        userID: undefined,
+        uid: undefined,
         limit: 15,
+        mobile: undefined,
         sex: undefined,
         state: undefined,
         reviewer: undefined,
-        date: undefined,
-        phoneNumber: undefined
+        date: undefined
       }
     };
   },
