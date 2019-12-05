@@ -1,7 +1,7 @@
 <template>
-  <el-table-column label="信息" prop="activityText" :sortable="sortable" align="center" :width="width">
+  <el-table-column label="信息" prop="text" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.activityText }}</span>
+      <span>{{ row.text }}</span>
     </template>
   </el-table-column>
 </template>
