@@ -7,7 +7,7 @@
     :width="width"
   >
     <template slot-scope="{row}">
-      <span>{{ row.userCreateType }}</span>
+      <span>{{ row.type === '0' ? 'App端' : '后台' }}</span>
     </template>
   </el-table-column>
 </template>

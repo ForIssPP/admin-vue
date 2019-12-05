@@ -47,7 +47,12 @@
     <!-- 检索栏 end -->
 
     <!-- 表格 -->
-    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
+    <picture-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    />
 
     <!-- 分页器 start -->
     <pagination
@@ -66,7 +71,7 @@ import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 import { SearchState, SearchReviewer } from "@/components/search/index";
-import MyTable from "@/components/table/index.vue";
+import PictureTable from "@/components/table/index.vue";
 import methodsCommon from "../common/methods";
 import { componentList } from "./table-config";
 
@@ -76,7 +81,7 @@ export default {
     Pagination,
     SearchState,
     SearchReviewer,
-    MyTable
+    PictureTable
   },
   directives: { waves },
   data() {
@@ -89,21 +94,21 @@ export default {
       listLoading: true,
       downloadLoading: false,
       listQuery: {
-        name: undefined,
+        nickname: undefined,
         page: 1,
-        userID: undefined,
+        uid: undefined,
         limit: 15,
         sex: undefined,
         state: undefined,
-        reviewer: undefined,
+        admin_id: undefined,
         date: undefined,
-        phoneNumber: undefined
+        mobile: undefined
       }
     };
   },
   created() {
     this.getList();
   },
-  methods: methodsCommon("getPictureList")
+  methods: methodsCommon("getPictureList", "setUserWomanAuth")
 };
 </script>

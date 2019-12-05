@@ -41,7 +41,12 @@
     <!-- 检索栏 end -->
 
     <!-- 表格 -->
-    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
+    <album-check-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    />
 
     <!-- 分页器 start -->
     <pagination
@@ -59,7 +64,7 @@
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
-import MyTable from "@/components/table/index.vue";
+import AlbumCheckTable from "@/components/table/index.vue";
 import downloadExcel from "@/utils/download-excel";
 import { tableHeader, tableContent, componentList } from "./table-config";
 import methodsCommon from "../common/methods";
@@ -68,7 +73,7 @@ export default {
   name: "UserControllerAlbumCheck",
   components: {
     Pagination,
-    MyTable
+    AlbumCheckTable
   },
   directives: { waves },
   data() {
@@ -80,21 +85,21 @@ export default {
       downloadLoading: false,
       componentList,
       listQuery: {
-        name: undefined,
+        nickname: undefined,
         page: 1,
-        userID: undefined,
+        uid: undefined,
         limit: 15,
         sex: undefined,
         state: undefined,
-        reviewer: undefined,
+        admin_id: undefined,
         date: undefined,
-        phoneNumber: undefined
+        mobile: undefined
       }
     };
   },
   created() {
     this.getList();
   },
-  methods: methodsCommon("getPictureList")
+  methods: methodsCommon("getAlbumList")
 };
 </script>

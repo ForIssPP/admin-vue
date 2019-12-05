@@ -32,6 +32,7 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
+    host: 'loc.mjliveapp.com',
     overlay: {
       warnings: false,
       errors: true

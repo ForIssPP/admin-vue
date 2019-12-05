@@ -9,20 +9,37 @@
       <el-table v-loading="listLoading" :data="album">
         <el-table-column label="图片" property="picture" align="center">
           <template slot-scope="{row}">
-            <img :src="row.picture" alt="old-avatar" />
+            <img style="width: 100%" :src="row.photo" alt="old-avatar" />
           </template>
         </el-table-column>
 
         <el-table-column label="操作" prop="check" align="center">
-          <el-button plain type="warning" size="mini" @click="handleChoise(true)">通过</el-button>
-          <el-button plain type="success" size="mini" @click="handleChoise(false)">不通过</el-button>
+          <template slot-scope="{row, any, $index}">
+            <div class="table-choise" v-show="row.state === '0'">
+              <el-button
+                plain
+                type="success"
+                size="mini"
+                @click="handleChoise(true, row, $index)"
+              >通过</el-button>
+              <el-button
+                plain
+                type="warning"
+                size="mini"
+                @click="handleChoise(false, row, $index)"
+              >拒绝</el-button>
+            </div>
+            <div class="table-choise" v-show="row.state !== '0'">
+              <el-button plain size="mini" @click="handleChoise('update', row, $index)">更改状态</el-button>
+            </div>
+          </template>
         </el-table-column>
       </el-table>
     </el-dialog>
   </el-table-column>
 </template>
 <script>
-import { getAlbumList } from "@/api/user";
+import { setUserPhotoCheck } from "@/api/user";
 
 export default {
   name: "table-old-avatar",
@@ -38,16 +55,29 @@ export default {
     };
   },
   methods: {
-    handleChoise(tag, row) {
+    handleChoise(tag, row, index) {
       if (tag === "open") {
         this.dialogFormVisible = true;
-        getAlbumList(row.id).then(res => {
-          this.album = res.data.album;
-          this.listLoading = false;
-        });
+        if (!this.album) {
+          this.album = row.photo.map(p => {
+            const photo = {
+              uid: row.id,
+              photo: p[0],
+              state: p[1]
+            };
+            return photo;
+          });
+          this.$nextTick(() => (this.listLoading = false));
+        }
       } else {
         import("@/utils/open-confirm").then(_confirm => {
-          _confirm.commonConfirm.call(this);
+          row.sort = index;
+          _confirm.userCommonOpenConfirm.call(
+            this,
+            tag,
+            row,
+            setUserPhotoCheck
+          );
         });
       }
     }

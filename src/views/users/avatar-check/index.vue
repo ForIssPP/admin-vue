@@ -4,7 +4,7 @@
     <div class="filter-container">
       <!-- 昵称查询 -->
       <el-input
-        v-model="listQuery.name"
+        v-model="listQuery.nickname"
         placeholder="昵称查询"
         style="width: 150px;"
         class="filter-item"
@@ -13,7 +13,7 @@
 
       <!-- 手机号查询 -->
       <el-input
-        v-model="listQuery.phoneNumber"
+        v-model="listQuery.mobile"
         placeholder="手机号查询"
         style="width: 150px;"
         class="filter-item"
@@ -22,7 +22,7 @@
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
@@ -53,7 +53,12 @@
     <!-- 检索栏 end -->
 
     <!-- 表格 -->
-    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
+    <avatar-check-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    />
 
     <!-- 分页器 start -->
     <pagination
@@ -68,7 +73,7 @@
 </template>
 
 <script>
-import MyTable from "@/components/table/index.vue";
+import AvatarCheckTable from "@/components/table/index.vue";
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
@@ -89,7 +94,7 @@ export default {
     SearchState,
     SearchReviewer,
     SearchDate,
-    MyTable
+    AvatarCheckTable
   },
   directives: { waves },
   data() {
@@ -102,21 +107,21 @@ export default {
       componentList,
       downloadLoading: false,
       listQuery: {
-        name: undefined,
+        nickname: undefined,
         page: 1,
-        userID: undefined,
+        uid: undefined,
         limit: 15,
         sex: undefined,
         state: undefined,
         reviewer: undefined,
         date: undefined,
-        phoneNumber: undefined
+        mobile: undefined
       }
     };
   },
   created() {
     this.getList();
   },
-  methods: methodsCommon("getAvatarList")
+  methods: methodsCommon("getAvatarList", "setUserAvatarCheck")
 };
 </script>

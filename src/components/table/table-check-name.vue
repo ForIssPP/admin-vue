@@ -1,7 +1,7 @@
 <template>
-  <el-table-column label="审核昵称" prop="checkName" :sortable="sortable" align="center" :width="width">
+  <el-table-column label="审核昵称" prop="nickname" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.checkName }}</span>
+      <span>{{ row.nickname }}</span>
     </template>
   </el-table-column>
 </template>

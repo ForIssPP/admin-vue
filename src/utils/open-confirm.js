@@ -10,30 +10,38 @@ export function commonConfirm(callback) {
       lockScroll: false,
       type: "warning"
     })
-      .then(() => {
-        this.$notify({
-          type: "success",
-          message: "修改成功!"
-        });
-        callback();
-      })
+      .then(callback)
       .catch(() => undefined);
   }
 }
 
-export function userCommonOpenConfirm(tag, row) {
+export function userCommonOpenConfirm(tag, row, handleSetState) {
   if (this && this.$confirm) {
     const openConfirm = commonConfirm.bind(this);
+
+    const handleSuccess = () => {
+      this.$notify({
+        type: "success",
+        message: "修改成功!"
+      });
+    };
+
     const handleUpdate = () => {
-      row.state = "待审核";
+      row.state = "0";
     };
 
     const handlePass = () => {
-      row.state = "通过";
+      handleSetState(row).then(res => {
+        handleSuccess();
+        row.state = "1";
+      });
     };
 
     const handleNotPass = () => {
-      row.state = "未通过";
+      handleSetState(row).then(res => {
+        handleSuccess();
+        row.state = "2";
+      });
     };
 
     if (tag === "update") {

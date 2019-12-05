@@ -7,7 +7,7 @@
     :width="width"
   >
     <template slot-scope="{row}">
-      <span>{{ row.numberState }}</span>
+      <span>{{ row.state === '0' ? '正常' : '冻结' }}</span>
     </template>
   </el-table-column>
 </template>

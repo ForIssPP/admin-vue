@@ -76,7 +76,12 @@
     <!-- 检索栏 end -->
 
     <!-- 表格 -->
-    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
+    <user-controller-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    />
 
     <!-- 分页器 start -->
     <pagination
@@ -105,10 +110,11 @@ import {
   SearchUserCreateType,
   SearchDate
 } from "@/components/search/index";
-import MyTable from "@/components/table/index.vue";
+import UserControllerTable from "@/components/table/index.vue";
 import downloadExcel from "@/utils/download-excel";
 import { tableHeader, tableContent, componentList } from "./table-config";
 import methodsCommon from "../common/methods";
+import { userDetail } from "@/api/user";
 
 const methods = methodsCommon("getUserList");
 methods["handleDownload"] = function() {
@@ -126,6 +132,31 @@ methods["handleDownload"] = function() {
   );
 };
 
+methods["handleChoise"] = function(tag, row) {
+  import("@/utils/open-confirm").then(_confirm => {
+    const openConfirm = _confirm.commonConfirm.bind(this);
+    if (tag === "freeze") {
+      openConfirm(() => (row.state = "1"));
+    }
+
+    if (tag === "thaw") {
+      openConfirm(() => (row.state = "0"));
+    }
+
+    if (tag === "msg") {
+      openConfirm(() => console.log(1));
+    }
+
+    if (tag === "see") {
+      openConfirm(() =>
+        userDetail(row.id).then(res => {
+          this.userDetailShow = true;
+        })
+      );
+    }
+  });
+};
+
 export default {
   name: "UserControllerCheck",
   components: {
@@ -139,7 +170,7 @@ export default {
     SearchNumberState,
     SearchUserCreateType,
     SearchDate,
-    MyTable
+    UserControllerTable
   },
   directives: { waves },
   data() {
@@ -149,6 +180,30 @@ export default {
       total: 0,
       listLoading: true,
       downloadLoading: false,
+      userDetailShow: false,
+      userDetail: {
+        id: undefined,
+        nickname: undefined,
+        sex: undefined,
+        position: undefined,
+        age: undefined,
+        state: undefined,
+        vip_level: undefined,
+        mobile: undefined,
+        avatar: undefined,
+        workWoman: undefined,
+        style: undefined,
+        height: undefined,
+        somke: undefined,
+        live: undefined,
+        authMan: undefined,
+        authWoman: undefined,
+        workMan: undefined,
+        target: undefined,
+        workWoman: undefined,
+        dimension: null,
+        drink: undefined
+      },
       componentList,
       listQuery: {
         name: undefined,

@@ -7,7 +7,7 @@
     :width="width"
   >
     <template slot-scope="{row}">
-      <span>{{ row.phoneNumber }}</span>
+      <span>{{ row.mobile }}</span>
     </template>
   </el-table-column>
 </template>

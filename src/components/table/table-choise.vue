@@ -1,11 +1,11 @@
 <template>
   <el-table-column label="操作" prop="checkName" :sortable="sortable" align="center" :width="width">
     <template v-slot="{row}">
-      <div class="table-choise" v-if="row.state === '待审核'">
+      <div class="table-choise" v-show="row.state === '0'">
         <el-button plain type="success" size="mini" @click="handleChoise(true, row)">通过</el-button>
         <el-button plain type="warning" size="mini" @click="handleChoise(false, row)">拒绝</el-button>
       </div>
-      <div v-else>
+      <div class="table-choise" v-show="row.state !== '0'">
         <el-button plain size="mini" @click="handleChoise('update', row)">更改状态</el-button>
       </div>
     </template>
@@ -41,6 +41,9 @@ export default {
   .el-button--warning.is-plain {
     margin-top: 3px;
     margin-left: 0;
+  }
+  .el-button {
+    margin: 3px 0;
   }
 }
 </style>

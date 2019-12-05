@@ -1,7 +1,7 @@
 <template>
   <el-table-column label="位置" prop="address" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.address }}</span>
+      <span>{{ row.position }}</span>
     </template>
   </el-table-column>
 </template>

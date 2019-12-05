@@ -5,9 +5,9 @@
     clearable
     @change="searchChange"
     class="filter-item"
-    style="width: 80px"
+    style="width: 110px"
   >
-    <el-option v-for="item in vipTypeOptions" :key="item" :label="item" :value="item" />
+    <el-option v-for="item in vipTypeOptions" :key="item[0]" :label="item[1]" :value="item[0]" />
   </el-select>
 </template>
 <script>
@@ -16,12 +16,12 @@ export default {
   data() {
     return {
       vipType: undefined,
-      vipTypeOptions: ["会员", "非会员"]
+      vipTypeOptions: [["1", "会员"], ["2", "非会员"]]
     };
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", "vip", this.vipType);
+      this.$emit("searchChange", "is_vip", this.vipType);
     }
   }
 };
