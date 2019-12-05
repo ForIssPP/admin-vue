@@ -30,25 +30,25 @@
       />
 
       <!-- 性别查询 -->
-      <search-sex></search-sex>
+      <search-sex @searchChange="searchChange" />
 
       <!-- 渠道查询 -->
-      <search-platform @stateTypeChange="stateTypeChange" />
+      <search-platform @searchChange="searchChange" />
 
       <!-- 时间查询 -->
-      <search-date @dateTypeChange="dateTypeChange" />
+      <search-date @searchChange="searchChange" />
 
       <!-- 状态查询 -->
-      <search-state-activity />
+      <search-state-activity @searchChange="searchChange" />
 
       <!-- 位置查询 -->
-      <search-address></search-address>
+      <search-address @searchChange="searchChange" />
 
       <!-- 用户类型查询 -->
-      <search-user-create-type></search-user-create-type>
+      <search-user-create-type @searchChange="searchChange" />
 
       <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @reviewerTypeChange="reviewerTypeChange" />
+      <search-reviewer style="margin-right: 10px" @searchChange="searchChange" />
 
       <!-- 搜索 -->
       <el-button
@@ -58,67 +58,11 @@
         icon="el-icon-search"
         @click="handleFilter"
       >搜索</el-button>
-
-      <!-- 导出 -->
-      <el-button
-        v-waves
-        :loading="downloadLoading"
-        class="filter-item"
-        type="primary"
-        style="margin-left: 0"
-        icon="el-icon-download"
-        @click="handleDownload"
-      >导出</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-    >
-      <!-- ID -->
-      <table-id />
-
-      <!-- Username -->
-      <table-username />
-
-      <!-- Address -->
-      <table-address />
-
-      <!-- Sex -->
-      <table-sex />
-
-      <!-- Platform -->
-      <table-platform />
-
-      <!-- Activity Text -->
-      <table-activity-text />
-
-      <!-- Activity Image -->
-      <el-table-column label="图片" prop="activityImage" align="center">
-        <template slot-scope="{row}">
-          <img :src="row.activityImage" alt="activity-images" />
-        </template>
-      </el-table-column>
-
-      <!-- State Activity -->
-      <table-state-activity></table-state-activity>
-
-      <!-- Time -->
-      <table-time />
-
-      <!-- Reviewer -->
-      <table-reviewer />
-
-      <!-- Choise Activity -->
-      <table-choise-activity></table-choise-activity>
-    </el-table>
+    <activity-check-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></activity-check-table>
     <!-- 表单 end -->
 
     <!-- 分页器 start -->
@@ -134,7 +78,6 @@
 </template>
 
 <script>
-import { getActivityCheckList } from "@/api/activity";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
@@ -148,18 +91,9 @@ import {
   SearchStateActivity,
   SearchDate
 } from "@/components/search/index";
-import {
-  TableId,
-  TableUsername,
-  TableAddress,
-  TableSex,
-  TablePlatform,
-  TableTime,
-  TableActivityText,
-  TableChoiseActivity,
-  TableStateActivity,
-  TableReviewer
-} from "@/components/table/index";
+import ActivityCheckTable from "@/components/table/index.vue";
+import { componentList } from "./table-config";
+import methodsCommon from "../common/methods";
 
 export default {
   name: "UserControllerNameCheck",
@@ -172,134 +106,36 @@ export default {
     SearchPlatform,
     SearchReviewer,
     SearchDate,
-    TableChoiseActivity,
-    TableId,
-    TableUsername,
-    TableAddress,
-    TableSex,
-    TablePlatform,
-    TableTime,
-    TableStateActivity,
-    TableActivityText,
-    TableReviewer
+    ActivityCheckTable
   },
   directives: { waves },
   data() {
     return {
+      componentList,
       tableKey: 0,
       list: null,
-      // 分页器按钮
       total: 0,
       listLoading: true,
       listQuery: {
-        // 页面
         page: 1,
-        // 15行
         limit: 15,
-        phoneNumber: undefined,
+        address: undefined,
+        date: undefined,
         name: undefined,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: "+id"
+        phoneNumber: undefined,
+        platform: undefined,
+        reviewer: undefined,
+        sex: undefined,
+        stateActivity: undefined,
+        userCreate: undefined,
+        userID: undefined
       },
-      tableHeader: [
-        "ID",
-        "电话号码",
-        "状态",
-        "性别",
-        "审核昵称",
-        "修改时间",
-        "处理人"
-      ],
-      tableContent: [
-        "id",
-        "phoneNumber",
-        "state",
-        "sex",
-        "checkName",
-        "time",
-        "reviewer"
-      ],
       downloadLoading: false
     };
   },
   created() {
     this.getList();
   },
-  methods: {
-    /**
-     * 操作状态更新
-     */
-    handleChoise(tag) {
-      console.log(tag);
-    },
-    /**
-     * 选择`性别`更新
-     */
-    sexTypeChange(sex) {
-      console.log(sex);
-    },
-    /**
-     * 选择`状态`更新
-     */
-    stateTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`处理`人更新
-     */
-    reviewerTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 选择`时间`更新
-     */
-    dateTypeChange(state) {
-      console.log(state);
-    },
-    /**
-     * 获取表单
-     */
-    getList() {
-      this.listLoading = true;
-      getActivityCheckList(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.total = response.data.total;
-        this.listLoading = false;
-      });
-    },
-    /**
-     * 表单搜索填充
-     */
-    handleFilter() {
-      console.log(this.listQuery);
-      // this.getList();
-    },
-    /**
-     * 导出Excel
-     */
-    handleDownload() {
-      const header = this.tableHeader;
-
-      this.downloadLoading = true;
-      import("@/vendor/Export2Excel").then(excel => {
-        if (header.length !== this.tableContent.length) {
-          return false;
-        }
-        const data = this.list.map(value => {
-          return this.tableContent.map(key => {
-            return value[key];
-          });
-        });
-        excel.export_json_to_excel({
-          header,
-          data,
-          filename: "name-check"
-        });
-        this.downloadLoading = false;
-      });
-    }
-  }
+  methods: methodsCommon("getActivityCheckList")
 };
 </script>

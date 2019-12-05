@@ -3,14 +3,14 @@
     <template v-slot="{row}">
       <div class="table-choise">
         <el-button
-          v-if="row.state === '待审核'"
+          v-if="row.tipOffState === '未处理'"
           plain
           type="success"
           size="mini"
-          @click="handleChoise(true)"
+          @click="handleChoise(true, row)"
         >处理</el-button>
-        <el-button v-else plain size="mini" @click="handleChoise(false)">已处理</el-button>
-        <el-button plain type="warning" size="mini" @click="handleChoise('msg')">私信</el-button>
+        <el-button v-else plain size="mini" @click="handleChoise(false, row)">已处理</el-button>
+        <el-button plain type="warning" size="mini" @click="handleChoise('msg', row)">私信</el-button>
       </div>
     </template>
   </el-table-column>
@@ -31,8 +31,8 @@ export default {
     }
   },
   methods: {
-    handleChoise(state) {
-      this.$emit("handleChoise", state);
+    handleChoise(state, row) {
+      this.$emit("handleChoise", state, row);
     }
   }
 };
