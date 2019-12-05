@@ -1,21 +1,21 @@
 function reLabelAndValue(name) {
-  return name.map(e => {
+  return name.map((e, i) => {
     return {
       label: e,
-      value: e
-    }
+      value: i + 1
+    };
   });
 }
 
 export default {
   workWoman: reLabelAndValue([
-    '模特',
-    '老师',
-    '学生',
-    '导游',
-    '空姐',
-    '白领',
-    '其他',
+    "模特",
+    "老师",
+    "学生",
+    "导游",
+    "空姐",
+    "白领",
+    "其他"
   ]),
   workMan: reLabelAndValue([
     "互联网行业",
@@ -27,13 +27,13 @@ export default {
     "食品制造业",
     "房地产行业",
     "医疗行业",
-    "其他",
+    "其他"
   ]),
-  live: reLabelAndValue([
+  life_quality: reLabelAndValue([
     "极度奢靡",
     "高度奢侈",
     "中产阶级",
-    "小资生活",
+    "小资生活"
   ]),
   style: reLabelAndValue([
     "性感",
@@ -42,31 +42,55 @@ export default {
     "淑女",
     "御姐",
     "可爱",
-    "多样",
+    "多样"
   ]),
-  target: reLabelAndValue([
+  purpose: reLabelAndValue([
     "寻找精神伴侣",
     "寻找私密关系",
     "打发时间",
-    "结交朋友",
+    "结交朋友"
   ]),
-  address: reLabelAndValue([
-    "澳门",
-    "台湾",
-    "香港",
-    "大陆",
-    "其他",
-  ]),
-  somke: reLabelAndValue([
-    "老烟枪",
-    "社交应酬",
-    "偶尔一根",
-    "从不抽烟",
-  ]),
-  drink: reLabelAndValue([
-    "品酒达人",
-    "社交应酬",
-    "偶尔小酌",
-    "滴酒不沾",
-  ])
-}
+  position: [
+    {
+      label: "澳门",
+      value: "澳门"
+    },
+    {
+      label: "台湾",
+      value: "台湾"
+    },
+    {
+      label: "香港",
+      value: "香港"
+    },
+    {
+      label: "大陆",
+      value: "大陆"
+    },
+    {
+      label: "其他",
+      value: "其他"
+    }
+  ],
+  smoke: reLabelAndValue(["老烟枪", "社交应酬", "偶尔一根", "从不抽烟"]),
+  drink: reLabelAndValue(["品酒达人", "社交应酬", "偶尔小酌", "滴酒不沾"]),
+  defaultForm: {
+    nickname: undefined,
+    position: "台湾",
+    mobile: undefined,
+    introduction: "暂无",
+    age: 18,
+    purpose: 1,
+    is_vip: "1",
+    profession: 1,
+    style: 1,
+    height: 1,
+    smoke: 1,
+    life_quality: 1,
+    drink: 1,
+    auth_state: 1,
+    sex: "2",
+    make_friend: "0",
+    measurements: [30, 30, 30]
+  }
+};
