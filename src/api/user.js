@@ -109,7 +109,7 @@ export function getUsernameList(query) {
 }
 
 export function addUserMan(info) {
-  info.service= "User.AddUserMan";
+  info.service = "User.AddUserMan";
   return richpapaRequest({
     method: "get",
     params: info
@@ -117,7 +117,7 @@ export function addUserMan(info) {
 }
 
 export function addUserWoman(info) {
-  info.service= "User.AddUserWoman";
+  info.service = "User.AddUserWoman";
   return richpapaRequest({
     method: "get",
     params: info
@@ -195,7 +195,9 @@ export function setUserIntroductionCheck(row) {
     params: {
       service: "User.UserIntroductionCheck",
       introduction_id: row.id,
-      state: row.state,
+      state: row.state
     }
   });
 }
+
+export default {};

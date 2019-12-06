@@ -56,3 +56,5 @@ export function setDynamicState(row) {
     }
   });
 }
+
+export default {};

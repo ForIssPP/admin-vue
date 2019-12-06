@@ -64,3 +64,5 @@ export function addUserAmount(form) {
     params: form
   });
 }
+
+export default {};
