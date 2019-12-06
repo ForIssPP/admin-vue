@@ -4,6 +4,7 @@ import { getToken } from "@/utils/auth";
 import { Message } from "element-ui";
 
 const pro_service = axios.create({
+  /* URL */
   baseURL: "http://loc.mjliveapp.com/appapi/",
   timeout: 5000
 });
@@ -48,4 +49,5 @@ pro_service.interceptors.response.use(
   }
 );
 
+/** pichpapa request functional */
 export default pro_service;
