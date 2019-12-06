@@ -56,13 +56,18 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="getList"
       >搜索</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <activity-check-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></activity-check-table>
+    <activity-check-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    ></activity-check-table>
     <!-- 表单 end -->
 
     <!-- 分页器 start -->
@@ -119,16 +124,16 @@ export default {
       listQuery: {
         page: 1,
         limit: 15,
-        address: undefined,
-        date: undefined,
-        name: undefined,
-        phoneNumber: undefined,
-        platform: undefined,
-        reviewer: undefined,
+        position: undefined,
+        create_time: undefined,
+        nickname: undefined,
+        mobile: undefined,
+        device: undefined,
+        admin_id: undefined,
         sex: undefined,
-        stateActivity: undefined,
+        state: undefined,
         userCreate: undefined,
-        userID: undefined
+        uid: undefined
       },
       downloadLoading: false
     };
@@ -136,6 +141,6 @@ export default {
   created() {
     this.getList();
   },
-  methods: methodsCommon("getActivityCheckList")
+  methods: methodsCommon("getActivityCheckList", "setDynamicState")
 };
 </script>

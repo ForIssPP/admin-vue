@@ -1,4 +1,4 @@
-import picture from "./picture.vue";
+import picture from "../common/picture.vue";
 
 export const componentList = [
   "TableId",
