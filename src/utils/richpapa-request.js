@@ -36,6 +36,9 @@ pro_service.interceptors.response.use(
     }
   },
   err => {
+    if (err.message === "timeout of 5000ms exceeded") {
+      err.message = "请求超时！";
+    }
     Message({
       message: err.message,
       type: "error",
