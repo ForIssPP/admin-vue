@@ -1,13 +1,7 @@
 <template>
-  <el-table-column
-    :label="payName"
-    prop="payType"
-    :sortable="sortable"
-    align="center"
-    :width="width"
-  >
+  <el-table-column :label="payName" prop="type" align="center">
     <template slot-scope="{row}">
-      <span>{{ row.payType }}</span>
+      <span>{{ row.type }}</span>
     </template>
   </el-table-column>
 </template>
@@ -15,18 +9,8 @@
 export default {
   name: "table-pay-type",
   props: {
-    width: {
-      type: String
-    },
     payName: {
       type: String
-    },
-    sortable: {
-      type: [Boolean, String],
-      validator(value) {
-        return typeof value === "boolean" || value === "custom ";
-      },
-      default: false
     }
   }
 };

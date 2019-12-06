@@ -1,7 +1,7 @@
 <template>
-  <el-table-column label="订单状态" prop="orderState" :sortable="sortable" align="center" :width="width">
+  <el-table-column label="订单状态" prop="state" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.orderState }}</span>
+      <span>{{ row.state === '0' ? '待审核' : row.state === '1' ? '通过' : '未通过' }}</span>
     </template>
   </el-table-column>
 </template>
