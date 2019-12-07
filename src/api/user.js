@@ -9,6 +9,21 @@ export function login(data) {
   });
 }
 
+export function richpapaRequestLogin(data) {
+  data.service = "Login.Login";
+  return richpapaRequest({
+    method: "post",
+    params: data
+  });
+}
+
+export function getVerifyImg() {
+  return Promise.resolve(
+    "http://loc.mjliveapp.com/appapi/?service=Login.VerifyImg&time=" +
+      new Date().getTime()
+  );
+}
+
 export function getInfo(token) {
   return request({
     url: "/user/info",
@@ -26,6 +41,10 @@ export function logout() {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getReviewerUserList(reviewerUserList) {
   return richpapaRequest({
     method: "get",
@@ -36,6 +55,10 @@ export function getReviewerUserList(reviewerUserList) {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getUserList(query) {
   query.service = "User.UserList";
   return richpapaRequest({
@@ -44,6 +67,10 @@ export function getUserList(query) {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getAvatarList(query) {
   query.service = "User.UserAvatarCheckList";
   return richpapaRequest({
@@ -52,6 +79,10 @@ export function getAvatarList(query) {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getProfilesList(query) {
   query.service = "User.UserIntroductionCheckList";
   return richpapaRequest({
@@ -60,6 +91,10 @@ export function getProfilesList(query) {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getPictureList(query) {
   query.service = "User.UserWomanAuthList";
   return richpapaRequest({
@@ -68,6 +103,10 @@ export function getPictureList(query) {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getAlbumList(query) {
   query.service = "User.UserPhotoCheckList";
   return richpapaRequest({
@@ -76,6 +115,10 @@ export function getAlbumList(query) {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getMoneyPicturesList(query) {
   query.service = "User.UserManAuthList";
   return richpapaRequest({
@@ -84,22 +127,10 @@ export function getMoneyPicturesList(query) {
   });
 }
 
-export function getFeedBack(query) {
-  return request({
-    url: "/user/tipoffs/feedback",
-    method: "get",
-    params: query
-  });
-}
-
-export function getTipOffsList(query) {
-  return request({
-    url: "/user/tipoffs/list",
-    method: "get",
-    params: query
-  });
-}
-
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getUsernameList(query) {
   query.service = "User.UserNicknameCheckList";
   return richpapaRequest({
@@ -108,6 +139,10 @@ export function getUsernameList(query) {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function addUserMan(info) {
   info.service = "User.AddUserMan";
   return richpapaRequest({
@@ -116,6 +151,10 @@ export function addUserMan(info) {
   });
 }
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function addUserWoman(info) {
   info.service = "User.AddUserWoman";
   return richpapaRequest({

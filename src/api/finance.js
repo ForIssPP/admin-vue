@@ -1,5 +1,9 @@
 import richpapaRequest from "@/utils/richpapa-request";
 
+/**
+ * 获取`提现记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getWithdrawList(query) {
   query.service = "Finance.CashoutList";
   return richpapaRequest({
@@ -8,6 +12,10 @@ export function getWithdrawList(query) {
   });
 }
 
+/**
+ * 获取`充值记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getRechargeRecordList(query) {
   query.service = "Finance.RechargeList";
   return richpapaRequest({
@@ -16,6 +24,10 @@ export function getRechargeRecordList(query) {
   });
 }
 
+/**
+ * 获取`消费记录`列表
+ * @param {AxiosRequestConfig.params} query 查询参数
+ */
 export function getPurchaseRecordList(query) {
   query.service = "Finance.ConsumeList";
   return richpapaRequest({
@@ -25,7 +37,7 @@ export function getPurchaseRecordList(query) {
 }
 
 /**
- * 提现驳回
+ * 提现`驳回`
  * @param {object} row 列表对象
  */
 export function cashoutReject(row) {
@@ -40,7 +52,7 @@ export function cashoutReject(row) {
 }
 
 /**
- * 提现打款
+ * 提现`打款`
  * @param {object} row 列表对象
  */
 export function cashoutRemit(row) {
