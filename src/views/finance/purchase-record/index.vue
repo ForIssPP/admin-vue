@@ -35,7 +35,7 @@
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 订单号查询 -->
@@ -44,7 +44,7 @@
         placeholder="订单号查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 筛选结果金额统计 -->
@@ -56,7 +56,7 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="getList"
       >搜索</el-button>
 
       <!-- 导出 -->
@@ -82,22 +82,22 @@
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <purchase-record-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></purchase-record-table>
+    <purchase-record-table :loading="listLoading" :componentList="componentList" :list="list"></purchase-record-table>
     <el-dialog
       title="手动扣除"
       label-width="80px"
       :visible.sync="purchaseVisible"
       :before-close="onClose"
     >
-      <el-form ref="rechargeForm" :model="form">
-        <el-form-item label="用户ID">
-          <el-input type="text" v-model="form.id" placeholder="请输入用户ID"></el-input>
+      <el-form ref="rechargeForm" :rules="formRules" :model="form">
+        <el-form-item label="用户ID" prop="uid">
+          <el-input type="text" v-model="form.uid" placeholder="请输入用户ID"></el-input>
         </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input type="text" v-model="form.username" placeholder="请输入昵称"></el-input>
+        <el-form-item label="用户昵称" prop="nickname">
+          <el-input type="text" v-model="form.nickname" placeholder="请输入昵称"></el-input>
         </el-form-item>
-        <el-form-item label="扣除金额">
-          <el-input type="text" v-model="form.coin" placeholder="请输入扣除金额"></el-input>
+        <el-form-item label="扣除金额" prop="coin">
+          <el-input type="text" v-model="form.coin" placeholder="请输入金额"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -135,6 +135,7 @@ import {
 import PurchaseRecordTable from "@/components/table/index.vue";
 import { tableHeader, tableContent, componentList } from "./table-config";
 import downloadExcel from "@/utils/download-excel";
+import methodsCommon from "../common/methods";
 
 export default {
   name: "FinanceControllerPurchaseRecord",
@@ -151,6 +152,8 @@ export default {
   data() {
     return {
       componentList,
+      tableHeader,
+      tableContent,
       tableKey: 0,
       list: null,
       total: 0,
@@ -158,9 +161,14 @@ export default {
       purchaseVisible: false,
       money: 0,
       form: {
-        id: undefined,
+        uid: undefined,
         coin: undefined,
-        username: undefined
+        nickname: undefined
+      },
+      formRules: {
+        uid: [{ required: true, message: "请输入用户ID", trigger: "blur" }],
+        coin: [{ required: true, message: "请输入扣除金额", trigger: "blur" }],
+        nickname: [{ required: true, message: "请输入用户名", trigger: "blur" }]
       },
       listQuery: {
         payType: undefined,
@@ -180,78 +188,40 @@ export default {
   created() {
     this.getList();
   },
-  methods: {
-    /**
-     * 操作状态更新
-     */
-    handleChoise(tag) {
-      console.log(tag);
-    },
-    /**
-     * 查询更新
-     */
-    searchChange(type, query) {
-      this.listQuery[type] = query || undefined;
-      console.log(this.listQuery);
-      /* TODO */
-    },
-    /**
-     * 获取表单
-     */
-    getList() {
-      this.listLoading = true;
-      getPurchaseRecordList(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.total = response.data.total;
-        this.listLoading = false;
-        this.money = this.list.reduce((prev, item) => {
-          if (typeof prev === "number") {
-            return prev + item.coin;
-          } else {
-            return prev.coin + item.coin;
-          }
-        });
-        console.log(this.money);
-      });
-    },
-    /**
-     * 表单搜索填充
-     */
-    handleFilter() {
-      console.log(this.listQuery);
-      // this.getList();
-    },
-    /**
-     * 导出Excel
-     */
-    handleDownload() {
-      this.downloadLoading = true;
-      const data = this.list.map(value => {
-        return tableContent.map(key => {
-          return value[key];
-        });
-      });
-      downloadExcel(
-        tableHeader,
-        data,
-        () => (this.downloadLoading = false)
-        /* file name */
-      );
-    },
+  methods: Object.assign(methodsCommon("getRechargeRecordList"), {
     onPurchase() {
       this.purchaseVisible = true;
     },
     onPurchaseAmount() {
-      console.log(this.form);
+      this.$refs.rechargeForm.validate(valid => {
+        if (valid) {
+          import("@/api/finance").then(api =>
+            api
+              .addUserAmount(this.form)
+              .then(
+                res =>
+                  this.$message({
+                    message: "扣除成功",
+                    type: "success"
+                  }),
+                (this.purchaseVisible = false)
+              )
+              .catch(
+                err =>
+                  this.$message({
+                    message: "扣除失败",
+                    type: "error"
+                  }),
+                (this.purchaseVisible = false)
+              )
+          );
+        }
+      });
     },
     onClose() {
-      this.form = {
-        coin: undefined,
-        id: undefined,
-        username: undefined
-      };
+      this.$refs.rechargeForm.resetFields();
       this.purchaseVisible = false;
     }
-  }
+  })
 };
 </script>

@@ -1,10 +1,10 @@
-import WithdrawAmount from "./withdraw-amount.vue";
+import TablePayType from "./table-pay-type.vue";
 
 export const componentList = [
   "TableId",
   "TableUsername",
   "TableVip",
-  WithdrawAmount,
+  TablePayType,
   "TableCoin",
   "TableSex",
   "TableOrderNumber",
@@ -26,12 +26,12 @@ export const tableHeader = [
 
 export const tableContent = [
   "id",
-  "username",
-  "vip",
-  "purchaseType",
+  "nickname",
+  "vip_level",
+  "type",
   "coin",
   "sex",
-  "orderNumber",
-  "platform",
-  "postTime"
+  "orderno",
+  "device",
+  "create_time"
 ];

@@ -4,7 +4,7 @@
     <div class="filter-container">
       <!-- 支付类型查询 -->
       <el-select
-        v-model="listQuery.payType"
+        v-model="listQuery.type"
         placeholder="支付类型"
         clearable
         class="filter-item"
@@ -17,7 +17,7 @@
 
       <!-- 订单状态查询 -->
       <el-select
-        v-model="listQuery.orderState"
+        v-model="listQuery.state"
         placeholder="订单状态"
         clearable
         class="filter-item"
@@ -35,36 +35,36 @@
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 订单号查询 -->
       <el-input
-        v-model="listQuery.orderNumber"
+        v-model="listQuery.orderno"
         placeholder="订单号查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 充值金额查询 -->
       <el-input
-        v-model="listQuery.rechargeAmount"
+        v-model="listQuery.money"
         placeholder="充值金额查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 渠道查询 -->
       <search-platform @searchChange="searchChange" />
 
       <!-- 筛选结果金额统计 -->
-      <money-conut :money="money" />
+      <money-conut :money="coin" />
       <money-conut :name="'手动充值金额'" :money="money" />
 
       <!-- 搜索 -->
@@ -73,7 +73,7 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="getList"
       >搜索</el-button>
 
       <!-- 导出 -->
@@ -99,21 +99,21 @@
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <recharge-record-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></recharge-record-table>
+    <recharge-record-table :loading="listLoading" :componentList="componentList" :list="list"></recharge-record-table>
     <el-dialog
       title="手动充值"
       label-width="80px"
       :visible.sync="rechargeVisible"
       :before-close="onClose"
     >
-      <el-form ref="rechargeForm" :model="form">
-        <el-form-item label="用户ID">
-          <el-input type="text" v-model="form.id" placeholder="请输入用户ID"></el-input>
+      <el-form ref="rechargeForm" :rules="formRules" :model="form">
+        <el-form-item label="用户ID" prop="uid">
+          <el-input type="text" v-model="form.uid" placeholder="请输入用户ID"></el-input>
         </el-form-item>
-        <el-form-item label="用户昵称">
-          <el-input type="text" v-model="form.username" placeholder="请输入昵称"></el-input>
+        <el-form-item label="用户昵称" prop="nickname">
+          <el-input type="text" v-model="form.nickname" placeholder="请输入昵称"></el-input>
         </el-form-item>
-        <el-form-item label="充值金额">
+        <el-form-item label="充值金额" prop="coin">
           <el-input type="text" v-model="form.coin" placeholder="请输入金额"></el-input>
         </el-form-item>
       </el-form>
@@ -137,8 +137,6 @@
 </template>
 
 <script>
-import { getRechargeRecordList } from "@/api/finance";
-// button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
@@ -153,6 +151,7 @@ import {
 import RechargeRecordTable from "@/components/table/index.vue";
 import { tableHeader, tableContent, componentList } from "./table-config";
 import downloadExcel from "@/utils/download-excel";
+import methodsCommon from "../common/methods";
 
 export default {
   name: "FinanceControllerRechargeRecord",
@@ -170,28 +169,37 @@ export default {
   data() {
     return {
       componentList,
+      tableHeader,
+      tableContent,
       tableKey: 0,
       list: null,
       total: 0,
       listLoading: true,
       rechargeVisible: false,
+      coin: 0,
       money: 0,
       form: {
-        id: undefined,
+        uid: undefined,
         coin: undefined,
-        username: undefined
+        nickname: undefined
+      },
+      formRules: {
+        uid: [{ required: true, message: "请输入用户ID", trigger: "blur" }],
+        coin: [{ required: true, message: "请输入充值金额", trigger: "blur" }],
+        nickname: [{ required: true, message: "请输入用户名", trigger: "blur" }]
       },
       listQuery: {
-        payType: undefined,
-        orderState: undefined,
-        userID: undefined,
-        orderNumber: undefined,
-        rechargeAmount: undefined,
+        type: undefined,
+        state: undefined,
+        uid: undefined,
+        orderno: undefined,
+        money: undefined,
         page: 1,
         limit: 15,
         sex: undefined,
-        platform: undefined,
-        orderNumber: undefined
+        is_vip: undefined,
+        admin_id: undefined,
+        device: undefined
       },
       downloadLoading: false
     };
@@ -199,78 +207,40 @@ export default {
   created() {
     this.getList();
   },
-  methods: {
-    /**
-     * 操作状态更新
-     */
-    handleChoise(tag) {
-      console.log(tag);
-    },
-    /**
-     * 查询更新
-     */
-    searchChange(type, query) {
-      this.listQuery[type] = query || undefined;
-      console.log(this.listQuery);
-      /* TODO */
-    },
-    /**
-     * 获取表单
-     */
-    getList() {
-      this.listLoading = true;
-      getRechargeRecordList(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.total = response.data.total;
-        this.listLoading = false;
-        this.money = this.list.reduce((prev, item) => {
-          if (typeof prev === "number") {
-            return prev + item.withdrawAmount;
-          } else {
-            return prev.withdrawAmount + item.withdrawAmount;
-          }
-        });
-        console.log(this.money);
-      });
-    },
-    /**
-     * 表单搜索填充
-     */
-    handleFilter() {
-      console.log(this.listQuery);
-      // this.getList();
-    },
-    /**
-     * 导出Excel
-     */
-    handleDownload() {
-      this.downloadLoading = true;
-      const data = this.list.map(value => {
-        return tableContent.map(key => {
-          return value[key];
-        });
-      });
-      downloadExcel(
-        tableHeader,
-        data,
-        () => (this.downloadLoading = false)
-        /* file name */
-      );
-    },
+  methods: Object.assign(methodsCommon("getRechargeRecordList"), {
     onRecharge() {
       this.rechargeVisible = true;
     },
     onRechargeAmount() {
-      console.log(this.form);
+      this.$refs.rechargeForm.validate(valid => {
+        if (valid) {
+          import("@/api/finance").then(api =>
+            api
+              .addUserAmount(this.form)
+              .then(
+                res =>
+                  this.$message({
+                    message: "充值成功",
+                    type: "success"
+                  }),
+                (this.rechargeVisible = false)
+              )
+              .catch(
+                err =>
+                  this.$message({
+                    message: "充值失败",
+                    type: "error"
+                  }),
+                (this.rechargeVisible = false)
+              )
+          );
+        }
+      });
     },
     onClose() {
-      this.form = {
-        coin: undefined,
-        id: undefined,
-        username: undefined
-      };
+      this.$refs.rechargeForm.resetFields();
       this.rechargeVisible = false;
     }
-  }
+  })
 };
 </script>

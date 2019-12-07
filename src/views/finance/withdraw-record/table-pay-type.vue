@@ -1,13 +1,12 @@
 <template>
-  <table-pay-type :payName="'提现类型'"></table-pay-type>
+  <el-table-column :label="'提现类型'" prop="type" align="center">
+    <template slot-scope="{row}">
+      <span>{{ row.type }}</span>
+    </template>
+  </el-table-column>
 </template>
 <script>
-import { TablePayType } from "@/components/table/index";
-
 export default {
-  name: "table-pictures",
-  components: {
-    TablePayType
-  }
+  name: "TablePayType"
 };
 </script>

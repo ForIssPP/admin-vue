@@ -1,8 +1,8 @@
 <template>
   <!-- Picture Check -->
-  <el-table-column label="提现金额" prop="withdrawAmount" align="center">
+  <el-table-column label="提现金额" prop="money" align="center">
     <template slot-scope="{row}">
-      <span>{{ row.withdrawAmount }}</span>
+      <span>{{ row.money }}</span>
     </template>
   </el-table-column>
 </template>
