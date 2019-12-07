@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { getFeedBack } from "@/api/user";
+import { getFeedBack } from "@/api/message";
 import MyTable from "@/components/table/index.vue";
 // button点击波纹指令
 import waves from "@/directive/waves";

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { getTipOffsList } from "@/api/user";
+import { getTipOffsList } from "@/api/message";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
