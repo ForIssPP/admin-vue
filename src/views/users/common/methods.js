@@ -1,14 +1,14 @@
-import * as userApi from "@/api/user";
-import { userCommonOpenConfirm } from "@/utils/open-confirm";
-
 export default function(api, setApi) {
   return {
     /**
      * 操作状态更新
      */
     handleChoise(tag, row) {
-      console.log(1);
-      userCommonOpenConfirm.call(this, tag, row, userApi[setApi]);
+      import("@/utils/open-confirm").then(func =>
+        import("@/api/user").then(userApi =>
+          func.userCommonOpenConfirm(tag, row, userApi[setApi])
+        )
+      );
     },
     /**
      * 查询更新
@@ -22,11 +22,13 @@ export default function(api, setApi) {
      */
     getList() {
       this.listLoading = true;
-      userApi[api](this.listQuery).then(response => {
-        this.list = response.items;
-        // this.total = response.total;
-        this.listLoading = false;
-      });
+      import("@/api/user").then(userApi =>
+        userApi[api](this.listQuery).then(response => {
+          this.list = response.items;
+          // this.total = response.total;
+          this.listLoading = false;
+        })
+      );
     }
   };
 }

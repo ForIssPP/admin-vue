@@ -4,11 +4,11 @@
     <div class="filter-container">
       <!-- 订单状态查询 -->
       <el-select
-        v-model="listQuery.orderState"
+        v-model="listQuery.type"
         placeholder="订单状态"
         clearable
         class="filter-item"
-        style="width: 80px"
+        style="width: 110px"
       >
         <el-option label="待处理" value="待处理" />
         <el-option label="提现成功" value="提现成功" />
@@ -20,20 +20,20 @@
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 订单号查询 -->
       <el-input
-        v-model="listQuery.orderNumber"
+        v-model="listQuery.orderno"
         placeholder="订单号查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- Vip查询 -->
@@ -57,7 +57,7 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="getList"
       >搜索</el-button>
 
       <!-- 导出 -->
@@ -73,10 +73,13 @@
     </div>
     <!-- 检索栏 end -->
 
-    <!-- 表单 start -->
-    <withdraw-record-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></withdraw-record-table>
-    <!-- 表单 end -->
-
+    <!-- 表单 -->
+    <withdraw-record-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    />
     <!-- 分页器 start -->
     <pagination
       v-show="total>0"
@@ -106,7 +109,15 @@ import {
 } from "@/components/search/index";
 import WithdrawRecordTable from "@/components/table/index.vue";
 import { tableHeader, tableContent, componentList } from "./table-config";
-import downloadExcel from "@/utils/download-excel";
+import methodsCommon from "../common/methods";
+
+const methods = methodsCommon("getWithdrawList");
+
+methods["handleChoise"] = function(tag, row) {
+  import("@/utils/open-confirm").then(confirm => {
+    confirm.financeCommonOpenConfirm(tag, row);
+  });
+};
 
 export default {
   name: "UserControllerNameCheck",
@@ -125,6 +136,8 @@ export default {
   data() {
     return {
       componentList,
+      tableHeader,
+      tableContent,
       tableKey: 0,
       list: null,
       total: 0,
@@ -132,16 +145,17 @@ export default {
       rechargeVisible: false,
       money: 0,
       listQuery: {
-        payType: undefined,
-        orderState: undefined,
-        userID: undefined,
-        orderNumber: undefined,
-        rechargeAmount: undefined,
+        type: undefined,
+        state: undefined,
+        uid: undefined,
+        orderno: undefined,
+        money: undefined,
         page: 1,
         limit: 15,
         sex: undefined,
-        platform: undefined,
-        orderNumber: undefined
+        is_vip: undefined,
+        admin_id: undefined,
+        device: undefined
       },
       downloadLoading: false
     };
@@ -149,78 +163,6 @@ export default {
   created() {
     this.getList();
   },
-  methods: {
-    /**
-     * 操作状态更新
-     */
-    async handleChoise(tag, row) {
-      const openConfirm = await import("@/utils/open-confirm");
-      if (tag === "reject") {
-        openConfirm.commonConfirm.call(this, () => {
-          row.orderState = "未完成";
-        });
-      } else if (tag === "goPay") {
-        openConfirm.commonConfirm.call(this, () => {
-          row.orderState = "已完成";
-        });
-      } else {
-        this.$message({
-          message: "操作已处理",
-          type: "warning"
-        });
-      }
-    },
-    /**
-     * 查询更新
-     */
-    searchChange(type, query) {
-      this.listQuery[type] = query || undefined;
-      console.log(this.listQuery);
-      /* TODO */
-    },
-    /**
-     * 获取表单
-     */
-    getList() {
-      this.listLoading = true;
-      getWithdrawList(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.total = response.data.total;
-        this.listLoading = false;
-        this.money = this.list.reduce((prev, item) => {
-          if (typeof prev === "number") {
-            return prev + item.withdrawAmount;
-          } else {
-            return prev.withdrawAmount + item.withdrawAmount;
-          }
-        });
-        console.log(this.money);
-      });
-    },
-    /**
-     * 表单搜索填充
-     */
-    handleFilter() {
-      console.log(this.listQuery);
-      // this.getList();
-    },
-    /**
-     * 导出Excel
-     */
-    handleDownload() {
-      this.downloadLoading = true;
-      const data = this.list.map(value => {
-        return tableContent.map(key => {
-          return value[key];
-        });
-      });
-      downloadExcel(
-        tableHeader,
-        data,
-        () => (this.downloadLoading = false)
-        /* file name */
-      );
-    }
-  }
+  methods
 };
 </script>

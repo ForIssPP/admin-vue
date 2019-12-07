@@ -4,29 +4,29 @@
     <div class="filter-container">
       <!-- 昵称查询 -->
       <el-input
-        v-model="listQuery.name"
+        v-model="listQuery.nickname"
         placeholder="昵称查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 手机号查询 -->
       <el-input
-        v-model="listQuery.phoneNumber"
+        v-model="listQuery.mobile"
         placeholder="手机号查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 性别查询 -->
@@ -53,17 +53,18 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="getList"
       >搜索</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
     <private-party-check-table
+      :loading="listLoading"
       :componentList="componentList"
       :list="list"
       @handleChoise="handleChoise"
-    ></private-party-check-table>
+    />
     <!-- 表单 end -->
 
     <!-- 分页器 start -->
@@ -118,15 +119,16 @@ export default {
       listQuery: {
         page: 1,
         limit: 15,
-        address: undefined,
-        date: undefined,
-        name: undefined,
-        phoneNumber: undefined,
-        platform: undefined,
-        reviewer: undefined,
+        position: undefined,
+        create_time: undefined,
+        nickname: undefined,
+        mobile: undefined,
+        device: undefined,
+        admin_id: undefined,
         sex: undefined,
-        stateActivity: undefined,
-        userID: undefined
+        state: undefined,
+        uid: undefined,
+        title: undefined
       },
       downloadLoading: false
     };
@@ -134,6 +136,6 @@ export default {
   created() {
     this.getList();
   },
-  methods: methodsCommon("getPrivateParty")
+  methods: methodsCommon("getPrivateParty", "setAppointmentState")
 };
 </script>

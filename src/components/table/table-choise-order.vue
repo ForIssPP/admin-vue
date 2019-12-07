@@ -3,24 +3,24 @@
     <template v-slot="{row}">
       <div class="table-choise">
         <el-button
-          v-show="row.orderState === '已完成'"
+          v-show="row.state !== '1'"
           plain
           size="mini"
           @click="handleChoise('orderFinish', row)"
         >已打款</el-button>
         <el-button
-          v-show="row.orderState !== '已完成'"
+          v-show="row.state === '0'"
           plain
           type="warning"
           size="mini"
-          @click="handleChoise('reject', row)"
+          @click="handleChoise(false, row)"
         >驳回</el-button>
         <el-button
-          v-show="row.orderState === '未处理'"
+          v-show="row.state === '0'"
           plain
           type="success"
           size="mini"
-          @click="handleChoise('goPay', row)"
+          @click="handleChoise(true, row)"
         >打款</el-button>
       </div>
     </template>

@@ -1,5 +1,5 @@
 <template>
-  <el-table-column :label="payName" prop="type" align="center">
+  <el-table-column :label="'消费类型'" prop="type" align="center">
     <template slot-scope="{row}">
       <span>{{ row.type }}</span>
     </template>
@@ -7,11 +7,6 @@
 </template>
 <script>
 export default {
-  name: "table-pay-type",
-  props: {
-    payName: {
-      type: String
-    }
-  }
+  name: "TablePayType"
 };
 </script>

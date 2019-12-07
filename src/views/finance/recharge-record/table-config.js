@@ -31,14 +31,14 @@ export const tableHeader = [
 
 export const tableContent = [
   "id",
-  "username",
-  "vip",
-  "rechargeAmount",
+  "nickname",
+  "vip_level",
+  "money",
   "coin",
-  "orderNumber",
+  "orderno",
   "sex",
-  "payType",
-  "platform",
-  "orderState",
-  "postTime"
+  "type",
+  "orderno",
+  "device",
+  "create_time"
 ];

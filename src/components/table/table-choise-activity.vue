@@ -1,7 +1,7 @@
 <template>
   <el-table-column label="操作" prop="checkUp" :sortable="sortable" align="center" :width="width">
     <template v-slot="{row}">
-      <div class="table-choise" v-if="row.activityState === '正常'">
+      <div class="table-choise" v-if="row.check_state === '0'">
         <el-button plain type="warning" size="mini" @click="handleChoise(true, row)">下架</el-button>
       </div>
       <div v-else>
@@ -26,8 +26,8 @@ export default {
     }
   },
   methods: {
-    handleChoise(state, row) {
-      this.$emit("handleChoise", state, row);
+    handleChoise(tag, row) {
+      this.$emit("handleChoise", tag, row);
     }
   }
 };

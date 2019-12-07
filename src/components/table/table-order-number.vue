@@ -1,7 +1,7 @@
 <template>
-  <el-table-column label="订单号" prop="orderNumber" :sortable="sortable" align="center" :width="width">
+  <el-table-column label="订单号" prop="orderno" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.orderNumber }}</span>
+      <span>{{ row.orderno }}</span>
     </template>
   </el-table-column>
 </template>

@@ -9,7 +9,7 @@ export const componentList = [
   "TableCoin",
   WithdrawAmount,
   "TableOrderNumber",
-  TablePayType,
+  // TablePayType,
   TablePayId,
   "TablePlatform",
   "TableStateOrder",
@@ -36,15 +36,15 @@ export const tableHeader = [
 
 export const tableContent = [
   "id",
-  "username",
-  "vip",
+  "nickname",
+  "vip_level",
   "coin",
-  "withdrawAmount",
-  "orderNumber",
-  "payType",
-  "platform",
-  "orderState",
-  "postTime",
-  "reviewer",
+  "money",
+  "orderno",
+  "type",
+  "device",
+  "state",
+  "create_time",
+  "admin_id",
   "time"
 ];

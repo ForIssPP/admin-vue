@@ -1,8 +1,8 @@
 <template>
   <!-- Picture Check -->
-  <el-table-column label="充值金额" prop="rechargeAmount" align="center">
+  <el-table-column label="充值金额" prop="money" align="center">
     <template slot-scope="{row}">
-      <span>{{ row.rechargeAmount }}</span>
+      <span>{{ row.money }}</span>
     </template>
   </el-table-column>
 </template>
