@@ -1,5 +1,3 @@
-import * as activityApi from "@/api/activity";
-
 export default function(api, setApi) {
   return {
     /**
@@ -7,7 +5,9 @@ export default function(api, setApi) {
      */
     handleChoise(tag, row) {
       import("@/utils/open-confirm").then(func =>
-        func.activityCommonOpenConfirm(tag, row, activityApi[setApi])
+        import("@/api/activity").then(activityApi =>
+          func.activityCommonOpenConfirm(tag, row, activityApi[setApi])
+        )
       );
     },
     /**
@@ -22,11 +22,13 @@ export default function(api, setApi) {
      */
     getList() {
       this.listLoading = true;
-      activityApi[api](this.listQuery).then(response => {
-        this.list = response.items;
-        // this.total = response.total;
-        this.listLoading = false;
-      });
+      import("@/api/activity").then(activityApi =>
+        activityApi[api](this.listQuery).then(response => {
+          this.list = response.items;
+          // this.total = response.total;
+          this.listLoading = false;
+        })
+      );
     }
   };
 }
