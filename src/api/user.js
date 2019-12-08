@@ -34,10 +34,23 @@ export function getInfo(token) {
   });
 }
 
-export function logout() {
-  return request({
-    url: "/user/logout",
-    method: "post"
+export function richpapaRequestGetInfo(token) {
+  return richpapaRequest({
+    method: "get",
+    params: {
+      service: "Login.UserRoles",
+      token
+    }
+  });
+}
+
+export function logout(admin_id) {
+  return richpapaRequest({
+    method: "post",
+    params: {
+      service: "Login.logout",
+      admin_id
+    }
   });
 }
 

@@ -53,20 +53,21 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-form-item prop="imgVerify">
+      <el-form-item prop="verifyCode">
         <span class="svg-container">
           <i class="el-icon-picture"></i>
         </span>
         <!-- 图片验证码 input -->
         <el-input
           class="valid-image-input"
-          ref="imgVerify"
-          v-model="loginForm.imgVerify"
+          ref="verifyCode"
+          v-model="loginForm.verifyCode"
           placeholder="图片验证码"
-          name="imgVerify"
+          name="verifyCode"
           type="text"
           tabindex="1"
           autocomplete="on"
+          @keyup.enter.native="handleLogin"
         />
         <img class="verify-img" :src="validImgUrl" alt="valid-image" @click="getValidImgFrom" />
       </el-form-item>
@@ -85,6 +86,7 @@
 import { validUsername, validImginput } from "@/utils/validate";
 import SocialSign from "./components/SocialSignin";
 import { log } from "util";
+import { getVerifyImg } from "@/api/user";
 import { loginConfig } from "@/config";
 import request from "@/utils/request";
 
@@ -128,7 +130,7 @@ export default {
       loginForm: {
         username: "",
         password: "",
-        imgVerify: ""
+        verifyCode: ""
       },
       validImgUrl: "",
       // 表单提交规则
@@ -139,7 +141,7 @@ export default {
         password: [
           { required: true, trigger: "blur", validator: validatePassword }
         ],
-        imgVerify: [
+        verifyCode: [
           { required: true, trigger: "blur", validator: validImgFrom }
         ]
       },
@@ -220,16 +222,27 @@ export default {
           // 调用公共方法 dispatch 验证用户信息
           this.$store
             .dispatch("user/login", this.loginForm)
-            .then(() => {
-              // 动态加载路由
-              this.$router.push({
-                path: this.redirect || "/",
-                query: this.otherQuery
-              });
+            .then(
+              () =>
+                // 动态加载路由
+                this.$router.push({
+                  path: this.redirect || "/",
+                  query: this.otherQuery
+                }),
+              (this.loading = false)
+            )
+            .catch(err => {
               this.loading = false;
-            })
-            .catch(() => {
-              this.loading = false;
+              this.getValidImgFrom();
+              const { code } = err;
+              // 验证码错误
+              if (code === 1003) {
+                this.loginForm.verifyCode = undefined;
+              } else if (code === 1005) {
+                this.loginForm.username = undefined;
+                this.loginForm.password = undefined;
+                this.loginForm.verifyCode = undefined;
+              }
             });
         } else {
           console.log("error submit!!");
@@ -253,11 +266,9 @@ export default {
      * 重新获取验证码
      */
     getValidImgFrom() {
-      request({
-        url: "/user/checkcode",
-        method: "get",
-        length
-      }).then(res => (this.validImgUrl = res.data));
+      getVerifyImg().then(res => {
+        this.validImgUrl = res;
+      });
     }
   }
 };
@@ -321,13 +332,12 @@ $dark_gray: #889aa4;
 $light_gray: #eee;
 
 div.login-container {
-  .valid-image-input {
-    width: 40%;
-  }
   .verify-img {
-    margin: 4px 4px 0 0;
-    width: 100px;
-    float: right;
+    top: 1px;
+    right: 1px;
+    position: absolute;
+    width: 120px;
+    height: calc(100% - 2px);
   }
 }
 .login-container {

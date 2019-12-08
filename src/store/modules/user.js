@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { richpapaRequestLogin, logout, richpapaRequestGetInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -31,25 +31,33 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password, verifyCode } = userInfo;
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
+      richpapaRequestLogin({
+        account: username.trim(),
+        pwd: password,
+        verify_code: verifyCode
       })
-    })
+        .then(response => {
+          const { token } = response;
+          commit('SET_TOKEN', token);
+          setToken(token);
+          resolve();
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   },
 
   // get user info
   getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
+    console.log(state.token);
+    console.log('----------------');
+    return new Promise((resolve, reject) =>
+      richpapaRequestGetInfo(state.token).then(data => {
+        // const { data } = response
+        console.log(data);
         if (!data) {
           reject('Verification failed, please Login again.')
         }
@@ -69,7 +77,7 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
-    })
+    )
   },
 
   // user logout
