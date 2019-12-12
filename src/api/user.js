@@ -19,7 +19,7 @@ export function richpapaRequestLogin(data) {
 
 export function getVerifyImg() {
   return Promise.resolve(
-    "http://loc.mjliveapp.com/appapi/?service=Login.VerifyImg&time=" +
+    "http://richpapa-admin.richpapa88.com/public/?service=Login.VerifyImg&time=" +
       new Date().getTime()
   );
 }
@@ -44,12 +44,12 @@ export function richpapaRequestGetInfo(token) {
   });
 }
 
-export function logout(admin_id) {
+export function logout(token) {
   return richpapaRequest({
     method: "post",
     params: {
       service: "Login.logout",
-      admin_id
+      token
     }
   });
 }

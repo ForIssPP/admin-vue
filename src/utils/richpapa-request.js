@@ -5,6 +5,7 @@ import { Message } from "element-ui";
 
 const pro_service = axios.create({
   /* URL */
+  // baseURL: "http://richpapa-admin.richpapa88.com/public/",
   baseURL: "http://loc.mjliveapp.com/appapi/",
   timeout: 5000
 });
