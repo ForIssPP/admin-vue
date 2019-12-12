@@ -2,7 +2,7 @@
   <!-- Check Avatar -->
   <el-table-column label="待审头像" align="center">
     <template slot-scope="{row}">
-      <img :src="row.checkAvatar" alt="check-avatar" />
+      <img style="width: 100%" :src="row.avatar" alt="check-avatar" />
     </template>
   </el-table-column>
 </template>
