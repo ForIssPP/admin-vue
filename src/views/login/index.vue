@@ -115,7 +115,7 @@ export default {
     };
     // 图片验证码
     const validImgFrom = (rule, value, callback) => {
-      if (!value.length) {
+      if (!value || !value.length) {
         callback(loginConfig.validErrorMsg.img[0]);
       } else if (
         !validImginput(value) ||
