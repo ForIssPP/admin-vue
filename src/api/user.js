@@ -185,69 +185,119 @@ export function setUserDetail(uid) {
   });
 }
 
-export function setUserAvatarCheck(row) {
+/**
+ * 修改`头像审核`状态
+ * @param {object} row 列表对象
+ * @param {string} state 状态
+ */
+export function setUserAvatarCheck(row, state) {
+  console.log(row);
   return richpapaRequest({
     method: "get",
     params: {
       service: "User.UserAvatarCheck",
-      avatar_id: row.nickname_id,
-      state: row.state
+      avatar_id: row.id,
+      state: state
     }
   });
 }
 
-export function setUserNameCheck(row) {
+/**
+ * 修改`昵称审核`状态
+ * @param {object} row 列表对象
+ * @param {string} state 状态
+ */
+export function setUserNameCheck(row, state) {
+  console.log(row);
   return richpapaRequest({
     method: "get",
     params: {
       service: "User.UserNicknameCheck",
-      nickname_id: row.nickname_id,
-      state: row.state
+      nickname_id: row.id,
+      state: state
     }
   });
 }
 
-export function setUserWomanAuth(row) {
+/**
+ * 修改`真人认证	`状态
+ * @param {object} row 列表对象
+ * @param {string} state 状态
+ */
+export function setUserWomanAuth(row, state) {
   return richpapaRequest({
     method: "get",
     params: {
       service: "User.UserWomanAuth",
-      nickname_id: row.nickname_id,
-      state: row.state
+      auth_id: row.id,
+      state: state
     }
   });
 }
 
-export function setUserManAuth(row) {
+/**
+ * 修改`财产认证`状态
+ * @param {object} row 列表对象
+ * @param {string} state 状态
+ */
+export function setUserManAuth(row, state) {
   return richpapaRequest({
     method: "get",
     params: {
       service: "User.UserManAuth",
-      nickname_id: row.nickname_id,
-      state: row.state
+      auth_id: row.id,
+      state: state
     }
   });
 }
 
-export function setUserPhotoCheck(row) {
+/**
+ * 修改`相册审核`状态
+ * @param {object} row 列表对象
+ * @param {string} state 状态
+ */
+export function setUserPhotoCheck(row, state) {
+  console.log(row);
   return richpapaRequest({
     method: "get",
     params: {
       service: "User.UserPhotoCheck",
       uid: row.uid,
-      state: row.state,
+      state: state,
       sort: row.sort
     }
   });
 }
 
-export function setUserIntroductionCheck(row) {
+/**
+ * 修改`个人介绍`状态
+ * @param {object} row 列表对象
+ * @param {string} state 状态
+ */
+export function setUserIntroductionCheck(row, state) {
   return richpapaRequest({
     method: "get",
     params: {
       service: "User.UserIntroductionCheck",
       introduction_id: row.id,
-      state: row.state
+      state: state
+    }
+  });
+}
+
+/**
+ * 修改`用户解封冻结`状态
+ * @param {object} row 列表对象
+ * @param {string} state 状态
+ */
+export function setUpdateUserState(row, state) {
+  console.log(row);
+  return richpapaRequest({
+    method: "get",
+    params: {
+      service: "User.UpdateUserState",
+      uid: row.id,
+      state: state
     }
   });
 }
