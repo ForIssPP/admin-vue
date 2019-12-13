@@ -142,8 +142,8 @@ export const asyncRoutes = [
     name: "Permission",
     meta: {
       title: "系统设置",
-      icon: "lock"
-      // roles: ["admin", "editor"] // you can set roles in root nav
+      icon: "lock",
+      roles: ["role"]
     },
     children: [
       {
@@ -151,13 +151,19 @@ export const asyncRoutes = [
         component: () => import("@/views/permission/role"),
         name: "RolePermission",
         meta: {
-          title: "权限管理"
-          // roles: ["admin"]
+          title: "权限管理",
+          roles: ["role"]
         }
       }
     ]
   }
 ];
+
+console.log(
+  asyncRoutes.map(e =>
+    e.children.map(c => [c.meta.title, c.meta.roles && c.meta.roles[0]])
+  )
+);
 
 const createRouter = () =>
   new Router({

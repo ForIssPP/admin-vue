@@ -3,7 +3,7 @@ import newPeoples from "./newPeoples";
 import check from "./check";
 import Layout from "@/layout";
 
-const children = [...check, ...info, ...newPeoples];
+const children = [info, ...check,  ...newPeoples];
 
 export default {
   path: "/user",
