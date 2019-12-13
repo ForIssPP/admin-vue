@@ -5,18 +5,23 @@ import { Message } from "element-ui";
 
 const pro_service = axios.create({
   /* URL */
-  baseURL: "http://loc.mjliveapp.com/appapi/",
+  baseURL: process.env.VUE_APP_BASE_API,
   timeout: 5000
 });
 
 pro_service.interceptors.request.use(
   config => {
     if (store.getters.token) {
-      config.headers["X-Token"] = getToken();
+      config.headers["Token"] = getToken();
     }
     return config;
   },
   error => {
+    Message({
+      message: "服务器错误！",
+      type: "error",
+      duration: 5 * 1000
+    });
     console.log(error);
     return Promise.reject(error);
   }
@@ -50,7 +55,7 @@ pro_service.interceptors.response.use(
       err.message = "请求超时，请重试！";
     }
     Message({
-      message: err.message,
+      message: err.message ||　"请求超时，请重试！",
       type: "error",
       duration: 5 * 1000
     });

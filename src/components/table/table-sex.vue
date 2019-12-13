@@ -1,7 +1,7 @@
 <template>
   <el-table-column label="性别" prop="sex" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.sex === '0' ? '保密' : row.sex === '1' ? '男' : '女' }}</span>
+      <span>{{ row.sex === '1' ? '男' : '女' }}</span>
     </template>
   </el-table-column>
 </template>

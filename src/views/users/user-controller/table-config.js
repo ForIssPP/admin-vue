@@ -1,3 +1,6 @@
+import TablePlatformType from "./table-platform.vue";
+import TableCreateTime from "./table-time.vue";
+
 export const tableHeader = [
   "ID",
   "昵称",
@@ -8,8 +11,7 @@ export const tableHeader = [
   "平台",
   "注册时间",
   "位置",
-  "用户类型",
-  "处理人"
+  "用户类型"
 ];
 
 export const tableContent = [
@@ -22,8 +24,7 @@ export const tableContent = [
   "platform",
   "time",
   "address",
-  "userCreateType",
-  "reviewer"
+  "userCreateType"
 ];
 
 export const componentList = [
@@ -33,10 +34,9 @@ export const componentList = [
   "TableNumberState",
   "TableSex",
   "TableVip",
-  "TableTime",
-  "TablePlatform",
+  TableCreateTime,
+  TablePlatformType,
   "TableAddress",
   "TableUserCreateType",
-  "TableReviewer",
   "TableChoiseGroup"
 ];

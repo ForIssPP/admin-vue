@@ -7,7 +7,7 @@
     :width="width"
   >
     <template slot-scope="{row}">
-      <span>{{ row.tipOffState }}</span>
+      <span>{{ row.state === "0" ? '未处理' : '已处理'  }}</span>
     </template>
   </el-table-column>
 </template>

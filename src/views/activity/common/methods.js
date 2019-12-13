@@ -20,15 +20,20 @@ export default function(api, setApi) {
     /**
      * 获取表单
      */
-    getList() {
+    getList(reload) {
       this.listLoading = true;
-      import("@/api/activity").then(activityApi =>
-        activityApi[api](this.listQuery).then(response => {
+
+      import("@/api/activity").then(activityApi => {
+        let data = this.listQuery;
+        if (reload === true) {
+          data = {};
+        }
+        activityApi[api](data).then(response => {
           this.list = response.items;
           // this.total = response.total;
           this.listLoading = false;
-        })
-      );
+        });
+      });
     }
   };
 }

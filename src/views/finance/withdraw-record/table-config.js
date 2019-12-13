@@ -14,7 +14,6 @@ export const componentList = [
   "TablePlatform",
   "TableStateOrder",
   "TablePostTime",
-  "TableReviewer",
   "TableTime",
   "TableChoiseOrder"
 ];
@@ -30,7 +29,6 @@ export const tableHeader = [
   "平台",
   "订单状态",
   "提交时间",
-  "处理人",
   "修改时间"
 ];
 
@@ -45,6 +43,5 @@ export const tableContent = [
   "device",
   "state",
   "create_time",
-  "admin_id",
   "time"
 ];

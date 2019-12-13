@@ -39,14 +39,15 @@ export function getPrivateParty(query) {
 /**
  * 修改`线下聚会`状态
  * @param {object} row 列表对象
+ * @param {string} state 状态
  */
-export function setPartyState(row) {
+export function setPartyState(row, state) {
   return richpapaRequest({
     method: "get",
     params: {
       service: "Square.UpdatePartyState",
       target_id: row.id,
-      type: row.check_state
+      type: state
     }
   });
 }
@@ -54,14 +55,15 @@ export function setPartyState(row) {
 /**
  * 修改`私密聚会`状态
  * @param {object} row 列表对象
+ * @param {string} state 状态
  */
-export function setAppointmentState(row) {
+export function setAppointmentState(row, state) {
   return richpapaRequest({
     method: "get",
     params: {
       service: "Square.UpdateAppointmentState",
       target_id: row.id,
-      type: row.check_state
+      type: state
     }
   });
 }
@@ -69,14 +71,15 @@ export function setAppointmentState(row) {
 /**
  * 修改`动态`状态
  * @param {object} row 列表对象
+ * @param {string} state 状态
  */
-export function setDynamicState(row) {
+export function setDynamicState(row, state) {
   return richpapaRequest({
     method: "get",
     params: {
       service: "Square.UpdateDynamicState",
       target_id: row.id,
-      state: row.check_state
+      state: state
     }
   });
 }

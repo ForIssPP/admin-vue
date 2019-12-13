@@ -35,9 +35,6 @@
       <!-- 状态查询 -->
       <search-state @searchChange="searchChange" />
 
-      <!-- 操作人查询 -->
-      <search-reviewer @searchChange="searchChange" />
-
       <!-- 时间查询 -->
       <search-date style="margin-right: 10px" @searchChange="searchChange" />
 
@@ -49,6 +46,15 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
+
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="getList(true)"
+      >重置</el-button>
     </div>
     <!-- 检索栏 end -->
 

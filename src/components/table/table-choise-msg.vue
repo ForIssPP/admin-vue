@@ -3,7 +3,7 @@
     <template v-slot="{row}">
       <div class="table-choise">
         <el-button
-          v-if="row.tipOffState === '未处理'"
+          v-if="row.state === '0'"
           plain
           type="success"
           size="mini"

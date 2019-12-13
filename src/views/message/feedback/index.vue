@@ -8,9 +8,6 @@
       <!-- 时间查询 -->
       <search-date @searchChange="searchChange" />
 
-      <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @searchChange="searchChange" />
-
       <!-- 渠道查询 -->
       <search-platform @searchChange="searchChange" />
 
@@ -38,7 +35,12 @@
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
+    <my-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    ></my-table>
 
     <el-dialog title="反馈结果" :visible.sync="feedbackVisible" :before-close="onClose">
       <el-form :model="form">
@@ -66,7 +68,7 @@
 </template>
 
 <script>
-import { getFeedBack } from "@/api/message";
+import { getFeedBackList, setFeedbackHandle } from "@/api/message";
 import MyTable from "@/components/table/index.vue";
 // button点击波纹指令
 import waves from "@/directive/waves";
@@ -128,18 +130,23 @@ export default {
       if (tag === "msg") {
         this.feedbackVisible = true;
         this.feedbackId = row.id;
-        console.log(tag, row);
       } else if (tag === false) {
         this.$message({
           message: "反馈已处理",
           type: "warning"
         });
       } else {
-        import("@/utils/open-confirm").then(_confirm => {
-          _confirm.commonConfirm.call(this, () => {
-            row.tipOffState = "已处理";
-          });
-        });
+        setFeedbackHandle(row.id).then(res =>
+          import("@/utils/open-confirm").then(_confirm => {
+            _confirm.commonConfirm(() => {
+              this.$message({
+                message: "处理成功",
+                type: "success"
+              });
+              row.state = "1";
+            });
+          })
+        );
       }
     },
     /**
@@ -155,9 +162,9 @@ export default {
      */
     getList() {
       this.listLoading = true;
-      getFeedBack(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.total = response.data.total;
+      getFeedBackList(this.listQuery).then(response => {
+        this.list = response.items;
+        // this.total = response.total;
         this.listLoading = false;
       });
     },
@@ -168,10 +175,31 @@ export default {
       console.log(this.listQuery);
       // this.getList();
     },
+    /**
+     * 提交消息
+     */
     onSend() {
-      console.log(this.form.feedback);
-      console.log(this.feedbackId);
+      if (!this.form.feedback) {
+        return this.$message({
+          type: "warning",
+          message: "内容不能为空"
+        });
+      }
+      import("@/api/message").then(messageApi =>
+        messageApi
+          .feedbackLetter(this.form.feedback, this.feedbackId)
+          .then(res => {
+            this.$message({
+              type: "success",
+              message: "私信成功"
+            });
+            this.onClose();
+          })
+      );
     },
+    /**
+     * 关闭提交消息弹窗
+     */
     onClose() {
       this.feedbackVisible = false;
       this.form.feedback = undefined;

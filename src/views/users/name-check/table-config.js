@@ -25,6 +25,5 @@ export const componentList = [
   "TableState",
   "TableCheckName",
   "TableTime",
-  "TableReviewer",
   "TableChoise"
 ];

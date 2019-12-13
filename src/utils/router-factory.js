@@ -5,9 +5,9 @@
  * @param {string|Array<string>} name 路由名称
  * @param {string|Array<string>} title 路由标题
  */
-export default function (path, component, name, title) {
+export default function(path, component, name, title) {
   const len = path.length;
-  if (typeof path !== 'string') {
+  if (typeof path !== "string") {
     let reList = [];
     for (let i = 0; i < len; i++) {
       reList.push({
@@ -15,19 +15,23 @@ export default function (path, component, name, title) {
         component: component[i],
         name: name[i],
         meta: {
-          title: title[i]
+          title: title[i],
+          roles: [name[i]]
         }
-      })
+      });
     }
     return reList;
   } else {
-    return [{
-      path,
-      component,
-      name,
-      meta: {
-        title
+    return [
+      {
+        path,
+        component,
+        name,
+        meta: {
+          title,
+          roles: [name]
+        }
       }
-    }];
+    ];
   }
 }

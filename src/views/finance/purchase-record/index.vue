@@ -20,8 +20,17 @@
       <!-- 渠道查询 -->
       <search-platform @searchChange="searchChange" />
 
-      <!-- 订单状态 -->
-      <search-state-finance @searchChange="searchChange" />
+      <!-- 订单状态查询 -->
+      <el-select
+        v-model="listQuery.state"
+        placeholder="订单状态"
+        clearable
+        class="filter-item"
+        style="width: 130px"
+      >
+        <el-option label="已完成" value="已完成" />
+        <el-option label="未完成" value="未完成" />
+      </el-select>
 
       <!-- 时间查询 -->
       <search-date @searchChange="searchChange" />
@@ -58,6 +67,15 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
+
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="getList(true)"
+      >重置</el-button>
 
       <!-- 导出 -->
       <el-button

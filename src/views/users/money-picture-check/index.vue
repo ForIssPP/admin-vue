@@ -32,9 +32,6 @@
       <!-- 状态查询 -->
       <SearchState @searchChange="searchChange" />
 
-      <!-- 操作人查询 -->
-      <SearchReviewer @searchChange="searchChange" />
-
       <!-- 搜索 -->
       <el-button
         v-waves
@@ -43,6 +40,15 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
+
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="getList(true)"
+      >重置</el-button>
     </div>
     <!-- 检索栏 end -->
 

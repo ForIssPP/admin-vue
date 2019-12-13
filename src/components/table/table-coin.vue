@@ -1,5 +1,5 @@
 <template>
-  <el-table-column label="兑换金币" prop="coin" :sortable="sortable" align="center" :width="width">
+  <el-table-column label="兑换爱豆" prop="coin" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
       <span>{{ row.coin }}</span>
     </template>

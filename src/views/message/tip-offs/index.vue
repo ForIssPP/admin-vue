@@ -8,9 +8,6 @@
       <!-- 时间查询 -->
       <search-date @searchChange="searchChange" />
 
-      <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @searchChange="searchChange" />
-
       <!-- 渠道查询 -->
       <search-platform @searchChange="searchChange" />
 
@@ -23,7 +20,7 @@
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
-        @keyup.enter.native="handleFilter"
+        @keyup.enter.native="getList"
       />
 
       <!-- 搜索 -->
@@ -32,13 +29,18 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="getList"
       >搜索</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <my-table :componentList="componentList" :list="list" @handleChoise="handleChoise"></my-table>
+    <my-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    ></my-table>
 
     <el-dialog title="反馈结果" :visible.sync="feedbackVisible" :before-close="onClose">
       <el-form :model="form">
@@ -66,7 +68,7 @@
 </template>
 
 <script>
-import { getTipOffsList } from "@/api/message";
+import { getTipOffsList, setTipoffHandle } from "@/api/message";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
@@ -128,18 +130,23 @@ export default {
       if (tag === "msg") {
         this.feedbackVisible = true;
         this.feedbackId = row.id;
-        console.log(tag, row);
       } else if (tag === false) {
         this.$message({
           message: "反馈已处理",
           type: "warning"
         });
       } else {
-        import("@/utils/open-confirm").then(_confirm => {
-          _confirm.commonConfirm.call(this, () => {
-            row.tipOffState = "已处理";
-          });
-        });
+        setTipoffHandle(row.id).then(res =>
+          import("@/utils/open-confirm").then(_confirm => {
+            _confirm.commonConfirm(() => {
+              this.$message({
+                message: "处理成功",
+                type: "success"
+              });
+              row.state = "1";
+            });
+          })
+        );
       }
     },
     /**
@@ -156,17 +163,10 @@ export default {
     getList() {
       this.listLoading = true;
       getTipOffsList(this.listQuery).then(response => {
-        this.list = response.data.items;
-        this.total = response.data.total;
+        this.list = response.items;
+        // this.total = response.total;
         this.listLoading = false;
       });
-    },
-    /**
-     * 表单搜索填充
-     */
-    handleFilter() {
-      console.log(this.listQuery);
-      // this.getList();
     },
     onSend() {
       console.log(this.form.feedback);
