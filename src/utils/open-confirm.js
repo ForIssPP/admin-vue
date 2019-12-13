@@ -34,14 +34,14 @@ export function userCommonOpenConfirm(tag, row, handleSetState) {
   };
 
   const handlePass = () => {
-    handleSetState(row).then(res => {
+    handleSetState(row, "1").then(res => {
       handleSuccess();
       row.state = "1";
     });
   };
 
   const handleNotPass = () => {
-    handleSetState(row).then(res => {
+    handleSetState(row, "2").then(res => {
       handleSuccess();
       row.state = "2";
     });
@@ -68,14 +68,14 @@ export function userCommonOpenConfirm(tag, row, handleSetState) {
  */
 export function activityCommonOpenConfirm(tag, row, handleSetState) {
   const handlePass = () => {
-    handleSetState(row).then(res => {
+    handleSetState(row, "1").then(res => {
       handleSuccess();
       row.check_state = "1";
     });
   };
 
   const handleNotPass = () => {
-    handleSetState(row).then(res => {
+    handleSetState(row, "0").then(res => {
       handleSuccess();
       row.check_state = "0";
     });
@@ -98,7 +98,7 @@ export function activityCommonOpenConfirm(tag, row, handleSetState) {
 export function financeCommonOpenConfirm(tag, row) {
   const handlePass = () => {
     import("@/api/finance").then(api =>
-      api.cashoutRemit(row).then(res => {
+      api.cashoutRemit(row, "1").then(res => {
         handleSuccess();
         row.state = "1";
       })
@@ -115,7 +115,7 @@ export function financeCommonOpenConfirm(tag, row) {
       }
       row.msg = msg;
       import("@/api/finance").then(api =>
-        api.cashoutReject(row).then(res => (row.state = "1"))
+        api.cashoutReject(row, "1").then(res => (row.state = "1"))
       );
     });
   };
