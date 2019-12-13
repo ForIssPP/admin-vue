@@ -1,7 +1,7 @@
 <template>
   <el-select
     v-model="payStateType"
-    placeholder="账号状态"
+    placeholder="支付类型"
     clearable
     @change="searchChange"
     class="filter-item"
