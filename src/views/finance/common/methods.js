@@ -13,10 +13,14 @@ export default function(api) {
     /**
      * 获取表单
      */
-    getList() {
+    getList(reload) {
       this.listLoading = true;
-      import("@/api/finance").then(financeApi =>
-        financeApi[api](this.listQuery).then(response => {
+      import("@/api/finance").then(financeApi => {
+        let data = this.listQuery;
+        if (reload === true) {
+          data = {};
+        }
+        financeApi[api](data).then(response => {
           this.list = response.items;
           // this.total = response.total;
           this.listLoading = false;
@@ -26,8 +30,8 @@ export default function(api) {
           if ("coin" in this) {
             this.coin = Number(response.coin) || 0;
           }
-        })
-      );
+        });
+      });
     },
     /**
      * 导出下载
