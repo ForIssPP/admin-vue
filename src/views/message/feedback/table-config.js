@@ -10,6 +10,5 @@ export const componentList = [
   "TablePlatform",
   pictures,
   "TableTime",
-  "TableReviewer",
   "TableChoiseMsg",
 ];

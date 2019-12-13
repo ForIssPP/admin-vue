@@ -42,28 +42,28 @@
       <!-- 身高 -->
       <div class="filter-item number-search">
         <el-col :span="11">
-          <el-input placeholder="开始身高" v-model="listQuery.height.start"></el-input>
+          <el-input placeholder="开始身高" v-model="listQuery.start_height"></el-input>
         </el-col>
         <el-col class="text-center" :span="2">-</el-col>
         <el-col :span="11">
-          <el-input placeholder="结束身高" v-model="listQuery.height.end"></el-input>
+          <el-input placeholder="结束身高" v-model="listQuery.end_height"></el-input>
         </el-col>
       </div>
 
       <!-- 年龄 -->
       <div class="filter-item number-search">
         <el-col :span="11">
-          <el-input placeholder="开始年龄" v-model="listQuery.age.start"></el-input>
+          <el-input placeholder="开始年龄" v-model="listQuery.start_age"></el-input>
         </el-col>
         <el-col class="text-center" :span="2">-</el-col>
         <el-col :span="11">
-          <el-input placeholder="结束年龄" v-model="listQuery.age.end"></el-input>
+          <el-input placeholder="结束年龄" v-model="listQuery.end_age"></el-input>
         </el-col>
       </div>
 
       <!-- 特殊符号 -->
       <el-select
-        v-model="listQuery.syntaxCheck"
+        v-model="listQuery.special_char"
         placeholder="特殊符号"
         class="filter-item"
         style="width: 110px"
@@ -77,18 +77,18 @@
         v-waves
         class="filter-item"
         type="primary"
-        icon="el-icon-search"
+        icon="el-icon-refresh"
         @click="resetSearch"
       >重置</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <el-form :label-position="'left'" :label-width="'100px'" :model="listQuery" ref="pushForm">
-      <el-form-item label="发送内容" prop="msg">
+      <el-form-item label="发送内容" prop="text">
         <el-input
           type="textarea"
           :rows="10"
-          v-model="listQuery.pushFormMsg"
+          v-model="listQuery.text"
           placeholder="请输入想要群发的内容"
           @change="savaMsg"
         ></el-input>
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { getUserList } from "@/api/user";
+import { msgPush } from "@/api/message";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
@@ -133,30 +133,26 @@ export default {
       list: null,
       listLoading: true,
       listQuery: {
-        pushFormMsg: undefined,
+        text: undefined,
         moneyCheck: undefined,
         userCheck: undefined,
-        syntaxCheck: undefined,
+        special_char: undefined,
         sex: undefined,
-        vip: undefined,
+        is_vip: undefined,
         date: undefined,
-        address: undefined,
-        platform: undefined,
-        height: {
-          start: undefined,
-          end: undefined
-        },
-        age: {
-          start: undefined,
-          end: undefined
-        }
+        city: undefined,
+        device: undefined,
+        start_height: undefined,
+        end_height: undefined,
+        start_age: undefined,
+        end_age: undefined
       }
     };
   },
   created() {
-    const pushFormMsg = window.localStorage.getItem("pushFormMsg");
-    if (pushFormMsg) {
-      this.listQuery.pushFormMsg = pushFormMsg;
+    const text = window.localStorage.getItem("text");
+    if (text) {
+      this.listQuery.text = text;
     }
   },
   methods: {
@@ -172,14 +168,39 @@ export default {
      * 提交消息
      */
     onSubmit() {
-      console.log(this.listQuery.pushFormMsg);
-      this.reSetPushFormMsg();
+      if (this.listQuery.text) {
+        let form;
+        if (this.listQuery.date) {
+          const [start_time, end_time] = this.listQuery.date;
+          form = Object.assign({}, this.listQuery, {
+            start_time,
+            end_time
+          });
+          console.log("000000000000000000");
+        } else {
+          form = Object.assign({}, this.listQuery);
+        }
+        console.log(form);
+        msgPush(form).then(res => {
+          this.$message({
+            type: "success",
+            message: "发送成功"
+          });
+          console.log(res);
+          this.reSetPushFormMsg();
+        });
+      } else {
+        this.$message({
+          type: "warning",
+          message: "请输入内容"
+        });
+      }
     },
     /**
      * 重置消息
      */
     onReset() {
-      this.listQuery.pushFormMsg = undefined;
+      this.listQuery.text = undefined;
       this.reSetPushFormMsg();
     },
     resetSearch() {
@@ -187,10 +208,11 @@ export default {
       window.location.reload();
     },
     savaMsg() {
-      window.localStorage.setItem("pushFormMsg", this.listQuery.pushFormMsg);
+      window.localStorage.setItem("text", this.listQuery.text);
     },
     reSetPushFormMsg() {
-      window.localStorage.removeItem("pushFormMsg");
+      window.localStorage.removeItem("text");
+      this.listQuery.text = "";
     }
   }
 };
