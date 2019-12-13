@@ -47,9 +47,6 @@
       <!-- 用户类型查询 -->
       <search-user-create-type @searchChange="searchChange" />
 
-      <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @searchChange="searchChange" />
-
       <!-- 搜索 -->
       <el-button
         v-waves
@@ -58,11 +55,25 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
+
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="getList(true)"
+      >重置</el-button>
     </div>
     <!-- 检索栏 end -->
 
     <!-- 表单 start -->
-    <offline-party-table :loading="listLoading" :componentList="componentList" :list="list" @handleChoise="handleChoise"></offline-party-table>
+    <offline-party-table
+      :loading="listLoading"
+      :componentList="componentList"
+      :list="list"
+      @handleChoise="handleChoise"
+    ></offline-party-table>
     <!-- 表单 end -->
 
     <!-- 分页器 start -->

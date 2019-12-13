@@ -76,6 +76,15 @@
         @click="getList"
       >搜索</el-button>
 
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="getList(true)"
+      >重置</el-button>
+
       <!-- 导出 -->
       <el-button
         v-waves

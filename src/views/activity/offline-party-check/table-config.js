@@ -10,6 +10,5 @@ export const componentList = [
   picture,
   "TableStateActivity",
   "TableTime",
-  "TableReviewer",
   "TableChoiseActivity",
 ];

@@ -44,9 +44,6 @@
       <!-- 位置查询 -->
       <search-address @searchChange="searchChange" />
 
-      <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @searchChange="searchChange" />
-
       <!-- 搜索 -->
       <el-button
         v-waves
@@ -55,6 +52,15 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
+
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="getList(true)"
+      >重置</el-button>
     </div>
     <!-- 检索栏 end -->
 

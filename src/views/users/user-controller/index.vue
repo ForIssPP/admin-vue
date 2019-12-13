@@ -50,9 +50,6 @@
       <!-- 用户类型查询 -->
       <search-userCreateType @searchChange="searchChange" />
 
-      <!-- 操作人查询 -->
-      <search-reviewer style="margin-right: 10px" @searchChange="searchChange" />
-
       <!-- 搜索 -->
       <el-button
         v-waves
@@ -61,6 +58,15 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
+
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="getList(true)"
+      >重置</el-button>
 
       <!-- 导出 -->
       <el-button
@@ -134,25 +140,50 @@ methods["handleDownload"] = function() {
 
 methods["handleChoise"] = function(tag, row) {
   import("@/utils/open-confirm").then(_confirm => {
-    const openConfirm = _confirm.commonConfirm.bind(this);
+    const openConfirm = _confirm.commonConfirm;
+    const handleSuccess = number => {
+      this.$notify({
+        type: "success",
+        message: "修改成功!"
+      });
+      row.state = String(number);
+    };
     if (tag === "freeze") {
-      openConfirm(() => (row.state = "1"));
+      openConfirm(() =>
+        import("@/api/user").then(userApi =>
+          userApi.setUpdateUserState(row, "1").then(res => handleSuccess(1))
+        )
+      );
     }
 
     if (tag === "thaw") {
-      openConfirm(() => (row.state = "0"));
+      openConfirm(() =>
+        import("@/api/user").then(userApi =>
+          userApi.setUpdateUserState(row, "0").then(res => handleSuccess(0))
+        )
+      );
     }
 
     if (tag === "msg") {
       openConfirm(() => console.log(1));
     }
 
+    if (tag === "edit") {
+      this.$router.push({
+        path: "/user/userController/userInfoController",
+        query: {
+          uid: row.id
+        }
+      });
+    }
+
     if (tag === "see") {
-      openConfirm(() =>
-        userDetail(row.id).then(res => {
-          this.userDetailShow = true;
-        })
-      );
+      this.$router.push({
+        path: "/user/userController/userInfoController",
+        query: {
+          uid: row.id
+        }
+      });
     }
   });
 };

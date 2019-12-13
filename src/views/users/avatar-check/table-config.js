@@ -9,6 +9,5 @@ export const componentList = [
   checkAvatar,
   oldAvatar,
   "TableTime",
-  "TableReviewer",
   "TableChoise"
 ];

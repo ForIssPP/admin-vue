@@ -5,7 +5,6 @@ export const componentList = [
   "TableSex",
   "TableState",
   "TableProfiles",
-  "TableReviewer",
   "TableTime",
   "TableChoise"
 ];

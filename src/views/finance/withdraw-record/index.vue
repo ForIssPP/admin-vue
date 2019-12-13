@@ -42,11 +42,17 @@
       <!-- 渠道查询 -->
       <search-platform @searchChange="searchChange" />
 
-      <!-- 操作人查询 -->
-      <search-reviewer @searchChange="searchChange" />
-
       <!-- 提现类型查询 -->
-      <search-state-finance style="margin-right: 10px" @searchChange="searchChange" />
+      <el-select
+        v-model="listQuery.state"
+        placeholder="提现类型"
+        clearable
+        class="filter-item"
+        style="width: 130px"
+      >
+        <el-option label="已完成" value="已完成" />
+        <el-option label="未完成" value="未完成" />
+      </el-select>
 
       <!-- 筛选结果金额统计 -->
       <money-conut :money="money" />
@@ -59,6 +65,15 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
+
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="getList(true)"
+      >重置</el-button>
 
       <!-- 导出 -->
       <el-button

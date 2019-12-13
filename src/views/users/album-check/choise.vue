@@ -1,6 +1,6 @@
 <template>
   <!-- 操作 -->
-  <el-table-column label="操作" prop="checkName" align="center" width="130">
+  <el-table-column label="操作" prop="checkName" align="center" width="auto">
     <template v-slot="{row}">
       <el-button plain size="mini" @click="handleChoise('open', row)">审核</el-button>
     </template>
@@ -72,12 +72,7 @@ export default {
       } else {
         import("@/utils/open-confirm").then(_confirm => {
           row.sort = index;
-          _confirm.userCommonOpenConfirm.call(
-            this,
-            tag,
-            row,
-            setUserPhotoCheck
-          );
+          _confirm.userCommonOpenConfirm(tag, row, setUserPhotoCheck);
         });
       }
     }
