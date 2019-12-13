@@ -7,7 +7,7 @@
     :width="width"
   >
     <template slot-scope="{row}">
-      <span>{{ row.tipOffType }}</span>
+      <span>{{ renderType(row.type) }}</span>
     </template>
   </el-table-column>
 </template>
@@ -25,6 +25,23 @@ export default {
         return typeof value === "boolean" || value === "custom ";
       },
       default: false
+    }
+  },
+  methods: {
+    // 1头像/资料虚假 2诈骗/广告 3发布色情、低俗、暴力内容 4恶意骚扰我 5其他
+    renderType(type) {
+      switch (type) {
+        case "1":
+          return "头像/资料虚假";
+        case "2":
+          return "诈骗/广告";
+        case "3":
+          return "发布色情、低俗、暴力内容";
+        case "4":
+          return "恶意骚扰";
+        case "5":
+          return "其他";
+      }
     }
   }
 };

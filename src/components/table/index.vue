@@ -13,6 +13,7 @@
       :key="index"
       :is="componentId"
       @handleChoise="handleChoise"
+      @openImageDialog="openImageDialog"
     ></component>
   </el-table>
 </template>
@@ -50,6 +51,9 @@ export default {
   methods: {
     handleChoise(state, row) {
       this.$emit("handleChoise", state, row);
+    },
+    openImageDialog(row) {
+      this.$emit("openImageDialog", row);
     }
   }
 };

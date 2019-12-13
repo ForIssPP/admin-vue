@@ -1,7 +1,7 @@
 <template>
   <el-table-column label="举报内容" prop="tipOffMsg" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.tipOffMsg }}</span>
+      <span>{{ row.text }}</span>
     </template>
   </el-table-column>
 </template>
