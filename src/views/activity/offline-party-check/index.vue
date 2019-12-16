@@ -129,7 +129,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 15,
+        limit: undefined,
         position: undefined,
         create_time: undefined,
         nickname: undefined,

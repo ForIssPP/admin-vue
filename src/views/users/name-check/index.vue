@@ -118,7 +118,7 @@ export default {
         nickname: undefined,
         page: 1,
         uid: undefined,
-        limit: 15,
+        limit: undefined,
         mobile: undefined,
         sex: undefined,
         state: undefined,

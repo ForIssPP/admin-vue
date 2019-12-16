@@ -195,7 +195,7 @@ export default {
         orderNumber: undefined,
         rechargeAmount: undefined,
         page: 1,
-        limit: 15,
+        limit: undefined,
         sex: undefined,
         platform: undefined,
         orderNumber: undefined

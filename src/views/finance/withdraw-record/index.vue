@@ -166,7 +166,7 @@ export default {
         orderno: undefined,
         money: undefined,
         page: 1,
-        limit: 15,
+        limit: undefined,
         sex: undefined,
         is_vip: undefined,
         admin_id: undefined,

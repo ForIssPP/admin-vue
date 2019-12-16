@@ -120,7 +120,7 @@ export default {
         nickname: undefined,
         page: 1,
         uid: undefined,
-        limit: 15,
+        limit: undefined,
         sex: undefined,
         state: undefined,
         reviewer: undefined,
