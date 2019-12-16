@@ -109,6 +109,7 @@ export default {
         platform: undefined,
         stateTackle: undefined,
         reviewer: undefined,
+        limit: undefined,
         date: undefined
       },
       form: {
@@ -154,8 +155,6 @@ export default {
      */
     searchChange(type, query) {
       this.listQuery[type] = query || undefined;
-      console.log(this.listQuery);
-      /* TODO */
     },
     /**
      * 获取表单
@@ -164,7 +163,8 @@ export default {
       this.listLoading = true;
       getFeedBackList(this.listQuery).then(response => {
         this.list = response.items;
-        // this.total = response.total;
+        this.total = Number(response.total);
+        this.listQuery.limit = Number(response.page_num);
         this.listLoading = false;
       });
     },

@@ -22,7 +22,8 @@ export default function(api) {
         }
         financeApi[api](data).then(response => {
           this.list = response.items;
-          // this.total = response.total;
+          this.total = Number(response.total);
+          this.listQuery.limit = Number(response.page_num);
           this.listLoading = false;
           if ("money" in this) {
             this.money = Number(response.money) || 0;

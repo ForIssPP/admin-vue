@@ -29,7 +29,8 @@ export default function(api, setApi) {
         }
         userApi[api](data).then(response => {
           this.list = response.items;
-          // this.total = response.total;
+          this.total = Number(response.total);
+          this.listQuery.limit = Number(response.page_num);
           this.listLoading = false;
         });
       });
