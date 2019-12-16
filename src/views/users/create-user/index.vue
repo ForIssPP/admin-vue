@@ -10,7 +10,7 @@
     >
       <!-- 用户头像 -->
       <el-form-item label="用户头像" prop="name">
-        <div @click="imagecropperShow=true">
+        <div @click="openImagecropperBox">
           <pan-thumb :image="image" alt="default" />
         </div>
       </el-form-item>
@@ -191,6 +191,40 @@
         </el-form-item>
       </div>
 
+      <!-- 相册上传 -->
+      <el-form-item label="相册" prop="photo">
+        <div class="photo">
+          <div class="photo-item" v-for="(picture, index) in lessPhoto" :key="index">
+            <i @click="delPhoto(index)" class="el-icon-error" title="删除" />
+            <img class="photo" :src="picture" />
+          </div>
+          <el-tooltip
+            v-if="createUserForm.photo.length > 4"
+            class="item"
+            effect="dark"
+            :content="less ? '显示更多' : '隐藏'"
+            placement="top"
+          >
+            <div @click="less=!less" class="picture-move">
+              <img v-show="less" class="photo" :src="createUserForm.photo[4]" />
+              <i v-show="less" class="el-icon-more" />
+              <i v-show="!less" class="el-icon-arrow-left" />
+            </div>
+          </el-tooltip>
+          <el-tooltip
+            v-if="createUserForm.photo.length < 8"
+            class="item"
+            effect="dark"
+            content="点击上传相册图片"
+            placement="top"
+          >
+            <div @click="openImagecropperBox(0)" class="picture-bgc">
+              <i class="el-icon-picture" />
+            </div>
+          </el-tooltip>
+        </div>
+      </el-form-item>
+
       <!-- 个人介绍 -->
       <el-form-item label="个人介绍" prop="introduction">
         <el-input
@@ -210,9 +244,11 @@
     <image-cropper
       v-show="imagecropperShow"
       :key="imagecropperKey"
-      :width="300"
+      :width="200"
       :height="300"
-      url="/user/update/avatar"
+      url="/"
+      :params="{ service: 'Login.FileUpload' }"
+      field="file"
       lang-type="zh"
       @close="close"
       @crop-upload-success="cropSuccess"
@@ -234,23 +270,49 @@ export default {
       imagecropperShow: false,
       imagecropperKey: 0,
       numbers: [...Array(100).keys()].slice(1),
-      image: "https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191",
+      image: "",
+      updateType: 0,
       createUserForm: formConfig.defaultForm,
       rules: {
         age: [{ required: true, message: "请输入用户年龄", trigger: "blur" }],
         mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }],
         nickname: [{ required: true, message: "请输入用户名", trigger: "blur" }]
-      }
+      },
+      less: true
     };
+  },
+  computed: {
+    lessPhoto() {
+      if (!this.less) {
+        return this.createUserForm.photo;
+      }
+      return this.createUserForm.photo.slice(0, 4);
+    }
   },
   methods: {
     cropSuccess(jsonData, field) {
       this.imagecropperShow = false;
       this.imagecropperKey = this.imagecropperKey + 1;
-      this.image = jsonData.files.avatar;
+      this.$message({
+        message: "上传成功",
+        type: "success"
+      });
+      if (this.updateType) {
+        this.createUserForm.photo.push(jsonData[0]);
+      } else {
+        this.image = jsonData[0];
+      }
     },
     close() {
       this.imagecropperShow = false;
+    },
+    openImagecropperBox(type) {
+      if (type) {
+        this.updateType = 0;
+      } else {
+        this.updateType = 1;
+      }
+      this.imagecropperShow = true;
     },
     onSubmit() {
       const form = JSON.parse(JSON.stringify(this.createUserForm));
@@ -282,7 +344,74 @@ export default {
     },
     resetForm() {
       this.$refs["createUserForm"].resetFields();
+    },
+    delPhoto(index) {
+      this.createUserForm.photo.splice(index, 1);
     }
   }
 };
 </script>
+<style lang="scss">
+%w {
+  width: 120px;
+  height: 150px;
+  box-shadow: 1px 2px 5px 0px #929292;
+}
+.photo {
+  display: flex;
+
+  .picture-bgc {
+    margin-left: 10px;
+    background: #e8e8e8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    @extend %w;
+  }
+
+  .picture-move {
+    position: relative;
+    margin-left: 10px;
+    cursor: pointer;
+    @extend %w;
+
+    img {
+      opacity: 0.2;
+      margin: 0;
+      box-shadow: unset;
+    }
+
+    i {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -7px;
+      margin-left: -7px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  img {
+    margin-left: 10px;
+    @extend %w;
+  }
+
+  .el-badge:first-of-type img {
+    margin: 0;
+  }
+
+  .photo-item {
+    position: relative;
+
+    i {
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      color: red;
+      cursor: pointer;
+    }
+  }
+}
+</style>

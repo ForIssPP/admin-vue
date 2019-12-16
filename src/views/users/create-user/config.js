@@ -91,6 +91,7 @@ export default {
     auth_state: 1,
     sex: "2",
     make_friend: "0",
-    measurements: [30, 30, 30]
+    measurements: [30, 30, 30],
+    photo: []
   }
 };
