@@ -1,5 +1,12 @@
 <template>
-  <el-table-column label="信息" prop="text" :sortable="sortable" align="center" :width="width">
+  <el-table-column
+    show-overflow-tooltip
+    label="信息"
+    prop="text"
+    :sortable="sortable"
+    align="center"
+    :width="width"
+  >
     <template slot-scope="{row}">
       <span>{{ row.text }}</span>
     </template>
