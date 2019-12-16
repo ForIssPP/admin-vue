@@ -19,7 +19,7 @@ export function richpapaRequestLogin(data) {
 
 export function getVerifyImg() {
   return Promise.resolve(
-    "http://richpapa-admin.richpapa88.com/public/?service=Login.VerifyImg&time=" +
+    process.env.VUE_APP_BASE_API + "?service=Login.VerifyImg&time=" +
       new Date().getTime()
   );
 }
@@ -153,7 +153,7 @@ export function getUsernameList(query) {
 }
 
 /**
- * 获取`提现记录`列表
+ * 获取`添加用户男`列表
  * @param {AxiosRequestConfig.params} query 查询参数
  */
 export function addUserMan(info) {
@@ -165,7 +165,7 @@ export function addUserMan(info) {
 }
 
 /**
- * 获取`提现记录`列表
+ * 获取`添加用户女`列表
  * @param {AxiosRequestConfig.params} query 查询参数
  */
 export function addUserWoman(info) {
