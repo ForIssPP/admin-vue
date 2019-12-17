@@ -250,6 +250,7 @@
       :params="{ service: 'Login.FileUpload' }"
       field="file"
       lang-type="zh"
+      noCircle
       @close="close"
       @crop-upload-success="cropSuccess"
     />
@@ -275,7 +276,20 @@ export default {
       createUserForm: formConfig.defaultForm,
       rules: {
         age: [{ required: true, message: "请输入用户年龄", trigger: "blur" }],
+        position: [{ required: true, message: "请选择位置", trigger: "blur" }],
         mobile: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        introduction: [
+          { required: true, message: "请输入个人介绍", trigger: "blur" }
+        ],
+        purpose: [
+          { required: true, message: "请选择交友目的", trigger: "blur" }
+        ],
+        is_vip: [
+          { required: true, message: "请选择会员信息", trigger: "blur" }
+        ],
+        photo: [
+          { required: true, message: "请至少上传一张相册图片", trigger: "blur" }
+        ],
         nickname: [{ required: true, message: "请输入用户名", trigger: "blur" }]
       },
       less: true
@@ -330,9 +344,9 @@ export default {
                 type: "success",
                 message: "创建成功!"
               });
-              this.createUserForm.nickname = undefined;
-              this.createUserForm.mobile = undefined;
+              this.createUserForm = formConfig.defaultForm;
             };
+            form.avatar = this.image;
             if (form.sex === "1") {
               addUserMan(form).then(ok);
             } else {
@@ -359,6 +373,14 @@ export default {
 }
 .photo {
   display: flex;
+
+  & > *:first-child {
+    margin: 0 !important;
+
+    img {
+      margin: 0 !important;
+    }
+  }
 
   .picture-bgc {
     margin-left: 10px;
@@ -396,10 +418,6 @@ export default {
   img {
     margin-left: 10px;
     @extend %w;
-  }
-
-  .el-badge:first-of-type img {
-    margin: 0;
   }
 
   .photo-item {
