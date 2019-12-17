@@ -7,15 +7,15 @@ export default {
     roles: ["userController"]
   },
   children: [
-    {
-      path: "userInfoController",
-      component: () => import("@/views/users/user-info"),
-      name: "userInfoController",
-      hidden: true,
-      meta: {
-        title: "用户信息",
-        roles: ["userController"]
-      }
-    }
+    // {
+    //   path: "userInfoController",
+    //   component: () => import("@/views/users/user-info"),
+    //   name: "userInfoController",
+    //   hidden: true,
+    //   meta: {
+    //     title: "用户信息",
+    //     roles: ["userController"]
+    //   }
+    // }
   ]
 };
