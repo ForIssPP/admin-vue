@@ -182,7 +182,7 @@
         <el-form-item label="职业" prop="profession">
           <el-select v-model="createUserForm.profession" placeholder="具体情况">
             <el-option
-              v-for="({label, value}, index) in formConfig.workMan"
+              v-for="({label, value}, index) in formConfig.workWoman"
               :key="index"
               :label="label"
               :value="value"
