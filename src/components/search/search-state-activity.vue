@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       stateActivityType: undefined,
-      stateActivityTypeOptions: [["1", "正常"], ["2", "已下架"]]
+      stateActivityTypeOptions: [["1", "正常"], ["2", "已下架"],["3", "删除"]]
     };
   },
   methods: {
