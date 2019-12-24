@@ -7,7 +7,12 @@
     class="filter-item"
     style="width: 110px"
   >
-    <el-option v-for="item in stateTackleTypeOptions" :key="item" :label="item" :value="item" />
+    <el-option
+      v-for="item in stateTackleTypeOptions"
+      :key="item[0]"
+      :label="item[1]"
+      :value="item[0]"
+    />
   </el-select>
 </template>
 <script>
@@ -16,12 +21,12 @@ export default {
   data() {
     return {
       stateTackleType: undefined,
-      stateTackleTypeOptions: ["已处理", "未处理"]
+      stateTackleTypeOptions: [["1", "已处理"], ["2", "未处理"]]
     };
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", "stateTackle", this.stateTackleType);
+      this.$emit("searchChange", "state", this.stateTackleType);
     }
   }
 };
