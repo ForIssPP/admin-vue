@@ -1,14 +1,9 @@
-import request from "@/utils/request";
 import richpapaRequest from "@/utils/richpapa-request";
 
-export function login(data) {
-  return request({
-    url: "/user/login",
-    method: "post",
-    data
-  });
-}
-
+/**
+ * 管理员登陆
+ * @param {AxiosRequestConfig.params} data 用户信息
+ */
 export function richpapaRequestLogin(data) {
   data.service = "Login.Login";
   return richpapaRequest({
@@ -17,6 +12,9 @@ export function richpapaRequestLogin(data) {
   });
 }
 
+/**
+ * 获取验证码
+ */
 export function getVerifyImg() {
   return Promise.resolve(
     process.env.VUE_APP_BASE_API + "?service=Login.VerifyImg&time=" +
@@ -24,16 +22,10 @@ export function getVerifyImg() {
   );
 }
 
-export function getInfo(token) {
-  return request({
-    url: "/user/info",
-    method: "get",
-    params: {
-      token
-    }
-  });
-}
-
+/**
+ * 获取用户权限
+ * @param {string} token token
+ */
 export function richpapaRequestGetInfo(token) {
   return richpapaRequest({
     method: "get",
@@ -44,6 +36,10 @@ export function richpapaRequestGetInfo(token) {
   });
 }
 
+/**
+ * 用户登出
+ * @param {string} token token
+ */
 export function logout(token) {
   return richpapaRequest({
     method: "post",
