@@ -247,7 +247,7 @@
       :width="200"
       :height="300"
       url="/"
-      :params="{ service: 'Login.FileUpload' }"
+      :params="{ service: 'Other.FileUpload' }"
       field="file"
       lang-type="zh"
       noCircle

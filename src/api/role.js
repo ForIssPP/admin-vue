@@ -7,7 +7,7 @@ export function getRoutes() {
   return richpapaRequest({
     method: "get",
     params: {
-      service: "Login.AllPowerList"
+      service: "Other.AllPowerList"
     }
   });
 }

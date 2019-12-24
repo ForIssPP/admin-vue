@@ -38,7 +38,7 @@ export function richpapaRequestGetInfo(token) {
   return richpapaRequest({
     method: "get",
     params: {
-      service: "Login.UserRoles",
+      service: "Other.UserRoles",
       token
     }
   });
