@@ -1,7 +1,7 @@
 <template>
   <el-select
     v-model="tipOffsType"
-    placeholder="举报类型"
+    :placeholder="name"
     clearable
     @change="searchChange"
     class="filter-item"
@@ -12,6 +12,12 @@
 </template>
 <script>
 export default {
+  props: {
+    name: {
+      type: String,
+      default: "举报类型"
+    }
+  },
   name: "search-tip-off-",
   data() {
     return {
