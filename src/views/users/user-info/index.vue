@@ -1,6 +1,7 @@
 <template>
   <div class="app-container" style="padding: 30px">
     <el-form
+      :disabled="edit"
       ref="createUserForm"
       :model="createUserForm"
       :rules="rules"
@@ -32,13 +33,17 @@
       <el-form-item label="会员" prop="is_vip">
         <el-radio-group v-model="createUserForm.is_vip">
           <el-radio :label="'1'">会员</el-radio>
-          <el-radio :label="'2'">非会员</el-radio>
+          <el-radio :label="'0'">非会员</el-radio>
         </el-radio-group>
       </el-form-item>
 
       <!-- 物质交友 -->
       <el-form-item v-show="createUserForm.sex === '2'" label="特殊符号" prop="make_friend">
-        <el-tooltip :content="createUserForm.make_friend === '0' ? '点击开启' : '点击关闭'" placement="top">
+        <el-tooltip
+          :disabled="edit"
+          :content="createUserForm.make_friend === '0' ? '点击开启' : '点击关闭'"
+          placement="top"
+        >
           <el-switch v-model="createUserForm.make_friend" active-value="1" inactive-value="0"></el-switch>
         </el-tooltip>
       </el-form-item>
@@ -82,8 +87,9 @@
         <!-- 财产认证 -->
         <el-form-item label="财产认证" prop="auth_state">
           <el-select v-model="createUserForm.auth_state" placeholder="认证信息">
-            <el-option label="是" :value="1"></el-option>
-            <el-option label="否" :value="2"></el-option>
+            <el-option label="是" :value="'2'"></el-option>
+            <el-option label="认证中" :value="'1'"></el-option>
+            <el-option label="否" :value="'0'"></el-option>
           </el-select>
         </el-form-item>
 
@@ -141,8 +147,9 @@
         <!-- 真人认证 -->
         <el-form-item label="真人认证" prop="auth_state">
           <el-select v-model="createUserForm.auth_state" placeholder="认证信息">
-            <el-option label="是" :value="1"></el-option>
-            <el-option label="否" :value="2"></el-option>
+            <el-option label="是" :value="'2'"></el-option>
+            <el-option label="认证中" :value="'1'"></el-option>
+            <el-option label="否" :value="'0'"></el-option>
           </el-select>
         </el-form-item>
 
@@ -194,8 +201,13 @@
       <!-- 相册上传 -->
       <el-form-item label="相册" prop="photo">
         <div class="photo">
-          <div class="photo-item" v-for="(picture, index) in lessPhoto" :key="index">
-            <i @click="delPhoto(index)" class="el-icon-error" title="删除" />
+          <div
+            :class="{'not-edit': edit}"
+            class="photo-item"
+            v-for="(picture, index) in lessPhoto"
+            :key="index"
+          >
+            <i v-if="!edit" @click="delPhoto(index)" class="el-icon-error" title="删除" />
             <img class="photo" :src="picture" />
           </div>
           <el-tooltip
@@ -212,13 +224,14 @@
             </div>
           </el-tooltip>
           <el-tooltip
+            :disabled="edit"
             v-if="createUserForm.photo.length < 8"
             class="item"
             effect="dark"
             content="点击上传相册图片"
             placement="top"
           >
-            <div @click="openImagecropperBox(0)" class="picture-bgc">
+            <div @click="openImagecropperBox(0)" class="picture-bgc" :class="{'not-edit': edit}">
               <i class="el-icon-picture" />
             </div>
           </el-tooltip>
@@ -236,7 +249,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click.native.prevent="onSubmit">创建</el-button>
+        <el-button type="primary" @click.native.prevent="onSubmit">修改</el-button>
         <el-button @click.native.prevent="resetForm">重置</el-button>
       </el-form-item>
     </el-form>
@@ -257,6 +270,7 @@
   </div>
 </template>
 <script>
+import { getUserDetail } from "@/api/user";
 import ImageCropper from "@/components/ImageCropper";
 import PanThumb from "@/components/PanThumb";
 import formConfig from "./config";
@@ -267,6 +281,8 @@ export default {
   components: { ImageCropper, PanThumb },
   data() {
     return {
+      uid: undefined,
+      edit: true,
       formConfig,
       imagecropperShow: false,
       imagecropperKey: 0,
@@ -303,6 +319,26 @@ export default {
       return this.createUserForm.photo.slice(0, 4);
     }
   },
+  created() {
+    const { uid, edit } = this.$route.query;
+    this.uid = uid;
+    if (edit) {
+      this.edit = false;
+    }
+    getUserDetail(this.uid).then(res => {
+      if (!res.measurements) {
+        res.measurements = [];
+      }
+      if (!res.photo) {
+        res.photo = [];
+      } else {
+        res.photo = res.photo.map(p => p[0]);
+      }
+      this.createUserForm = res;
+      this.createUserForm.is_vip = res.vip_level;
+      this.image = res.avatar;
+    });
+  },
   methods: {
     cropSuccess(jsonData, field) {
       this.imagecropperShow = false;
@@ -321,6 +357,9 @@ export default {
       this.imagecropperShow = false;
     },
     openImagecropperBox(type) {
+      if (this.edit) {
+        return;
+      }
       if (type) {
         this.updateType = 0;
       } else {
@@ -370,6 +409,9 @@ export default {
   width: 120px;
   height: 150px;
   box-shadow: 1px 2px 5px 0px #929292;
+}
+.not-edit {
+  cursor: not-allowed !important;
 }
 .photo {
   display: flex;

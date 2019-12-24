@@ -4,7 +4,7 @@
       <div class="table-choise" v-if="row.check_state === '0'">
         <el-button plain type="warning" size="mini" @click="handleChoise(true, row)">下架</el-button>
       </div>
-      <div v-else>
+      <div v-if="row.check_state === '1'">
         <el-button plain type="success" size="mini" @click="handleChoise(false, row)">上架</el-button>
       </div>
     </template>

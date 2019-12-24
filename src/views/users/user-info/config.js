@@ -2,13 +2,14 @@ function reLabelAndValue(name) {
   return name.map((e, i) => {
     return {
       label: e,
-      value: i + 1
+      value: String(i)
     };
   });
 }
 
 export default {
   workWoman: reLabelAndValue([
+    "无",
     "模特",
     "老师",
     "学生",
@@ -18,6 +19,7 @@ export default {
     "其他"
   ]),
   workMan: reLabelAndValue([
+    "无",
     "互联网行业",
     "金融行业",
     "制造行业",
@@ -30,12 +32,14 @@ export default {
     "其他"
   ]),
   life_quality: reLabelAndValue([
+    "无",
     "极度奢靡",
     "高度奢侈",
     "中产阶级",
     "小资生活"
   ]),
   style: reLabelAndValue([
+    "无",
     "性感",
     "萝莉",
     "女神",
@@ -45,6 +49,7 @@ export default {
     "多样"
   ]),
   purpose: reLabelAndValue([
+    "无",
     "寻找精神伴侣",
     "寻找私密关系",
     "打发时间",

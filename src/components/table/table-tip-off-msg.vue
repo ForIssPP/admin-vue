@@ -1,5 +1,12 @@
 <template>
-  <el-table-column label="举报内容" prop="tipOffMsg" :sortable="sortable" align="center" :width="width">
+  <el-table-column
+    label="举报内容"
+    show-overflow-tooltip
+    prop="tipOffMsg"
+    :sortable="sortable"
+    align="center"
+    :width="width"
+  >
     <template slot-scope="{row}">
       <span>{{ row.text }}</span>
     </template>

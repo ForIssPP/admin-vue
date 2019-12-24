@@ -1,7 +1,7 @@
 <template>
-  <el-table-column label="昵称" prop="defendant" :sortable="sortable" align="center" :width="width">
+  <el-table-column label="被举报人" prop="bnickname" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ row.defendant }}</span>
+      <span>{{ row.bnickname }}</span>
     </template>
   </el-table-column>
 </template>

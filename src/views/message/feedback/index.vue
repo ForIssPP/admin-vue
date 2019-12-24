@@ -3,7 +3,7 @@
     <!-- 检索栏 start -->
     <div class="filter-container">
       <!-- 处理类型查询 -->
-      <search-tip-off-type @searchChange="searchChange" />
+      <search-tip-off-type name="反馈类型" @searchChange="searchChange" />
 
       <!-- 时间查询 -->
       <search-date @searchChange="searchChange" />
@@ -44,7 +44,7 @@
 
     <el-dialog title="反馈结果" :visible.sync="feedbackVisible" :before-close="onClose">
       <el-form :model="form">
-        <el-form-item label="活动名称" :label-width="'500'">
+        <el-form-item label="私信消息" :label-width="'500'">
           <el-input type="textarea" :rows="10" v-model="form.feedback" placeholder="请输入反馈内容"></el-input>
         </el-form-item>
       </el-form>
@@ -109,6 +109,7 @@ export default {
         platform: undefined,
         stateTackle: undefined,
         reviewer: undefined,
+        limit: undefined,
         date: undefined
       },
       form: {
@@ -154,8 +155,6 @@ export default {
      */
     searchChange(type, query) {
       this.listQuery[type] = query || undefined;
-      console.log(this.listQuery);
-      /* TODO */
     },
     /**
      * 获取表单
@@ -164,7 +163,8 @@ export default {
       this.listLoading = true;
       getFeedBackList(this.listQuery).then(response => {
         this.list = response.items;
-        // this.total = response.total;
+        this.total = Number(response.total);
+        this.listQuery.limit = Number(response.page_num);
         this.listLoading = false;
       });
     },

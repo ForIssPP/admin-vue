@@ -136,7 +136,7 @@
 
 <script>
 'use strict'
-import request from '@/utils/request'
+import request from '@/utils/richpapa-request'
 import language from './utils/language.js'
 import mimes from './utils/mimes.js'
 import data2blob from './utils/data2blob.js'
@@ -797,7 +797,7 @@ export default {
       })
         .then(resData => {
           this.loading = 2
-          this.$emit('crop-upload-success', resData.data)
+          this.$emit('crop-upload-success', resData)
         })
         .catch(err => {
           if (this.value) {

@@ -1,14 +1,9 @@
-import request from "@/utils/request";
 import richpapaRequest from "@/utils/richpapa-request";
 
-export function login(data) {
-  return request({
-    url: "/user/login",
-    method: "post",
-    data
-  });
-}
-
+/**
+ * 管理员登陆
+ * @param {AxiosRequestConfig.params} data 用户信息
+ */
 export function richpapaRequestLogin(data) {
   data.service = "Login.Login";
   return richpapaRequest({
@@ -17,33 +12,34 @@ export function richpapaRequestLogin(data) {
   });
 }
 
+/**
+ * 获取验证码
+ */
 export function getVerifyImg() {
   return Promise.resolve(
-    "http://richpapa-admin.richpapa88.com/public/?service=Login.VerifyImg&time=" +
+    process.env.VUE_APP_BASE_API + "?service=Login.VerifyImg&time=" +
       new Date().getTime()
   );
 }
 
-export function getInfo(token) {
-  return request({
-    url: "/user/info",
-    method: "get",
-    params: {
-      token
-    }
-  });
-}
-
+/**
+ * 获取用户权限
+ * @param {string} token token
+ */
 export function richpapaRequestGetInfo(token) {
   return richpapaRequest({
     method: "get",
     params: {
-      service: "Login.UserRoles",
+      service: "Other.UserRoles",
       token
     }
   });
 }
 
+/**
+ * 用户登出
+ * @param {string} token token
+ */
 export function logout(token) {
   return richpapaRequest({
     method: "post",
@@ -55,8 +51,22 @@ export function logout(token) {
 }
 
 /**
+ * 获取用户详细信息
+ * @param {AxiosRequestConfig.params} uid 用户ID
+ */
+export function getUserDetail(uid) {
+  return richpapaRequest({
+    method: "get",
+    params: {
+      service: "User.UserDetail",
+      uid
+    }
+  });
+}
+
+/**
  * 获取`提现记录`列表
- * @param {AxiosRequestConfig.params} query 查询参数
+ * @param {AxiosRequestConfig.params} reviewerUserList 查询参数
  */
 export function getReviewerUserList(reviewerUserList) {
   return richpapaRequest({
@@ -153,8 +163,8 @@ export function getUsernameList(query) {
 }
 
 /**
- * 获取`提现记录`列表
- * @param {AxiosRequestConfig.params} query 查询参数
+ * 获取`添加用户男`列表
+ * @param {AxiosRequestConfig.params} info 查询参数
  */
 export function addUserMan(info) {
   info.service = "User.AddUserMan";
@@ -165,23 +175,14 @@ export function addUserMan(info) {
 }
 
 /**
- * 获取`提现记录`列表
- * @param {AxiosRequestConfig.params} query 查询参数
+ * 获取`添加用户女`列表
+ * @param {AxiosRequestConfig.params} info 查询参数
  */
 export function addUserWoman(info) {
   info.service = "User.AddUserWoman";
   return richpapaRequest({
     method: "get",
     params: info
-  });
-}
-
-export function setUserDetail(uid) {
-  return richpapaRequest({
-    method: "get",
-    params: {
-      uid
-    }
   });
 }
 

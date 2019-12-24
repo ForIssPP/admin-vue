@@ -170,16 +170,17 @@ methods["handleChoise"] = function(tag, row) {
 
     if (tag === "edit") {
       this.$router.push({
-        path: "/user/userController/userInfoController",
+        path: "/user/userInfoController",
         query: {
-          uid: row.id
+          uid: row.id,
+          edit: 1
         }
       });
     }
 
     if (tag === "see") {
       this.$router.push({
-        path: "/user/userController/userInfoController",
+        path: "/user/userInfoController",
         query: {
           uid: row.id
         }
@@ -240,7 +241,7 @@ export default {
         name: undefined,
         page: 1,
         userID: undefined,
-        limit: 15,
+        limit: undefined,
         sex: undefined,
         state: undefined,
         reviewer: undefined,
