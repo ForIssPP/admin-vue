@@ -51,8 +51,22 @@ export function logout(token) {
 }
 
 /**
+ * 获取用户详细信息
+ * @param {AxiosRequestConfig.params} uid 用户ID
+ */
+export function getUserDetail(uid) {
+  return richpapaRequest({
+    method: "get",
+    params: {
+      service: "User.UserDetail",
+      uid
+    }
+  });
+}
+
+/**
  * 获取`提现记录`列表
- * @param {AxiosRequestConfig.params} query 查询参数
+ * @param {AxiosRequestConfig.params} reviewerUserList 查询参数
  */
 export function getReviewerUserList(reviewerUserList) {
   return richpapaRequest({
@@ -150,7 +164,7 @@ export function getUsernameList(query) {
 
 /**
  * 获取`添加用户男`列表
- * @param {AxiosRequestConfig.params} query 查询参数
+ * @param {AxiosRequestConfig.params} info 查询参数
  */
 export function addUserMan(info) {
   info.service = "User.AddUserMan";
@@ -162,22 +176,13 @@ export function addUserMan(info) {
 
 /**
  * 获取`添加用户女`列表
- * @param {AxiosRequestConfig.params} query 查询参数
+ * @param {AxiosRequestConfig.params} info 查询参数
  */
 export function addUserWoman(info) {
   info.service = "User.AddUserWoman";
   return richpapaRequest({
     method: "get",
     params: info
-  });
-}
-
-export function setUserDetail(uid) {
-  return richpapaRequest({
-    method: "get",
-    params: {
-      uid
-    }
   });
 }
 
