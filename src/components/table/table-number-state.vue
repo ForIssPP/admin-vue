@@ -7,7 +7,9 @@
     :width="width"
   >
     <template slot-scope="{row}">
-      <span>{{ row.state === '0' ? '正常' : '冻结' }}</span>
+      <span
+        :class="row.state === '0' ? 'state-success' : 'state-danger'"
+      >{{ row.state === '0' ? '正常' : '冻结' }}</span>
     </template>
   </el-table-column>
 </template>
