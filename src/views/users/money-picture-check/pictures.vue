@@ -2,7 +2,7 @@
   <!-- Picture Check -->
   <el-table-column label="图片" prop="avatar" align="center">
     <template slot-scope="{row}">
-      <img width="100%" v-for="(picture, index) in row.img" :key="index" :src="picture" alt="old-avatar" />
+      <img width="50px" v-for="(picture, index) in row.img" :key="index" :src="picture" alt="old-avatar" />
     </template>
   </el-table-column>
 </template>
