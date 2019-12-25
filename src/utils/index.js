@@ -345,3 +345,23 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+/**
+ * 解析menu列表为roles
+ * @param {array} list menu列表
+ */
+export function parseMenuList(list) {
+  const { length } = list
+  if (length) {
+    let menu = []
+    for (let i = 0;i < length;i++) {
+      const e = list[i]
+      if (e.children && e.children.length > 0) {
+        menu = menu.concat(parseMenuList(e.children))
+      } else if (e.en_name) {
+        menu.push(e.en_name)
+      }
+    }
+    return menu
+  }
+}

@@ -30,7 +30,7 @@ export function richpapaRequestGetInfo(token) {
   return richpapaRequest({
     method: "get",
     params: {
-      service: "Other.UserRoles",
+      service: "Login.AdminPowerList",
       token
     }
   });
