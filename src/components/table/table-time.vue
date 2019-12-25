@@ -1,7 +1,7 @@
 <template>
   <el-table-column label="修改时间" prop="time" :sortable="sortable" align="center" :width="width">
     <template slot-scope="{row}">
-      <span>{{ new Date(Number(row.create_time)).toLocaleDateString() }}</span>
+      <span>{{ new Date(Number(row.create_time * 1e3)).toLocaleDateString() }}</span>
     </template>
   </el-table-column>
 </template>
