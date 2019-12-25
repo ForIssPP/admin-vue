@@ -8,23 +8,23 @@ export const tableHeader = [
   "账号状态",
   "性别",
   "会员",
-  "平台",
   "注册时间",
+  "手机类型",
   "位置",
   "用户类型"
 ];
 
 export const tableContent = [
   "id",
-  "username",
-  "phoneNumber",
-  "numberState",
+  "nickname",
+  "mobile",
+  "state",
   "sex",
-  "vip",
-  "platform",
-  "time",
-  "address",
-  "userCreateType"
+  "vip_level",
+  "device",
+  "create_time",
+  "position",
+  "type"
 ];
 
 export const componentList = [

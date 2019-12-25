@@ -4,7 +4,7 @@
     <div class="filter-container">
       <!-- 昵称查询 -->
       <el-input
-        v-model="listQuery.name"
+        v-model="listQuery.nickname"
         placeholder="昵称查询"
         style="width: 150px;"
         class="filter-item"
@@ -13,7 +13,7 @@
 
       <!-- 手机号查询 -->
       <el-input
-        v-model="listQuery.phoneNumber"
+        v-model="listQuery.mobile"
         placeholder="手机号查询"
         style="width: 150px;"
         class="filter-item"
@@ -22,7 +22,7 @@
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
@@ -117,7 +117,6 @@ import {
   SearchDate
 } from "@/components/search/index";
 import UserControllerTable from "@/components/table/index.vue";
-import downloadExcel from "@/utils/download-excel";
 import { tableHeader, tableContent, componentList } from "./table-config";
 import methodsCommon from "../common/methods";
 import { userDetail } from "@/api/user";
@@ -125,16 +124,14 @@ import { userDetail } from "@/api/user";
 const methods = methodsCommon("getUserList");
 methods["handleDownload"] = function() {
   this.downloadLoading = true;
+  console.log(this.list);
   const data = this.list.map(value => {
     return tableContent.map(key => {
       return value[key];
     });
   });
-  downloadExcel(
-    tableHeader,
-    data,
-    () => (this.downloadLoading = false)
-    /* file name */
+  import("@/utils/download-excel").then(e =>
+    e.default(tableHeader, data).then(() => (this.downloadLoading = false))
   );
 };
 

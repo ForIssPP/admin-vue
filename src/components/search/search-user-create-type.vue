@@ -7,7 +7,7 @@
     class="filter-item"
     style="width: 110px"
   >
-    <el-option v-for="item in userCreateTypeOptions" :key="item" :label="item" :value="item" />
+    <el-option v-for="item in userCreateTypeOptions" :key="item[0]" :label="item[1]" :value="item[0]" />
   </el-select>
 </template>
 <script>
@@ -16,12 +16,12 @@ export default {
   data() {
     return {
       userCreateType: undefined,
-      userCreateTypeOptions: ["后台", "手机端"]
+      userCreateTypeOptions: [[2, "后台"], [1, "手机端"]]
     };
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", "userCreate", this.userCreateType);
+      this.$emit("searchChange", "type", this.userCreateType);
     }
   }
 };

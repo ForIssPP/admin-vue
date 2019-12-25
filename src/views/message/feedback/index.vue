@@ -16,7 +16,7 @@
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
