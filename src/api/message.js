@@ -1,4 +1,3 @@
-import request from "@/utils/request";
 import richpapaRequest from "@/utils/richpapa-request";
 
 export function getFeedBackList(query) {
@@ -23,6 +22,16 @@ export function feedbackLetter(text, uid) {
     params: {
       service: "Message.FeedbackLetter",
       text,
+      uid
+    }
+  });
+}
+
+export function tipoffHandtleUser(uid) {
+  return richpapaRequest({
+    method: "get",
+    params: {
+      service: "Message.TipoffHandleUser",
       uid
     }
   });
