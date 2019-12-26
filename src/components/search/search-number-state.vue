@@ -7,7 +7,12 @@
     class="filter-item"
     style="width: 110px"
   >
-    <el-option v-for="item in numberStateTypeOptions" :key="item" :label="item" :value="item" />
+    <el-option
+      v-for="item in numberStateTypeOptions"
+      :key="item[0]"
+      :label="item[1]"
+      :value="item[0]"
+    />
   </el-select>
 </template>
 <script>
@@ -16,12 +21,12 @@ export default {
   data() {
     return {
       numberStateType: undefined,
-      numberStateTypeOptions: ["正常", "非正常"]
+      numberStateTypeOptions: [[1, "正常"], [2, "非正常"]]
     };
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", "numberState", this.numberStateType);
+      this.$emit("searchChange", "state", this.numberStateType);
     }
   }
 };

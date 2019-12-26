@@ -7,7 +7,12 @@
     class="filter-item"
     style="width: 80px"
   >
-    <el-option v-for="item in platformTypeOptions" :key="item[0]" :label="item[1]" :value="item[0]" />
+    <el-option
+      v-for="item in platformTypeOptions"
+      :key="item[0]"
+      :label="item[1]"
+      :value="item[0]"
+    />
   </el-select>
 </template>
 <script>

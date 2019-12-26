@@ -7,7 +7,12 @@
     class="filter-item"
     style="width: 110px"
   >
-    <el-option v-for="item in payStateTypeOptions" :key="item" :label="item" :value="item" />
+    <el-option
+      v-for="item in payStateTypeOptions"
+      :key="item.id"
+      :label="item.name"
+      :value="item.id"
+    />
   </el-select>
 </template>
 <script>
@@ -22,13 +27,11 @@ export default {
     };
   },
   created() {
-    getPayList().then(
-      response => (this.payStateTypeOptions = response.data.items)
-    );
+    getPayList().then(response => (this.payStateTypeOptions = response));
   },
   methods: {
     searchChange() {
-      this.$emit("searchChange", "payState", this.payStateType);
+      this.$emit("searchChange", "type", this.payStateType);
     }
   }
 };

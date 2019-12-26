@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       stateType: undefined,
-      stateTypeOptions: [["1", "通过"], ["2", "未通过"]]
+      stateTypeOptions: [["1", "已通过"], ["2", "未通过"]]
     };
   },
   methods: {
