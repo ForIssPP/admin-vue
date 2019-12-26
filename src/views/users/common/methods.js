@@ -1,4 +1,4 @@
-export default function(api, setApi) {
+export default function(api, setApi, type) {
   return {
     /**
      * 操作状态更新
@@ -6,7 +6,7 @@ export default function(api, setApi) {
     handleChoise(tag, row) {
       import("@/utils/open-confirm").then(func =>
         import("@/api/user").then(userApi =>
-          func.userCommonOpenConfirm(tag, row, userApi[setApi])
+          func.userCommonOpenConfirm.call(this, tag, row, userApi[setApi], type)
         )
       );
     },
@@ -34,6 +34,22 @@ export default function(api, setApi) {
           this.listLoading = false;
         });
       });
+    },
+    onUpdateMessage(data) {
+      const state = Number(this.userState);
+      import("@/api/user").then(userApi =>
+        userApi.setUpdateUserState(this.id, state, data.type).then(() => {
+          this.$notify({
+            type: "success",
+            message: "修改成功!"
+          });
+          this.row.state = state;
+          this.visibleChoise = false;
+        })
+      );
+    },
+    onClosed() {
+      this.visibleChoise = false;
     }
   };
 }

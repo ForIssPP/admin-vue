@@ -98,6 +98,15 @@
       @pagination="getList"
     />
     <!-- 分页器 end -->
+
+    <!-- 拒绝反馈 -->
+    <open-choise-type
+      :visible="visibleChoise"
+      :title="'反馈类型'"
+      :typeList="typeList"
+      @onUpdateMessage="onUpdateMessage"
+      @closed="onClosed"
+    ></open-choise-type>
   </div>
 </template>
 
@@ -117,77 +126,13 @@ import {
   SearchDate
 } from "@/components/search/index";
 import UserControllerTable from "@/components/table/index.vue";
+import OpenChoiseType from "@/components/OpenChoiseType";
 import { tableHeader, tableContent, componentList } from "./table-config";
 import methodsCommon from "../common/methods";
 import { userDetail } from "@/api/user";
 
-const methods = methodsCommon("getUserList");
-methods["handleDownload"] = function() {
-  this.downloadLoading = true;
-  console.log(this.list);
-  const data = this.list.map(value => {
-    return tableContent.map(key => {
-      return value[key];
-    });
-  });
-  import("@/utils/download-excel").then(e =>
-    e.default(tableHeader, data).then(() => (this.downloadLoading = false))
-  );
-};
-
-methods["handleChoise"] = function(tag, row) {
-  import("@/utils/open-confirm").then(_confirm => {
-    const openConfirm = _confirm.commonConfirm;
-    const handleSuccess = number => {
-      this.$notify({
-        type: "success",
-        message: "修改成功!"
-      });
-      row.state = String(number);
-    };
-    if (tag === "freeze") {
-      openConfirm(() =>
-        import("@/api/user").then(userApi =>
-          userApi.setUpdateUserState(row, "1").then(res => handleSuccess(1))
-        )
-      );
-    }
-
-    if (tag === "thaw") {
-      openConfirm(() =>
-        import("@/api/user").then(userApi =>
-          userApi.setUpdateUserState(row, "0").then(res => handleSuccess(0))
-        )
-      );
-    }
-
-    if (tag === "msg") {
-      openConfirm(() => console.log(1));
-    }
-
-    if (tag === "edit") {
-      this.$router.push({
-        path: "/user/userInfoController",
-        query: {
-          uid: row.id,
-          edit: 1
-        }
-      });
-    }
-
-    if (tag === "see") {
-      this.$router.push({
-        path: "/user/userInfoController",
-        query: {
-          uid: row.id
-        }
-      });
-    }
-  });
-};
-
 export default {
-  name: "UserControllerCheck",
+  name: "UserController",
   components: {
     Pagination,
     SearchVip,
@@ -199,11 +144,16 @@ export default {
     SearchNumberState,
     SearchUserCreateType,
     SearchDate,
-    UserControllerTable
+    UserControllerTable,
+    OpenChoiseType
   },
   directives: { waves },
   data() {
     return {
+      id: undefined,
+      typeList: ["信息违规", "信息虚假", "人身攻击", "传播色情", "骚扰用户"],
+      userState: undefined,
+      visibleChoise: false,
       tableKey: 0,
       list: null,
       total: 0,
@@ -250,6 +200,70 @@ export default {
   created() {
     this.getList();
   },
-  methods
+  methods: Object.assign(methodsCommon("getUserList"), {
+    handleDownload() {
+      this.downloadLoading = true;
+      const data = this.list.map(value => {
+        return tableContent.map(key => {
+          return value[key];
+        });
+      });
+      import("@/utils/download-excel").then(e =>
+        e.default(tableHeader, data).then(() => (this.downloadLoading = false))
+      );
+    },
+    handleChoise(tag, row) {
+      this.id = row.id;
+      this.row = row;
+      import("@/utils/open-confirm").then(_confirm => {
+        const openConfirm = _confirm.commonConfirm;
+        const handleSuccess = number => {
+          this.$notify({
+            type: "success",
+            message: "修改成功!"
+          });
+          row.state = String(number);
+        };
+
+        if (tag === "freeze") {
+          this.visibleChoise = true;
+          this.userState = true;
+        }
+
+        if (tag === "thaw") {
+          openConfirm(() =>
+            import("@/api/user").then(userApi =>
+              userApi
+                .setUpdateUserState(this.id, "0")
+                .then(res => handleSuccess(0))
+            )
+          );
+        }
+
+        if (tag === "msg") {
+          openConfirm(() => console.log(1));
+        }
+
+        if (tag === "edit") {
+          this.$router.push({
+            path: "/user/userInfoController",
+            query: {
+              uid: this.id,
+              edit: 1
+            }
+          });
+        }
+
+        if (tag === "see") {
+          this.$router.push({
+            path: "/user/userInfoController",
+            query: {
+              uid: this.id
+            }
+          });
+        }
+      });
+    }
+  })
 };
 </script>

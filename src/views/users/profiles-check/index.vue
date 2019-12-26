@@ -75,6 +75,15 @@
       @pagination="getList"
     />
     <!-- 分页器 end -->
+
+    <!-- 拒绝反馈 -->
+    <open-choise-type
+      :visible="visibleChoise"
+      :title="'反馈类型'"
+      :typeList="typeList"
+      @onUpdateMessage="onUpdateMessage"
+      @closed="onClosed"
+    ></open-choise-type>
   </div>
 </template>
 
@@ -91,6 +100,7 @@ import {
 import ProfilesTable from "@/components/table/index.vue";
 import methodsCommon from "../common/methods";
 import { componentList } from "./table-config";
+import OpenChoiseType from "@/components/OpenChoiseType";
 
 export default {
   name: "UserControllerProfilesCheck",
@@ -100,11 +110,16 @@ export default {
     SearchState,
     SearchReviewer,
     SearchDate,
-    ProfilesTable
+    ProfilesTable,
+    OpenChoiseType
   },
   directives: { waves },
   data() {
     return {
+      id: undefined,
+      typeList: ["含有敏感词", "有其他社交平台账号", "广告宣传"],
+      userState: undefined,
+      visibleChoise: false,
       tableKey: 0,
       list: null,
       // 分页器按钮
@@ -128,6 +143,6 @@ export default {
   created() {
     this.getList();
   },
-  methods: methodsCommon("getProfilesList", "setUserIntroductionCheck")
+  methods: methodsCommon("getProfilesList", "setUserIntroductionCheck", 1)
 };
 </script>

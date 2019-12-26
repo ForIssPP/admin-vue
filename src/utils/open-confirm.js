@@ -27,8 +27,9 @@ export function commonConfirm(callback) {
  * @param {string} tag 类型
  * @param {object} row 列表对象
  * @param {function} handleSetState 修改操作函数
+ * @param {number} type 是否添加弹窗
  */
-export function userCommonOpenConfirm(tag, row, handleSetState) {
+export function userCommonOpenConfirm(tag, row, handleSetState, type) {
   const handleUpdate = () => {
     row.state = "0";
   };
@@ -56,7 +57,12 @@ export function userCommonOpenConfirm(tag, row, handleSetState) {
   }
 
   if (tag === false) {
-    commonConfirm(handleNotPass);
+    if (type) {
+      this.visibleChoise = true;
+      this.userState = true;
+    } else {
+      commonConfirm(handleNotPass);
+    }
   }
 }
 
