@@ -85,6 +85,23 @@ export function addRoleAdmin(role_id, pwd) {
 }
 
 /**
+ * 添加`群组用户`
+ * @param {string} role_id 群组ID
+ * @param {string} pwd 群组密码
+ */
+export function addAdmin(account, pwd) {
+  return richpapaRequest({
+    method: "post",
+    params: {
+      service: "System.AddAdmin",
+      account,
+      pwd,
+      repeat_pwd: pwd
+    }
+  });
+}
+
+/**
  * 修改`群组`权限
  * @param {string} role_id 群组ID
  * @param {string} power_ids 群组权限数组
