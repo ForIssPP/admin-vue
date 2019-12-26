@@ -1,9 +1,10 @@
-import request from "@/utils/request";
+import request from "@/utils/richpapa-request";
 
-export function getPayList(data) {
+export function getPayList() {
   return request({
-    url: "/config/paylist",
     method: "get",
-    data
+    params: {
+      service: "Other.PayType"
+    }
   });
 }
