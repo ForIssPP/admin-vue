@@ -65,6 +65,18 @@ export function getUserDetail(uid) {
 }
 
 /**
+ * 修改`用户`信息
+ * @param {objcet} form 表单数据
+ */
+export function userEdit(form) {
+  form.service = "User.UserEdit";
+  return richpapaRequest({
+    method: "get",
+    params: form
+  });
+}
+
+/**
  * 获取`提现记录`列表
  * @param {AxiosRequestConfig.params} reviewerUserList 查询参数
  */
