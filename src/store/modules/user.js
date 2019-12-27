@@ -59,16 +59,15 @@ const actions = {
     return new Promise((resolve, reject) =>
       richpapaRequestGetInfo(state.token).then(data => {
         // const { data } = response
-        console.log(data);
         if (!data) {
           reject('Verification failed, please Login again.')
         }
 
-        const { menu } = data
+        const { menu = [] } = data
         // const { roles } = data
 
-        const roles = parseMenuList(menu)
-        console.log(roles);
+        const roles = parseMenuList(menu) || ['nothing']
+        console.log(roles, 'roles');
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
