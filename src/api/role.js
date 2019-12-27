@@ -71,15 +71,15 @@ export function addRole(name, power_ids) {
 /**
  * 添加`群组用户`
  * @param {string} role_id 群组ID
- * @param {string} pwd 群组密码
+ * @param {string} admin_id 管理员ID
  */
-export function addRoleAdmin(role_id, pwd) {
+export function addRoleAdmin(role_id, admin_id) {
   return richpapaRequest({
     method: "post",
     params: {
       service: "System.AddRoleAdmin",
       role_id,
-      pwd
+      admin_id
     }
   });
 }
@@ -117,12 +117,31 @@ export function updateRole(role_id, power_ids) {
   });
 }
 
+/**
+ * 删除`群组`
+ * @param {string} role_id 群组ID
+ */
 export function deleteRole(role_id) {
   return richpapaRequest({
     method: "post",
     params: {
       service: "System.DelRole",
       role_id
+    }
+  });
+}
+
+/**
+ * 删除`群组管理员`
+ * @param {string} role_id 群组ID
+ */
+export function deleteRoleMan(role_id, admin_id) {
+  return richpapaRequest({
+    method: "post",
+    params: {
+      service: "System.DelRoleAdmin",
+      role_id,
+      admin_id
     }
   });
 }
