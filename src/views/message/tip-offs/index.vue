@@ -12,11 +12,11 @@
       <search-platform @searchChange="searchChange" />
 
       <!-- 处理结果查询 -->
-      <search-state-tackle />
+      <search-state-tackle @searchChange="searchChange" />
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
@@ -31,6 +31,15 @@
         icon="el-icon-search"
         @click="getList"
       >搜索</el-button>
+
+      <!-- 重置 -->
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-refresh"
+        @click="getList(true)"
+      >重置</el-button>
     </div>
     <!-- 检索栏 end -->
 
@@ -68,7 +77,12 @@
 </template>
 
 <script>
-import { getTipOffsList, setTipoffHandle } from "@/api/message";
+import {
+  getTipOffsList,
+  setTipoffHandle,
+  feedbackLetter,
+  tipoffHandtleUser
+} from "@/api/message";
 // button点击波纹指令
 import waves from "@/directive/waves";
 import { parseTime } from "@/utils";
@@ -82,6 +96,7 @@ import {
   SearchStateTackle,
   SearchTipOffType
 } from "@/components/search/index";
+import OpenChoiseType from "@/components/OpenChoiseType";
 
 export default {
   name: "MessageControllerTip-OffsPage",
@@ -92,11 +107,15 @@ export default {
     SearchReviewer,
     SearchDate,
     SearchStateTackle,
-    SearchTipOffType
+    SearchTipOffType,
+    OpenChoiseType
   },
   directives: { waves },
   data() {
     return {
+      typeList: ["是", "否"],
+      userState: undefined,
+      visibleChoise: false,
       componentList,
       tableKey: 0,
       list: null,
@@ -161,9 +180,16 @@ export default {
     /**
      * 获取表单
      */
-    getList() {
+    getList(reload) {
+      let query;
+
       this.listLoading = true;
-      getTipOffsList(this.listQuery).then(response => {
+      if (reload === true) {
+        query = {};
+      } else {
+        query = this.listQuery;
+      }
+      getTipOffsList(query).then(response => {
         this.list = response.items;
         this.listQuery.limit = Number(response.page_num);
         this.total = Number(response.total);
@@ -171,8 +197,14 @@ export default {
       });
     },
     onSend() {
-      console.log(this.form.feedback);
-      console.log(this.feedbackId);
+      if (this.form.feedback) {
+        feedbackLetter(this.form.feedback, this.feedbackId).then(res => {
+          this.$message.success("发送成功");
+          this.feedbackVisible = false;
+        });
+      } else {
+        this.$message.warning("请输入内容");
+      }
     },
     onClose() {
       this.feedbackVisible = false;

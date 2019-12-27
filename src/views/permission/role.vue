@@ -4,14 +4,15 @@
     <el-button type="primary" @click="handleAddAdminNumber">新建管理账号</el-button>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="群组序号" width="220">
+      <el-table-column align="center" label="群组序号">
         <template slot-scope="scope">{{ scope.row.key }}</template>
       </el-table-column>
-      <el-table-column align="center" label="群组名称" width="220">
+      <el-table-column align="center" label="群组名称">
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
+          <el-button type="primary" size="small" @click="handleOpenRuleManView(scope)">群组成员</el-button>
           <el-button type="primary" size="small" @click="handleEdit(scope)">修改</el-button>
           <el-button type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
         </template>
@@ -57,6 +58,33 @@
         <el-button type="primary" @click="onAddAdmin">确定</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="roleMan" :title.sync="roleManTitle" @closed="closeRoleMan">
+      <div class="demo-input-suffix">
+        <span>添加成员</span>
+        <el-input
+          v-model="name"
+          prefix-icon="el-icon-search"
+          placeholder="昵称查询"
+          style="width: 150px;"
+          class="filter-item"
+          @keyup.enter.native="getList"
+        />
+        <el-button type="primary" size="small" @click="handleAddRoleMan()">添加</el-button>
+      </div>
+      <el-table :data="roleAdminList" style="width: 100%;margin-top:30px;" border>
+        <el-table-column align="center" label="序号">
+          <template slot-scope="scope">{{ scope.row.id }}</template>
+        </el-table-column>
+        <el-table-column align="center" label="群员名称">
+          <template slot-scope="scope">{{ scope.row.nickname }}</template>
+        </el-table-column>
+        <el-table-column align="center" label="操作">
+          <template slot-scope="scope">
+            <el-button type="danger" size="small" @click="handleDeleteRoleMan(scope)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,13 +92,16 @@
 import path from "path";
 import { deepClone } from "@/utils";
 import {
-  addRoleAdmin,
+  addAdmin,
+  deleteRoleMan,
   getRolePowerList,
   getRoutes,
   getRoles,
   addRole,
   deleteRole,
-  updateRole
+  updateRole,
+  getRoleAdminList,
+  addRoleAdmin
 } from "@/api/role";
 
 const defaultRole = {
@@ -92,14 +123,19 @@ export default {
       }
     };
     return {
+      name: undefined,
+      roleId: undefined,
       role: Object.assign({}, defaultRole),
       routes: [],
       rolesList: [],
       dialogVisible: false,
+      roleMan: false,
+      roleManTitle: undefined,
       dialogType: "新建群组",
       addAdminDialog: false,
       checkStrictly: false,
       adminKey: undefined,
+      roleAdminList: [],
       addAdminForm: {
         pwd: undefined,
         pwd_two: undefined,
@@ -130,8 +166,6 @@ export default {
     async getRoutes() {
       const res = await getRoutes();
       this.serviceRoutes = res;
-      console.dir(res);
-      console.dir(this.generateRoutes(res));
       this.routes = this.generateRoutes(res);
     },
     async getRoles() {
@@ -218,10 +252,7 @@ export default {
         .then(async () => {
           await deleteRole(row.key);
           this.rolesList.splice($index, 1);
-          this.$message({
-            type: "success",
-            message: "Delete succed!"
-          });
+          this.$message.success("删除成功!");
         })
         .catch(err => {
           console.error(err);
@@ -304,7 +335,7 @@ export default {
       this.$refs.addAdminForm.validate(valid => {
         if (valid) {
           const { account, pwd } = this.addAdminForm;
-          addRoleAdmin(account, pwd).then(
+          addAdmin(account, pwd).then(
             res =>
               this.$notify({
                 title: "创建成功",
@@ -319,6 +350,32 @@ export default {
     closeAddAdmin() {
       this.addAdminDialog = false;
       this.$refs.addAdminForm.resetFields();
+    },
+    handleOpenRuleManView(scope) {
+      this.roleId = scope.row.key;
+      this.roleManTitle = scope.row.name;
+      getRoleAdminList(this.roleId).then(res => {
+        this.roleAdminList = res.items;
+        this.roleMan = true;
+      });
+    },
+    handleDeleteRoleMan(scope) {
+      deleteRoleMan(this.roleId, scope.row.id).then(res => {
+        this.$message.success("删除成功!");
+        this.roleAdminList.splice(scope.$index, 1);
+      });
+    },
+    closeRoleMan() {
+      // TODO
+    },
+    handleAddRoleMan() {
+      if (this.name) {
+        addRoleAdmin(this.roleId, this.name).then(res => {
+          this.$message.success("添加成功!");
+          this.roleMan = false;
+          this.name = undefined;
+        });
+      }
     }
   }
 };

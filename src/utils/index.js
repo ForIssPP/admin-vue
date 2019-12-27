@@ -37,7 +37,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -343,5 +343,25 @@ export function removeClass(ele, cls) {
   if (hasClass(ele, cls)) {
     const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)')
     ele.className = ele.className.replace(reg, ' ')
+  }
+}
+
+/**
+ * 解析menu列表为roles
+ * @param {array} list menu列表
+ */
+export function parseMenuList(list) {
+  const { length } = list
+  if (length) {
+    let menu = []
+    for (let i = 0;i < length;i++) {
+      const e = list[i]
+      if (e.children && e.children.length > 0) {
+        menu = menu.concat(parseMenuList(e.children))
+      } else if (e.en_name) {
+        menu.push(e.en_name)
+      }
+    }
+    return menu
   }
 }

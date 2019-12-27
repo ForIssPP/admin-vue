@@ -25,8 +25,15 @@ function editData(data, header) {
             : (redate = "iOS");
           break;
         case "提交时间":
+        case "注册时间":
         case "修改时间":
           redate = new Date(Number(redate) || 0).toLocaleDateString();
+          break;
+        case "用户类型":
+          redate === "1" ? (redate = "App端") : (redate = "后台");
+          break;
+        case "账号状态":
+          redate === "1" ? (redate = "冻结") : (redate = "正常");
           break;
       }
       return redate;

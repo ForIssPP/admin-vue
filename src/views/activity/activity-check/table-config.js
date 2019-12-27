@@ -4,11 +4,13 @@ export const componentList = [
   "TableId",
   "TableUsername",
   "TableAddress",
+  "TablePhoneNumber",
   "TableSex",
   "TablePlatform",
   "TableActivityText",
   picture,
   "TableStateActivity",
   "TableTime",
-  "TableChoiseActivity",
+  "TableUserCreateType",
+  "TableChoiseActivity"
 ];

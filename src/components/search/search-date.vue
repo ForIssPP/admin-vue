@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+import { parseTime } from '@/utils'
 
 export default {
   name: "search-date",
@@ -24,12 +25,14 @@ export default {
     searchChange() {
       // 返回的是Date对象数组
       if (this.choseDates) {
-        this.$emit("searchChange", "date", this.getTime());
+        const arr = this.getTime();
+        this.$emit("searchChange", "start_time", arr[0]);
+        this.$emit("searchChange", "end_time", arr[1]);
       }
     },
     getTime() {
       return this.choseDates.map(date => {
-        date = Math.floor(date.getTime() / 1e3);
+        parseTime(date.getTime(), '{y}-{m}-{d}')
         return date;
       });
     }

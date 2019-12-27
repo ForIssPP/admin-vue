@@ -30,7 +30,7 @@ export function richpapaRequestGetInfo(token) {
   return richpapaRequest({
     method: "get",
     params: {
-      service: "Other.UserRoles",
+      service: "Other.AdminPowerList",
       token
     }
   });
@@ -61,6 +61,18 @@ export function getUserDetail(uid) {
       service: "User.UserDetail",
       uid
     }
+  });
+}
+
+/**
+ * 修改`用户`信息
+ * @param {objcet} form 表单数据
+ */
+export function userEdit(form) {
+  form.service = "User.UserEdit";
+  return richpapaRequest({
+    method: "get",
+    params: form
   });
 }
 
@@ -192,7 +204,6 @@ export function addUserWoman(info) {
  * @param {string} state 状态
  */
 export function setUserAvatarCheck(row, state) {
-  console.log(row);
   return richpapaRequest({
     method: "get",
     params: {
@@ -209,7 +220,6 @@ export function setUserAvatarCheck(row, state) {
  * @param {string} state 状态
  */
 export function setUserNameCheck(row, state) {
-  console.log(row);
   return richpapaRequest({
     method: "get",
     params: {
@@ -258,7 +268,6 @@ export function setUserManAuth(row, state) {
  * @param {string} state 状态
  */
 export function setUserPhotoCheck(row, state) {
-  console.log(row);
   return richpapaRequest({
     method: "get",
     params: {
@@ -288,17 +297,18 @@ export function setUserIntroductionCheck(row, state) {
 
 /**
  * 修改`用户解封冻结`状态
- * @param {object} row 列表对象
- * @param {string} state 状态
+ * @param {string | number} id 用户ID
+ * @param {string | number} state 状态
+ * @param {string} type 状态
  */
-export function setUpdateUserState(row, state) {
-  console.log(row);
+export function setUpdateUserState(id, state, type) {
   return richpapaRequest({
     method: "get",
     params: {
       service: "User.UpdateUserState",
-      uid: row.id,
-      state: state
+      uid: id,
+      state,
+      type
     }
   });
 }

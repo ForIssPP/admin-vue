@@ -1,5 +1,6 @@
 import { richpapaRequestLogin, logout, richpapaRequestGetInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { parseMenuList } from '@/utils'
 import router, { resetRouter } from '@/router'
 
 const state = {
@@ -39,8 +40,11 @@ const actions = {
         verify_code: verifyCode
       })
         .then(response => {
-          const { token } = response;
+          const { token, nickname, avatar, introduction } = response;
           commit('SET_TOKEN', token);
+          commit('SET_AVATAR', avatar || "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif")
+          commit('SET_NAME', nickname || "Admin")
+          commit('SET_INTRODUCTION', introduction || "无简介")
           setToken(token);
           resolve();
         })
@@ -52,28 +56,25 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
-    console.log(state.token);
-    console.log('----------------');
     return new Promise((resolve, reject) =>
       richpapaRequestGetInfo(state.token).then(data => {
         // const { data } = response
-        console.log(data);
         if (!data) {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { menu = [] } = data
+        // const { roles } = data
 
+        const roles = parseMenuList(menu) || ['nothing']
+        console.log(roles, 'roles');
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
 
         commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
+        resolve({ roles })
       }).catch(error => {
         reject(error)
       })

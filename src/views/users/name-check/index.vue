@@ -4,7 +4,7 @@
     <div class="filter-container">
       <!-- 昵称查询 -->
       <el-input
-        v-model="listQuery.name"
+        v-model="listQuery.nickname"
         placeholder="昵称查询"
         style="width: 150px;"
         class="filter-item"
@@ -13,7 +13,7 @@
 
       <!-- 手机号查询 -->
       <el-input
-        v-model="listQuery.phoneNumber"
+        v-model="listQuery.mobile"
         placeholder="手机号查询"
         style="width: 150px;"
         class="filter-item"
@@ -22,7 +22,7 @@
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
@@ -75,6 +75,15 @@
       @pagination="getList"
     />
     <!-- 分页器 end -->
+
+    <!-- 拒绝反馈 -->
+    <open-choise-type
+      :visible="visibleChoise"
+      :title="'反馈类型'"
+      :typeList="typeList"
+      @onUpdateMessage="onUpdateMessage"
+      @closed="onClosed"
+    ></open-choise-type>
   </div>
 </template>
 
@@ -93,7 +102,8 @@ import downloadExcel from "@/utils/download-excel";
 import { tableHeader, tableContent, componentList } from "./table-config";
 import methodsCommon from "../common/methods";
 import { commonConfirm } from "@/utils/open-confirm";
-const methods = methodsCommon("getUsernameList", "setUserNameCheck");
+import OpenChoiseType from "@/components/OpenChoiseType";
+const methods = methodsCommon("getUsernameList", "setUserNameCheck", 1);
 
 export default {
   name: "UserControllerNameCheck",
@@ -103,11 +113,16 @@ export default {
     SearchState,
     SearchReviewer,
     SearchDate,
-    NameCheckTable
+    NameCheckTable,
+    OpenChoiseType
   },
   directives: { waves },
   data() {
     return {
+      id: undefined,
+      typeList: ["含有敏感词", "有其他社交平台账号", "广告宣传"],
+      userState: undefined,
+      visibleChoise: false,
       tableKey: 0,
       list: null,
       total: 0,

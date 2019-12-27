@@ -3,8 +3,7 @@
     <!-- 检索栏 start -->
     <div class="filter-container">
       <!-- 处理类型查询 -->
-      <search-tip-off-type name="反馈类型" @searchChange="searchChange" />
-
+      <search-tip-off-type :list="tipOffsTypeOptions" name="反馈类型" @searchChange="searchChange" />
       <!-- 时间查询 -->
       <search-date @searchChange="searchChange" />
 
@@ -16,7 +15,7 @@
 
       <!-- ID查询 -->
       <el-input
-        v-model="listQuery.userID"
+        v-model="listQuery.uid"
         placeholder="ID查询"
         style="width: 150px;"
         class="filter-item"
@@ -29,7 +28,7 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="getList"
       >搜索</el-button>
     </div>
     <!-- 检索栏 end -->
@@ -64,6 +63,15 @@
       @pagination="getList"
     />
     <!-- 分页器 end -->
+
+    <!-- 重置 -->
+    <el-button
+      v-waves
+      class="filter-item"
+      type="primary"
+      icon="el-icon-refresh"
+      @click="getList(true)"
+    >重置</el-button>
   </div>
 </template>
 
@@ -98,16 +106,23 @@ export default {
   data() {
     return {
       componentList,
+      tipOffsTypeOptions: [
+        "用户问题",
+        "APP问题",
+        "费用问题",
+        "线下聚会/私密约会申请",
+        "其他"
+      ],
       tableKey: 0,
       list: null,
       total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
-        tipOffs: undefined,
+        type: undefined,
         name: undefined,
         platform: undefined,
-        stateTackle: undefined,
+        state: undefined,
         reviewer: undefined,
         limit: undefined,
         date: undefined
@@ -159,9 +174,16 @@ export default {
     /**
      * 获取表单
      */
-    getList() {
+    getList(reload) {
+      let query;
+
       this.listLoading = true;
-      getFeedBackList(this.listQuery).then(response => {
+      if (reload === true) {
+        query = {};
+      } else {
+        query = this.listQuery;
+      }
+      getFeedBackList(query).then(response => {
         this.list = response.items;
         this.total = Number(response.total);
         this.listQuery.limit = Number(response.page_num);

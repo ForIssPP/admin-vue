@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       stateTackleType: undefined,
-      stateTackleTypeOptions: [["1", "已处理"], ["2", "未处理"]]
+      stateTackleTypeOptions: [["2", "已处理"], ["1", "未处理"]]
     };
   },
   methods: {
