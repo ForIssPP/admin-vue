@@ -274,7 +274,6 @@ import { getUserDetail } from "@/api/user";
 import ImageCropper from "@/components/ImageCropper";
 import PanThumb from "@/components/PanThumb";
 import formConfig from "./config";
-import { addUserMan, addUserWoman } from "@/api/user";
 
 export default {
   name: "UserControllerCreateUser",
@@ -328,6 +327,8 @@ export default {
     getUserDetail(this.uid).then(res => {
       if (!res.measurements) {
         res.measurements = [];
+      } else {
+        res.measurements = res.measurements.split("-");
       }
       if (!res.photo) {
         res.photo = [];
@@ -371,26 +372,20 @@ export default {
       const form = JSON.parse(JSON.stringify(this.createUserForm));
       this.$refs["createUserForm"].validate(valid => {
         if (valid) {
-          this.$confirm(`确认创建用户${form.nickname}？`, "警告", {
+          this.$confirm(`确认修改？`, "警告", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             lockScroll: false,
             type: "warning"
           }).then(() => {
             form.measurements = form.measurements.join(" ");
-            const ok = res => {
-              this.$notify({
-                type: "success",
-                message: "创建成功!"
-              });
-              this.createUserForm = formConfig.defaultForm;
-            };
+            import("@/api/user").then(api =>
+              api.userEdit(form).then(() => {
+                this.$notify.success("创建成功!");
+                this.createUserForm = formConfig.defaultForm;
+              })
+            );
             form.avatar = this.image;
-            if (form.sex === "1") {
-              addUserMan(form).then(ok);
-            } else {
-              addUserWoman(form).then(ok);
-            }
           });
         }
       });
