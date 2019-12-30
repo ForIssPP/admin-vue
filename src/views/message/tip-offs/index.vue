@@ -129,7 +129,8 @@ export default {
         stateTackle: undefined,
         reviewer: undefined,
         limit: undefined,
-        date: undefined
+        start_time: undefined,
+        end_time: undefined
       },
       form: {
         feedback: undefined

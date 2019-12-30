@@ -107,7 +107,8 @@ export default {
         sex: undefined,
         state: undefined,
         admin_id: undefined,
-        date: undefined,
+        start_time: undefined,
+        end_time: undefined,
         mobile: undefined
       }
     };

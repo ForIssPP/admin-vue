@@ -139,7 +139,8 @@ export default {
         sex: undefined,
         state: undefined,
         reviewer: undefined,
-        date: undefined,
+        start_time: undefined,
+        end_time: undefined,
         mobile: undefined
       }
     };
