@@ -162,7 +162,12 @@
         <!-- 身高 -->
         <el-form-item label="身高" prop="height">
           <el-select v-model="createUserForm.height" placeholder="单位cm">
-            <el-option v-for="item in numbers" :key="item" :label="130 + item + 'cm'" :value="130 + item"></el-option>
+            <el-option
+              v-for="item in numbers"
+              :key="item"
+              :label="130 + item + 'cm'"
+              :value="130 + item"
+            ></el-option>
           </el-select>
         </el-form-item>
 
