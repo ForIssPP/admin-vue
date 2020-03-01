@@ -71,15 +71,15 @@ export function addRole(name, power_ids) {
 /**
  * 添加`群组用户`
  * @param {string} role_id 群组ID
- * @param {string} admin_id 管理员ID
+ * @param {string} account 管理员名
  */
-export function addRoleAdmin(role_id, admin_id) {
+export function addRoleAdmin(role_id, account) {
   return richpapaRequest({
     method: "post",
     params: {
       service: "System.AddRoleAdmin",
       role_id,
-      admin_id
+      account
     }
   });
 }

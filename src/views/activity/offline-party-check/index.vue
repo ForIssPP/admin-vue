@@ -140,6 +140,8 @@ export default {
         state: undefined,
         userCreate: undefined,
         title: undefined,
+        start_time: undefined,
+        end_time: undefined,
         uid: undefined
       },
       downloadLoading: false

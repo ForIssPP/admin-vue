@@ -31,7 +31,7 @@
             :data="routesData"
             :props="defaultProps"
             show-checkbox
-            node-key="id"
+            :node-key="'id'"
             class="permission-tree"
           />
         </el-form-item>
@@ -167,6 +167,7 @@ export default {
       const res = await getRoutes();
       this.serviceRoutes = res;
       this.routes = this.generateRoutes(res);
+      console.dir(this.routes);
     },
     async getRoles() {
       const res = await getRoles();
@@ -182,7 +183,7 @@ export default {
           route
         );
 
-        if (route.children && onlyOneShowingChild && !route.alwaysShow) {
+        if (route.children && onlyOneShowingChild) {
           route = onlyOneShowingChild;
         }
 
@@ -193,7 +194,7 @@ export default {
         };
 
         // recursive child routes
-        if (route.children) {
+        if (route.children.length) {
           data.children = this.generateRoutes(route.children, data.path);
         }
         res.push(data);
@@ -206,7 +207,7 @@ export default {
       let data = [];
       routes.forEach(route => {
         data.push(route);
-        if (route.children && route.children.length > 1) {
+        if (route.children && route.children.length) {
           const temp = this.generateArr(route.children);
           if (temp.length > 0) {
             data = [...data, ...temp];
@@ -239,7 +240,6 @@ export default {
       this.$nextTick(() => {
         const routes = this.generateRoutes(this.role.power);
         this.$refs.tree.setCheckedNodes(this.generateArr(routes));
-        // set checked state of a node not affects its father and child nodes
         this.checkStrictly = false;
       });
     },
@@ -258,33 +258,35 @@ export default {
           console.error(err);
         });
     },
-    generateTree(routes, basePath = "/", checkedKeys) {
-      const res = [];
+    // generateTree(routes, basePath = "/", checkedKeys) {
+    //   const res = [];
 
-      for (const route of routes) {
-        const routePath = path.resolve(basePath, route.path);
+    //   for (const route of routes) {
+    //     const routePath = path.resolve(basePath, route.path);
 
-        // recursive child routes
-        if (route.children) {
-          route.children = this.generateTree(
-            route.children,
-            routePath,
-            checkedKeys
-          );
-        }
+    //     // recursive child routes
+    //     if (route.children) {
+    //       route.children = this.generateTree(
+    //         route.children,
+    //         routePath,
+    //         checkedKeys
+    //       );
+    //     }
 
-        if (
-          checkedKeys.includes(routePath) ||
-          (route.children && route.children.length >= 1)
-        ) {
-          res.push(route);
-        }
-      }
-      return res;
-    },
+    //     if (
+    //       checkedKeys.includes(routePath) ||
+    //       (route.children && route.children.length >= 1)
+    //     ) {
+    //       res.push(route);
+    //     }
+    //   }
+    //   return res;
+    // },
     async confirmRole() {
       const isEdit = this.dialogType === "修改权限";
-      const powerIds = this.$refs.tree.getCheckedKeys();
+      const powerIds = this.$refs.tree
+        .getHalfCheckedKeys()
+        .concat(this.$refs.tree.getCheckedKeys());
       console.log(powerIds);
       if (isEdit) {
         await updateRole(this.adminKey, powerIds);
@@ -301,7 +303,6 @@ export default {
         this.role.key = key;
         this.rolesList.push(this.role);
       }
-      console.log(this.role);
       const { description, key, name } = this.role;
       this.dialogVisible = false;
       this.$notify({

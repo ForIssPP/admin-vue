@@ -134,6 +134,8 @@ export default {
         sex: undefined,
         state: undefined,
         uid: undefined,
+        start_time: undefined,
+        end_time: undefined,
         title: undefined
       },
       downloadLoading: false
